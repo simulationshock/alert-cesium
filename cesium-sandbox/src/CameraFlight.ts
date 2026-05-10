@@ -1,5 +1,5 @@
 import { Camera, Cartesian3, Math as CesiumMath } from 'cesium';
-import type { CameraFlightOptions, CameraFlightOutcome, ResolvedCameraFlightOptions } from './types';
+import type { CameraFlightOptions, CameraFlightOutcome, ResolvedCameraFlightOptions } from './types.js';
 
 const MIN_DURATION_SECONDS = 0.35;
 const MAX_DURATION_SECONDS = 4.0;

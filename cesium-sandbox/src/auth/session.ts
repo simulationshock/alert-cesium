@@ -1,7 +1,7 @@
-import { recordAuthEvent } from './audit';
-import { AuthStore } from './storage';
-import { AuthenticatedSession, CurrentUserState, SandboxUser, SignedOutState } from './types';
-import { createId } from './audit';
+import { recordAuthEvent } from './audit.js';
+import { AuthStore } from './storage.js';
+import { AuthenticatedSession, CurrentUserState, SandboxUser, SignedOutState } from './types.js';
+import { createId } from './audit.js';
 
 export const SESSION_COOKIE = 'cesium_sandbox_session';
 const DEFAULT_TTL_SECONDS = 60 * 60 * 8;

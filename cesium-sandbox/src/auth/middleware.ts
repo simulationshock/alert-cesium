@@ -1,6 +1,6 @@
-import { recordAuthEvent } from './audit';
-import { AuthStore } from './storage';
-import { currentUserState, parseCookie, SESSION_COOKIE, validateSession } from './session';
+import { recordAuthEvent } from './audit.js';
+import { AuthStore } from './storage.js';
+import { currentUserState, parseCookie, SESSION_COOKIE, validateSession } from './session.js';
 
 export interface GuardResult {
   allowed: boolean;

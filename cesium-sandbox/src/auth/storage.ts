@@ -1,4 +1,4 @@
-import { AuthenticatedSession, AuthenticationEvent, OAuth2Identity, SandboxUser } from './types';
+import { AuthenticatedSession, AuthenticationEvent, OAuth2Identity, SandboxUser } from './types.js';
 
 export interface AuthStore {
   findUserById(id: string): Promise<SandboxUser | undefined>;

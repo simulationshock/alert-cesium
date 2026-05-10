@@ -7,6 +7,7 @@ export interface WildfireCamera {
   longitude: number;
   height?: number;
   streamUrl?: string;
+  imageUrl?: string;
   thumbnailUrl?: string;
   metadata?: Record<string, unknown>;
 }

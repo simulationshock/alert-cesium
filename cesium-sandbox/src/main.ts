@@ -1,5 +1,5 @@
 import { Camera } from 'cesium';
-import { centerCameraOnSanDiego } from './sandboxConfig';
+import { centerCameraOnSanDiego } from './sandboxConfig.js';
 
 export interface SandboxBootstrapUser {
   id: string;

@@ -5,6 +5,7 @@
  * between wildfire camera locations in Cesium.
  */
 export { CameraFlight } from './CameraFlight.js';
+export { CameraPickerPanel } from './CameraPickerPanel.js';
 export { FloatingCameraFeedCanvas } from './FloatingCameraFeedCanvas.js';
 export { WebXRSessionManager } from './WebXRSessionManager.js';
 export { WebXRWildfireCameraSandbox } from './WebXRWildfireCameraSandbox.js';
@@ -12,14 +13,14 @@ export { WildfireCameraFlightController } from './WildfireCameraFlightController
 export { WildfireCameraDataSource } from './WildfireCameraDataSource.js';
 export { WildfireCameraDataService, WildfireCameraLayer } from './WildfireCameraLayer.js';
 export { WildfireCameraMarkerManager } from './WildfireCameraMarkerManager.js';
-export * from './sandboxConfig';
-export * from './main';
-export * from './auth/types';
-export * from './auth/storage';
-export * from './auth/provider';
-export * from './auth/user';
-export * from './auth/session';
-export * from './auth/middleware';
-export * from './routes/auth';
-export * from './ui/login';
+export * from './sandboxConfig.js';
+export * from './main.js';
+export * from './auth/types.js';
+export * from './auth/storage.js';
+export * from './auth/provider.js';
+export * from './auth/user.js';
+export * from './auth/session.js';
+export * from './auth/middleware.js';
+export * from './routes/auth.js';
+export * from './ui/login.js';
 //# sourceMappingURL=index.js.map

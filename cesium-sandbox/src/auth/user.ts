@@ -1,6 +1,6 @@
-import { createId, recordAuthEvent } from './audit';
-import { AuthStore } from './storage';
-import { OAuth2Identity, ProviderProfile, SandboxUser } from './types';
+import { createId, recordAuthEvent } from './audit.js';
+import { AuthStore } from './storage.js';
+import { OAuth2Identity, ProviderProfile, SandboxUser } from './types.js';
 
 export interface ResolveUserResult {
   user: SandboxUser;

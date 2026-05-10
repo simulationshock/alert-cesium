@@ -1,157 +1,240 @@
-import { Cartesian2, Cartesian3, Color, Entity, HorizontalOrigin, VerticalOrigin, Viewer } from 'cesium';
-import type { FeedState, ResolvedWildfireCamera } from './types';
+import { Cartesian3, ConstantProperty, Viewer } from 'cesium';
+import type { FeedState, ResolvedWildfireCamera } from './types.js';
 
 export interface FloatingCameraFeedOptions {
   width?: number;
   height?: number;
-  pixelOffset?: Cartesian2;
+  /** Base URL of a same-origin CORS proxy (e.g. "https://localhost:8443").
+   *  When provided, an in-world Cesium billboard is created alongside the DOM panel.
+   *  The proxy must expose /proxy?url=<encoded> with Access-Control-Allow-Origin: *.
+   */
+  proxyBase?: string;
 }
 
 /**
- * Draws a selected live camera feed to a canvas and exposes it as a floating Cesium billboard.
- * If video loading fails, an explicit Feed Offline frame is rendered instead.
+ * Displays a selected wildfire camera feed as a DOM overlay panel over the Cesium viewer.
+ * When a proxyBase is provided, also renders an in-world billboard entity at the camera's
+ * geographic position so the feed is visible in XR / immersive mode.
  */
 export class FloatingCameraFeedCanvas extends EventTarget {
   private readonly viewer: Viewer;
-  private readonly canvas: HTMLCanvasElement;
-  private readonly context: CanvasRenderingContext2D;
-  private readonly video: HTMLVideoElement;
-  private readonly options: Required<FloatingCameraFeedOptions>;
-  private entity?: Entity;
-  private frameRequest?: number;
+  private readonly panel: HTMLDivElement;
+  private readonly titleEl: HTMLSpanElement;
+  private readonly badgeEl: HTMLSpanElement;
+  private readonly imgEl: HTMLImageElement;
+  private readonly proxyBase?: string;
+  private pollInterval?: ReturnType<typeof setInterval>;
   private state?: FeedState;
+  private billboardEntity?: any; // Cesium Entity
 
   constructor(viewer: Viewer, options: FloatingCameraFeedOptions = {}) {
     super();
     this.viewer = viewer;
-    this.options = {
-      width: options.width ?? 640,
-      height: options.height ?? 360,
-      pixelOffset: options.pixelOffset ?? new Cartesian2(0, -140)
-    };
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.options.width;
-    this.canvas.height = this.options.height;
-    const context = this.canvas.getContext('2d');
-    if (!context) throw new Error('Canvas 2D context is unavailable.');
-    this.context = context;
-    this.video = document.createElement('video');
-    this.video.crossOrigin = 'anonymous';
-    this.video.muted = true;
-    this.video.playsInline = true;
+    this.proxyBase = options.proxyBase;
+
+    this.panel = document.createElement('div');
+    this.panel.style.cssText = [
+      'position:absolute', 'bottom:20px', 'right:20px', 'width:320px',
+      'background:#111', 'border:2px solid rgba(255,255,255,0.3)',
+      'border-radius:6px', 'overflow:hidden', 'display:none',
+      'z-index:100', 'box-shadow:0 4px 24px rgba(0,0,0,0.6)',
+      'font-family:sans-serif'
+    ].join(';');
+
+    const header = document.createElement('div');
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#1a1a1a;';
+
+    this.titleEl = document.createElement('span');
+    this.titleEl.style.cssText = 'color:#fff;font:bold 13px sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+
+    this.badgeEl = document.createElement('span');
+    this.badgeEl.style.cssText = 'color:#fff;font:bold 11px sans-serif;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-left:8px;';
+
+    header.appendChild(this.titleEl);
+    header.appendChild(this.badgeEl);
+
+    this.imgEl = document.createElement('img');
+    this.imgEl.style.cssText = 'width:100%;display:block;';
+    this.imgEl.alt = '';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = [
+      'position:absolute', 'top:6px', 'right:8px', 'background:none',
+      'border:none', 'color:#aaa', 'font-size:16px', 'cursor:pointer',
+      'line-height:1', 'padding:0'
+    ].join(';');
+    closeBtn.onclick = () => this.close();
+
+    this.panel.appendChild(header);
+    this.panel.appendChild(this.imgEl);
+    this.panel.appendChild(closeBtn);
+
+    const container = viewer.container as HTMLElement;
+    container.style.position = 'relative';
+    container.appendChild(this.panel);
   }
 
   async open(camera: ResolvedWildfireCamera): Promise<FeedState> {
     this.close();
     this.state = { camera, status: 'loading' };
-    this.drawLoading(camera);
-    this.entity = this.createEntity(camera);
-    this.viewer.entities.add(this.entity);
+    this.titleEl.textContent = camera.name;
+    this.setBadge('loading');
+    this.panel.style.display = 'block';
 
-    if (!camera.streamUrl) {
-      this.setOffline(camera, 'No stream URL available.');
-      return this.state;
-    }
-
-    try {
-      this.video.src = camera.streamUrl;
-      await this.video.play();
-      this.state = { camera, status: 'playing' };
-      this.dispatchEvent(new CustomEvent('feedstate', { detail: this.state }));
-      this.drawVideoLoop(camera);
-    } catch {
-      this.setOffline(camera, 'Feed Offline');
+    if (camera.imageUrl) {
+      this.startImagePoll(camera);
+    } else if (camera.streamUrl) {
+      this.setOffline(camera, 'Stream not supported');
+    } else {
+      this.setOffline(camera, 'No feed available');
     }
 
     return this.state;
   }
 
   close(): void {
-    if (this.frameRequest !== undefined) cancelAnimationFrame(this.frameRequest);
-    this.frameRequest = undefined;
-    this.video.pause();
-    this.video.removeAttribute('src');
-    this.video.load();
-    if (this.entity) this.viewer.entities.remove(this.entity);
-    this.entity = undefined;
+    if (this.pollInterval !== undefined) clearInterval(this.pollInterval);
+    this.pollInterval = undefined;
+    this.imgEl.src = '';
+    this.panel.style.display = 'none';
+    this.removeBillboard();
     if (this.state) {
       this.state = { ...this.state, status: 'closed' };
       this.dispatchEvent(new CustomEvent('feedstate', { detail: this.state }));
     }
   }
 
-  getCanvas(): HTMLCanvasElement {
-    return this.canvas;
-  }
-
   getState(): FeedState | undefined {
     return this.state;
   }
 
-  private createEntity(camera: ResolvedWildfireCamera): Entity {
-    return new Entity({
-      id: `wildfire-camera-feed:${camera.id}`,
-      name: `${camera.name} live feed`,
-      position: Cartesian3.fromDegrees(camera.longitude, camera.latitude, (camera.height ?? 0) + 350),
-      billboard: {
-        image: this.canvas,
-        width: 320,
-        height: 180,
-        pixelOffset: this.options.pixelOffset,
-        horizontalOrigin: HorizontalOrigin.CENTER,
-        verticalOrigin: VerticalOrigin.BOTTOM,
-        disableDepthTestDistance: Number.POSITIVE_INFINITY
-      },
-      label: {
-        text: camera.name,
-        fillColor: Color.WHITE,
-        outlineColor: Color.BLACK,
-        outlineWidth: 3,
-        pixelOffset: new Cartesian2(this.options.pixelOffset.x, this.options.pixelOffset.y - 105),
-        disableDepthTestDistance: Number.POSITIVE_INFINITY
+  destroy(): void {
+    this.close();
+    this.panel.remove();
+  }
+
+  private startImagePoll(camera: ResolvedWildfireCamera): void {
+    // DOM overlay: plain <img> (no crossOrigin needed)
+    const refresh = (): void => {
+      this.imgEl.src = `${camera.imageUrl}?t=${Date.now()}`;
+    };
+    this.imgEl.onload = () => {
+      if (this.state?.status !== 'playing') {
+        this.state = { camera, status: 'playing' };
+        this.setBadge('live');
+        this.dispatchEvent(new CustomEvent('feedstate', { detail: this.state }));
       }
+    };
+    this.imgEl.onerror = () => this.setOffline(camera, 'Feed unavailable');
+    refresh();
+    this.pollInterval = setInterval(() => {
+      refresh();
+      // Also refresh the XR billboard if active
+      if (this.proxyBase && camera.imageUrl) {
+        void this.refreshBillboard(camera);
+      }
+    }, 10_000);
+
+    // Create the XR in-world billboard if a proxy is configured
+    if (this.proxyBase && camera.imageUrl) {
+      this.ensureBillboard(camera);
+      void this.refreshBillboard(camera);
+    }
+  }
+
+  private ensureBillboard(camera: ResolvedWildfireCamera): void {
+    if (this.billboardEntity) return;
+    const position = Cartesian3.fromDegrees(camera.longitude, camera.latitude, (camera as any).altitude ?? 100);
+    this.billboardEntity = this.viewer.entities.add({
+      position,
+      billboard: {
+        // Placeholder until first frame loads via proxy
+        image: new ConstantProperty(this.makePlaceholderCanvas()),
+        width: new ConstantProperty(320),
+        height: new ConstantProperty(180),
+        scaleByDistance: new ConstantProperty({ near: 100, nearValue: 1.5, far: 50_000, farValue: 0.3 } as any),
+        disableDepthTestDistance: new ConstantProperty(Number.POSITIVE_INFINITY),
+      } as any,
+      label: {
+        text: new ConstantProperty(camera.name),
+        pixelOffset: new ConstantProperty({ x: 0, y: -110 } as any),
+        font: new ConstantProperty('bold 13px sans-serif'),
+        fillColor: new ConstantProperty({ red: 1, green: 1, blue: 1, alpha: 1 } as any),
+        outlineWidth: new ConstantProperty(2),
+        style: new ConstantProperty(2 /* FILL_AND_OUTLINE */),
+        disableDepthTestDistance: new ConstantProperty(Number.POSITIVE_INFINITY),
+      } as any,
     });
   }
 
-  private drawVideoLoop(camera: ResolvedWildfireCamera): void {
-    this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
-    this.drawChrome(camera.name, 'LIVE');
-    (this.entity?.billboard?.image as any)?.setValue?.(this.canvas);
-    this.frameRequest = requestAnimationFrame(() => this.drawVideoLoop(camera));
+  private async refreshBillboard(camera: ResolvedWildfireCamera): Promise<void> {
+    if (!this.billboardEntity || !this.proxyBase || !camera.imageUrl) return;
+    const proxyUrl = `${this.proxyBase}/proxy?url=${encodeURIComponent(camera.imageUrl + '?t=' + Date.now())}`;
+    try {
+      const canvas = await loadImageToCanvas(proxyUrl);
+      // Assign a NEW ConstantProperty each cycle to force Cesium texture re-upload
+      this.billboardEntity.billboard.image = new ConstantProperty(canvas);
+      this.billboardEntity.billboard.width = new ConstantProperty(canvas.width);
+      this.billboardEntity.billboard.height = new ConstantProperty(canvas.height);
+    } catch {
+      // Silently ignore — keep showing the previous frame
+    }
   }
 
-  private drawLoading(camera: ResolvedWildfireCamera): void {
-    this.drawPanel(camera.name, 'Loading feed…', '#203040');
+  private removeBillboard(): void {
+    if (this.billboardEntity) {
+      this.viewer.entities.remove(this.billboardEntity);
+      this.billboardEntity = undefined;
+    }
+  }
+
+  private makePlaceholderCanvas(): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = 320;
+    canvas.height = 180;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#aaa';
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Loading feed…', canvas.width / 2, canvas.height / 2);
+    return canvas;
   }
 
   private setOffline(camera: ResolvedWildfireCamera, message: string): void {
     this.state = { camera, status: 'offline', message };
-    this.drawPanel(camera.name, message, '#3d1f1f');
-    (this.entity?.billboard?.image as any)?.setValue?.(this.canvas);
+    this.setBadge('offline');
     this.dispatchEvent(new CustomEvent('feedstate', { detail: this.state }));
   }
 
-  private drawPanel(title: string, message: string, background: string): void {
-    this.context.fillStyle = background;
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.fillStyle = '#ffffff';
-    this.context.font = 'bold 28px sans-serif';
-    this.context.fillText(title, 24, 54);
-    this.context.font = '22px sans-serif';
-    this.context.fillText(message, 24, 112);
-    this.drawChrome(title, message.toUpperCase());
+  private setBadge(mode: 'live' | 'offline' | 'loading'): void {
+    const styles: Record<string, [string, string]> = {
+      live:    ['LIVE',    '#e53935'],
+      offline: ['OFFLINE', '#555'],
+      loading: ['…',       '#555'],
+    };
+    const [text, bg] = styles[mode];
+    this.badgeEl.textContent = text;
+    this.badgeEl.style.background = bg;
   }
+}
 
-  private drawChrome(_title: string, badge: string): void {
-    this.context.fillStyle = 'rgba(0, 0, 0, 0.55)';
-    this.context.fillRect(0, 0, this.canvas.width, 38);
-    this.context.fillStyle = '#ffffff';
-    this.context.font = 'bold 18px sans-serif';
-    this.context.fillText('Wildfire Camera', 16, 25);
-    this.context.fillStyle = badge === 'LIVE' ? '#e53935' : '#9e9e9e';
-    this.context.fillRect(this.canvas.width - 92, 9, 72, 22);
-    this.context.fillStyle = '#ffffff';
-    this.context.font = 'bold 13px sans-serif';
-    this.context.fillText(badge, this.canvas.width - 82, 25);
-  }
+/** Loads an image via a CORS-enabled URL into an HTMLCanvasElement. */
+function loadImageToCanvas(url: string): Promise<HTMLCanvasElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth || 320;
+      canvas.height = img.naturalHeight || 180;
+      canvas.getContext('2d')!.drawImage(img, 0, 0);
+      resolve(canvas);
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
 }

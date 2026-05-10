@@ -1,5 +1,5 @@
-import { AuthStore } from './storage';
-import { AuthenticationEvent, AuthenticationEventOutcome, AuthenticationEventType } from './types';
+import { AuthStore } from './storage.js';
+import { AuthenticationEvent, AuthenticationEventOutcome, AuthenticationEventType } from './types.js';
 
 export interface AuditInput {
   type: AuthenticationEventType;

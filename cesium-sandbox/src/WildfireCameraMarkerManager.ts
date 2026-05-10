@@ -6,10 +6,12 @@ import {
   HorizontalOrigin,
   LabelStyle,
   SceneTransforms,
+  ScreenSpaceEventHandler,
+  ScreenSpaceEventType,
   VerticalOrigin,
   Viewer
 } from 'cesium';
-import type { CameraCluster, MarkerSelection, ResolvedWildfireCamera } from './types';
+import type { CameraCluster, MarkerSelection, ResolvedWildfireCamera } from './types.js';
 
 export interface MarkerManagerOptions {
   /** Screen-space size in pixels used to group crowded markers. */
@@ -25,6 +27,8 @@ export class WildfireCameraMarkerManager {
   private readonly options: Required<Omit<MarkerManagerOptions, 'onSelect'>> & Pick<MarkerManagerOptions, 'onSelect'>;
   private cameras: ResolvedWildfireCamera[] = [];
   private entities: Entity[] = [];
+  private readonly onMoveEnd: () => void;
+  private readonly clickHandler: ScreenSpaceEventHandler;
 
   constructor(viewer: Viewer, options: MarkerManagerOptions = {}) {
     this.viewer = viewer;
@@ -33,6 +37,23 @@ export class WildfireCameraMarkerManager {
       maximumVisibleMarkers: options.maximumVisibleMarkers ?? 250,
       onSelect: options.onSelect
     };
+    this.onMoveEnd = () => this.refresh();
+    this.viewer.camera.moveEnd.addEventListener(this.onMoveEnd);
+
+    this.clickHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
+    this.clickHandler.setInputAction((event: ScreenSpaceEventHandler.PositionedEvent) => {
+      const picked = this.viewer.scene.pick(event.position);
+      console.log('[MarkerManager] click picked:', picked);
+      const entity: Entity | undefined = picked?.id instanceof Entity ? picked.id : undefined;
+      console.log('[MarkerManager] entity:', entity?.id, 'selection:', (entity as any)?.wildfireSelection);
+
+      if (!entity) return;
+      const selection: MarkerSelection | undefined = (entity as any).wildfireSelection;
+      if (selection) {
+        console.log('[MarkerManager] firing onSelect with:', selection);
+        this.options.onSelect?.(selection);
+      }
+    }, ScreenSpaceEventType.LEFT_CLICK);
   }
 
   setCameras(cameras: ResolvedWildfireCamera[]): void {
@@ -63,6 +84,12 @@ export class WildfireCameraMarkerManager {
       this.viewer.entities.remove(entity);
     }
     this.entities = [];
+  }
+
+  destroy(): void {
+    this.viewer.camera.moveEnd.removeEventListener(this.onMoveEnd);
+    this.clickHandler.destroy();
+    this.clear();
   }
 
   selectCamera(cameraId: string): MarkerSelection | undefined {

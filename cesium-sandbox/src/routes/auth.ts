@@ -1,8 +1,8 @@
-import { recordAuthEvent } from '../auth/audit';
-import { createAuthorizationRedirect, exchangeAuthorizationCode, fetchProviderProfile, OAuth2ProviderConfig, OAuthLoginStateStore, safeReturnTo } from '../auth/provider';
-import { AuthStore } from '../auth/storage';
-import { clearSessionCookie, createSession, currentUserState, endSession, parseCookie, SESSION_COOKIE, sessionCookie, signedOutState, validateSession } from '../auth/session';
-import { AuthUserError, resolveOrRegisterUser } from '../auth/user';
+import { recordAuthEvent } from '../auth/audit.js';
+import { createAuthorizationRedirect, exchangeAuthorizationCode, fetchProviderProfile, OAuth2ProviderConfig, OAuthLoginStateStore, safeReturnTo } from '../auth/provider.js';
+import { AuthStore } from '../auth/storage.js';
+import { clearSessionCookie, createSession, currentUserState, endSession, parseCookie, SESSION_COOKIE, sessionCookie, signedOutState, validateSession } from '../auth/session.js';
+import { AuthUserError, resolveOrRegisterUser } from '../auth/user.js';
 
 export interface AuthRoutesOptions {
   store: AuthStore;

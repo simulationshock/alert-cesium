@@ -1,6 +1,6 @@
 import { Camera, Cartesian3 } from 'cesium';
-import { CameraFlight } from './CameraFlight';
-import type { CameraFlightOptions, CameraFlightOutcome, CameraFlightStatus, WildfireCameraLocation } from './types';
+import { CameraFlight } from './CameraFlight.js';
+import type { CameraFlightOptions, CameraFlightOutcome, CameraFlightStatus, WildfireCameraLocation } from './types.js';
 
 const DEFAULT_FOCUS_DISTANCE_METERS = 25;
 

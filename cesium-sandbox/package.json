@@ -2,11 +2,13 @@
   "name": "cesium-wildfire-cameras",
   "version": "1.0.0",
   "description": "Cesium-based wildfire camera visualization with smooth flight animations",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "serve": "node serve.mjs",
     "test": "npm run test:e2e",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed"
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/cesium": "^1.70.0",
+    "selfsigned": "^5.5.0",
     "typescript": "^5.9.3"
   }
 }

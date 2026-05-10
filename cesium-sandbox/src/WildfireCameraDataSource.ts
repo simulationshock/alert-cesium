@@ -1,9 +1,11 @@
 import { Cartesian3 } from 'cesium';
-import type { ResolvedWildfireCamera, WildfireCamera } from './types';
+import type { ResolvedWildfireCamera, WildfireCamera } from './types.js';
 
 export interface WildfireCameraDataSourceOptions {
   endpoint?: string;
   fetcher?: typeof fetch;
+  /** URL template for a per-camera JPEG image. Use `{id}` as a placeholder for the camera ID. */
+  imageUrlPattern?: string;
 }
 
 type UnknownRecord = Record<string, unknown>;
@@ -17,10 +19,12 @@ type UnknownRecord = Record<string, unknown>;
 export class WildfireCameraDataSource {
   private endpoint?: string;
   private fetcher: typeof fetch;
+  private imageUrlPattern?: string;
 
   constructor(options: WildfireCameraDataSourceOptions = {}) {
     this.endpoint = options.endpoint;
-    this.fetcher = options.fetcher ?? fetch;
+    this.fetcher = options.fetcher ?? fetch.bind(globalThis);
+    this.imageUrlPattern = options.imageUrlPattern;
   }
 
   async load(endpoint = this.endpoint): Promise<ResolvedWildfireCamera[]> {
@@ -87,7 +91,10 @@ export class WildfireCameraDataSource {
     const id = String(firstValue(item, ['id', 'cameraId', 'metadataId', 'slug']) ?? `wildfire-camera-${index}`);
     const name = String(firstValue(item, ['name', 'title', 'label']) ?? `Wildfire Camera ${index + 1}`);
     const streamUrl = stringFrom(firstValue(item, ['streamUrl', 'stream_url', 'hlsUrl', 'url']));
-    const thumbnailUrl = stringFrom(firstValue(item, ['thumbnailUrl', 'thumbnail_url', 'imageUrl', 'image']));
+    const imageUrl = stringFrom(firstValue(item, ['imageUrl', 'image_url', 'frameUrl', 'frame_url']))
+      ?? (this.imageUrlPattern ? this.imageUrlPattern.replace('{id}', id) : undefined);
+    const thumbnailUrl = stringFrom(firstValue(item, ['thumbnailUrl', 'thumbnail_url']))
+      ?? (this.imageUrlPattern ? this.imageUrlPattern.replace('{id}', id).replace('latest-frame', 'latest-thumb') : undefined);
 
     return {
       id,
@@ -96,6 +103,7 @@ export class WildfireCameraDataSource {
       longitude,
       height,
       streamUrl,
+      imageUrl,
       thumbnailUrl,
       metadata: item,
       position: Cartesian3.fromDegrees(longitude, latitude, height ?? 0)

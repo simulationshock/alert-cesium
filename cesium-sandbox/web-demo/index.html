@@ -16,16 +16,31 @@
   <script type="importmap">
 {
   "imports": {
-    "cesium": "https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"
+    "cesium": "./cesium-esm-shim.js"
   }
 }
 </script>
 <script type="module">
     // Import the compiled sandbox bundle (ESM)
     import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
-    // Initialize Cesium Viewer with XR button enabled – Cesium is provided via the import map above
+
+    // Terrain: ArcGIS World Elevation 3D — Copernicus DEM, ~10–30 m global, no token required
+    const terrainProvider = await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
+      'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
+    );
+
+    // Imagery: ArcGIS World Topo Map — shaded relief, land cover, roads and labels baked in.
+    // Much lighter than full satellite imagery; renders well draped over 3D elevation.
+    const topoLayer = Cesium.ImageryLayer.fromProviderAsync(
+      Cesium.ArcGisMapServerImageryProvider.fromUrl(
+        'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer'
+      )
+    );
+
+    // Initialize Cesium Viewer
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrainProvider: Cesium.createWorldTerrain(),
+      terrainProvider,
+      baseLayer: topoLayer,
       vrButton: true, // enables WebXR entry point
       baseLayerPicker: false,
       fullscreenButton: false,
@@ -39,11 +54,16 @@
       selectionIndicator: false,
     });
 
-    // Wire up the sandbox (no auth for this demo)
-    const sandbox = new WebXRWildfireCameraSandbox(viewer);
-    // Load a dummy endpoint – the sandbox is data‑agnostic; replace with real API as needed.
-    // Here we just resolve the promise to an empty list so the viewer still works.
-    sandbox.load('').catch(console.error);
+    // Wire up the sandbox
+    const sandbox = new WebXRWildfireCameraSandbox(viewer, {
+      dataSource: {
+        imageUrlPattern: 'https://cameras.alertcalifornia.org/public-camera-data/{id}/latest-frame.jpg'
+      },
+      feed: {
+        proxyBase: window.location.origin,
+      },
+    });
+    sandbox.load('https://cameras.alertcalifornia.org/public-camera-data/all_cameras-v3.json').catch(console.error);
   </script>
 </body>
 </html>

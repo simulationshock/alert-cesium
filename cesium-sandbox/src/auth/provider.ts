@@ -1,5 +1,5 @@
-import { randomToken } from './audit';
-import { ProviderProfile } from './types';
+import { randomToken } from './audit.js';
+import { ProviderProfile } from './types.js';
 
 export interface OAuth2ProviderConfig {
   provider: string;
