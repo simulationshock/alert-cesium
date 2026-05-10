@@ -1,7 +1,0 @@
-{
-  "inputs": {
-    "spec": "cesium-sandbox/specs/002-webxr-wildfire-cameras/spec.md",
-    "integration": "claude",
-    "scope": "full"
-  }
-}

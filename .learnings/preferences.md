@@ -1,1 +1,0 @@
-- All GitHub repositories created by Darb must be **private** by default unless explicitly stated otherwise by the user.

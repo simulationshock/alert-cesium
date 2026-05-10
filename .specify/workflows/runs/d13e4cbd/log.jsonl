@@ -1,8 +1,0 @@
-{"event": "step_started", "step_id": "specify", "type": "command", "timestamp": "2026-05-09T19:30:06.482633+00:00"}
-{"event": "step_completed", "step_id": "specify", "status": "completed", "timestamp": "2026-05-09T19:30:07.835258+00:00"}
-{"event": "step_started", "step_id": "review-spec", "type": "gate", "timestamp": "2026-05-09T19:30:07.836011+00:00"}
-{"event": "step_completed", "step_id": "review-spec", "status": "paused", "timestamp": "2026-05-09T19:30:07.836627+00:00"}
-{"event": "workflow_finished", "status": "paused", "timestamp": "2026-05-09T19:30:07.837234+00:00"}
-{"event": "step_started", "step_id": "review-spec", "type": "gate", "timestamp": "2026-05-09T19:31:49.175771+00:00"}
-{"event": "step_completed", "step_id": "review-spec", "status": "paused", "timestamp": "2026-05-09T19:31:49.179632+00:00"}
-{"event": "workflow_finished", "status": "paused", "timestamp": "2026-05-09T19:31:49.180242+00:00"}

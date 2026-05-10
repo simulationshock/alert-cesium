@@ -1,7 +1,0 @@
-{
-  "inputs": {
-    "spec": "Build a Minimalist Task-Timer webapp using Next.js. The app should allow users to input a task name and a duration (in minutes), then run a visual countdown timer. A key requirement is a visual overlay where the agent's insect emoji (\ud83e\udd97) 'drizzles' or falls down the page as a background animation.",
-    "integration": "generic",
-    "scope": "full"
-  }
-}

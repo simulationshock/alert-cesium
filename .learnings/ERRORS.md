@@ -1,2 +1,0 @@
-- 2026-05-09: In cesium-sandbox, `npm run build` can fail with `tsc: not found` when npm dependencies have not been installed yet; run `npm install` before using build as a verification gate.
-- 2026-05-09: In cesium-sandbox, local `npm run test:e2e` could not launch Playwright Chromium because OS library `libglib-2.0.so.0` is missing. `npx playwright install-deps chromium` failed without root/su; elevated exec unavailable in direct runtime. CI workflow uses `npx playwright install --with-deps chromium` to avoid this on GitHub runners.
