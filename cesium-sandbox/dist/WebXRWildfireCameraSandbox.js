@@ -1,7 +1,7 @@
 import { FloatingCameraFeedCanvas } from './FloatingCameraFeedCanvas.js';
 import { WildfireCameraDataSource } from './WildfireCameraDataSource.js';
 import { WildfireCameraFlightController } from './WildfireCameraFlightController.js';
-import { WildfireCameraMarkerManager } from './WildfireCameraMarkerManager';
+import { WildfireCameraMarkerManager } from './WildfireCameraMarkerManager.js';
 import { WebXRSessionManager } from './WebXRSessionManager.js';
 /** High-level wiring for the WebXR wildfire camera feature. */
 export class WebXRWildfireCameraSandbox {
