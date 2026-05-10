@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cesium Sandbox Demo</title>
+  <!-- Cesium from CDN (same version as the sandbox dependency) -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <style>
+    html, body, #cesiumContainer { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script type="module">
+    // Import the compiled sandbox bundle (ESM)
+    import { WebXRWildfireCameraSandbox } from './dist/WebXRWildfireCameraSandbox.js';
+    // Initialize Cesium Viewer with XR button enabled
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      terrainProvider: Cesium.createWorldTerrain(),
+      vrButton: true, // enables WebXR entry point
+      baseLayerPicker: false,
+      fullscreenButton: false,
+      animation: false,
+      timeline: false,
+      infoBox: false,
+      geocoder: false,
+      homeButton: false,
+      navigationHelpButton: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+    });
+
+    // Wire up the sandbox (no auth for this demo)
+    const sandbox = new WebXRWildfireCameraSandbox(viewer);
+    // Load a dummy endpoint – the sandbox is data‑agnostic; replace with real API as needed.
+    // Here we just resolve the promise to an empty list so the viewer still works.
+    sandbox.load('').catch(console.error);
+  </script>
+</body>
+</html>

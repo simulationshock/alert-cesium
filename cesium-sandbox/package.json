@@ -1,0 +1,32 @@
+{
+  "name": "cesium-wildfire-cameras",
+  "version": "1.0.0",
+  "description": "Cesium-based wildfire camera visualization with smooth flight animations",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "npm run test:e2e",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed"
+  },
+  "keywords": [
+    "cesium",
+    "wildfire",
+    "camera",
+    "animation",
+    "flight",
+    "parabolic"
+  ],
+  "author": "Wildfire Visualization Team",
+  "license": "MIT",
+  "dependencies": {
+    "cesium": "^1.120.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/cesium": "^1.70.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,4 @@
+{"event": "step_completed", "step_id": "specify", "status": "completed", "timestamp": "2026-05-09T18:56:32.866971+00:00"}
+{"event": "step_started", "step_id": "review-spec", "type": "gate", "timestamp": "2026-05-09T18:56:32.867666+00:00"}
+{"event": "step_completed", "step_id": "review-spec", "status": "paused", "timestamp": "2026-05-09T18:56:32.868380+00:00"}
+{"event": "workflow_finished", "status": "paused", "timestamp": "2026-05-09T18:56:32.868961+00:00"}

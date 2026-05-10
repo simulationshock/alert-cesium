@@ -1,0 +1,1 @@
+- 2026-05-09: `npm run build` passed for cesium-sandbox, but direct Node import of `dist/index.js` fails because emitted ES modules use extensionless imports and package.json lacks Node ESM-compatible settings. Use tsc as the verification gate unless module packaging is updated.
