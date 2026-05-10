@@ -1,0 +1,141 @@
+{
+  models: {
+    mode: "merge",
+    providers: {
+      nrp: {
+        baseUrl: "https://ellm.nrp-nautilus.io/v1",
+        apiKey: { source: "env", provider: "default", id: "NRP_ELLM_API" },
+        auth: "api-key",
+        authHeader: true,
+        api: "openai-completions",
+        timeoutSeconds: 120,
+        models: [
+          {
+            id: "qwen3",
+            name: "NRP Qwen3 397B",
+            reasoning: true,
+            input: ["text", "image", "video"],
+            contextWindow: 262144,
+            contextTokens: 262144,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "qwen3-small",
+            name: "NRP Qwen3 Small 27B",
+            reasoning: true,
+            input: ["text", "image", "video"],
+            contextWindow: 262144,
+            contextTokens: 262144,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "gpt-oss",
+            name: "NRP GPT-OSS 120B",
+            reasoning: true,
+            input: ["text"],
+            contextWindow: 131072,
+            contextTokens: 131072,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "gemma",
+            name: "NRP Gemma 31B",
+            reasoning: true,
+            input: ["text", "image", "video"],
+            contextWindow: 262144,
+            contextTokens: 262144,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "qwen3-embedding",
+            name: "NRP Qwen3 Embedding 8B",
+            reasoning: false,
+            input: ["image", "video"],
+            compat: { supportsTools: false }
+          }
+        ]
+      },
+      "nrp-experimental": {
+        baseUrl: "https://ellm.nrp-nautilus.io/v1",
+        apiKey: { source: "env", provider: "default", id: "NRP_ELLM_API" },
+        auth: "api-key",
+        authHeader: true,
+        api: "openai-completions",
+        timeoutSeconds: 120,
+        models: [
+          {
+            id: "gemma-small",
+            name: "NRP Experimental Gemma Small ~8B",
+            reasoning: true,
+            input: ["text", "image", "video", "audio"],
+            contextWindow: 131072,
+            contextTokens: 131072,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "kimi",
+            name: "NRP Experimental Kimi 1T",
+            reasoning: true,
+            input: ["text", "image", "video"],
+            contextWindow: 262144,
+            contextTokens: 262144,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "glm-4.7",
+            name: "NRP Experimental GLM 4.7 358B",
+            reasoning: true,
+            input: ["text"],
+            contextWindow: 202752,
+            contextTokens: 202752,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "glm-5",
+            name: "NRP Experimental GLM 5 744B",
+            reasoning: true,
+            input: ["text"],
+            contextWindow: 202752,
+            contextTokens: 202752,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "minimax-m2",
+            name: "NRP Experimental MiniMax M2 230B",
+            reasoning: true,
+            input: ["text"],
+            contextWindow: 204800,
+            contextTokens: 204800,
+            compat: { supportsTools: true }
+          },
+          {
+            id: "olmo",
+            name: "NRP Experimental OLMo 32B",
+            reasoning: false,
+            input: ["text"],
+            contextWindow: 65536,
+            contextTokens: 65536,
+            compat: { supportsTools: true }
+          }
+        ]
+      }
+    }
+  },
+  agents: {
+    defaults: {
+      models: {
+        "nrp/qwen3": { alias: "NRP Qwen3 397B" },
+        "nrp/qwen3-small": { alias: "NRP Qwen3 Small 27B" },
+        "nrp/gpt-oss": { alias: "NRP GPT-OSS 120B" },
+        "nrp/gemma": { alias: "NRP Gemma 31B" },
+        "nrp/qwen3-embedding": { alias: "NRP Qwen3 Embedding 8B" },
+        "nrp-experimental/gemma-small": { alias: "NRP Experimental Gemma Small ~8B" },
+        "nrp-experimental/kimi": { alias: "NRP Experimental Kimi 1T" },
+        "nrp-experimental/glm-4.7": { alias: "NRP Experimental GLM 4.7 358B" },
+        "nrp-experimental/glm-5": { alias: "NRP Experimental GLM 5 744B" },
+        "nrp-experimental/minimax-m2": { alias: "NRP Experimental MiniMax M2 230B" },
+        "nrp-experimental/olmo": { alias: "NRP Experimental OLMo 32B" }
+      }
+    }
+  }
+}

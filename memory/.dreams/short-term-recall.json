@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-09T17:23:04.508Z",
+  "entries": {
+    "memory:memory/2026-05-08.md:1:11": {
+      "key": "memory:memory/2026-05-08.md:1:11",
+      "path": "memory/2026-05-08.md",
+      "startLine": 1,
+      "endLine": 11,
+      "source": "memory",
+      "snippet": "# Durable Memories - 2026-05-08 ## Docker Sandbox Connectivity Investigation - Identified that OpenClaw (in container) needs to reach worker agents in Docker Sandboxes. - Determined that `host.docker.internal` resolves correctly to `172.17.0.1`. - Attempted port mapping (`sbx ports`) for `claude-darb`, `codex-darb`, and `opencode-nrp-darb` on host ports 8081, 8082, and 8083 mapping to internal 8080. - Initial connectivity tests failed. - Diagnosed that sandboxes were initially \"empty\" (no agent processes running), but later verified via GUI dashboard that `claude-darb` is active and communicating with Anthropic APIs. - Current Hypothesis: Agent services inside sandboxes are binding to `127.",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1.632199321855429,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-05-09T07:44:24.005Z",
+      "lastRecalledAt": "2026-05-09T17:23:04.508Z",
+      "queryHashes": [
+        "fbe41ad2eca1",
+        "811c0e7816bd"
+      ],
+      "recallDays": [
+        "2026-05-09"
+      ],
+      "conceptTags": [
+        "host.docker.internal",
+        "172.17.0.1",
+        "claude-darb",
+        "codex-darb",
+        "opencode-nrp-darb",
+        "durable",
+        "memories",
+        "docker"
+      ]
+    }
+  }
+}

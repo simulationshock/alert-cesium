@@ -1,0 +1,2 @@
+- Always create GitHub repositories as **private** by default.
+- Only create a public repository if the user explicitly uses the word "public".

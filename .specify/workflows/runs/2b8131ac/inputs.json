@@ -1,0 +1,7 @@
+{
+  "inputs": {
+    "spec": "specs/003-flight-nav/spec.md",
+    "integration": "claude",
+    "scope": "full"
+  }
+}

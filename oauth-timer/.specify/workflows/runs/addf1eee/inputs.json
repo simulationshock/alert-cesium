@@ -1,0 +1,7 @@
+{
+  "inputs": {
+    "spec": "Build an authenticated Task-Timer webapp. Features: 1. Next.js frontend with Tailwind CSS. 2. OAuth 2.0 login (e.g., Google or GitHub) and a basic account creation flow. 3. User-specific task timers that persist across sessions (database required). 4. The \ud83e\udd97 drizzle overlay as a background animation. 5. Secure session management.",
+    "integration": "claude",
+    "scope": "full"
+  }
+}

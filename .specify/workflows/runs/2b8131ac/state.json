@@ -1,0 +1,53 @@
+{
+  "run_id": "2b8131ac",
+  "workflow_id": "speckit",
+  "status": "paused",
+  "current_step_index": 1,
+  "current_step_id": "review-spec",
+  "step_results": {
+    "specify": {
+      "integration": "claude",
+      "model": null,
+      "options": {},
+      "input": {
+        "args": "specs/003-flight-nav/spec.md"
+      },
+      "output": {
+        "command": "speckit.specify",
+        "integration": "claude",
+        "model": null,
+        "options": {},
+        "input": {
+          "args": "specs/003-flight-nav/spec.md"
+        },
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "dispatched": true
+      },
+      "status": "completed"
+    },
+    "review-spec": {
+      "integration": null,
+      "model": null,
+      "options": [
+        "approve",
+        "reject"
+      ],
+      "input": {},
+      "output": {
+        "message": "Review the generated spec before planning.",
+        "options": [
+          "approve",
+          "reject"
+        ],
+        "on_reject": "abort",
+        "show_file": null,
+        "choice": null
+      },
+      "status": "paused"
+    }
+  },
+  "created_at": "2026-05-09T19:17:39.989136+00:00",
+  "updated_at": "2026-05-09T19:17:45.945556+00:00"
+}
