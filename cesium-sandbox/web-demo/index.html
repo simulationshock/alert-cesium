@@ -13,10 +13,17 @@
 </head>
 <body>
   <div id="cesiumContainer"></div>
-  <script type="module">
+  <script type="importmap">
+{
+  "imports": {
+    "cesium": "https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"
+  }
+}
+</script>
+<script type="module">
     // Import the compiled sandbox bundle (ESM)
     import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
-    // Initialize Cesium Viewer with XR button enabled
+    // Initialize Cesium Viewer with XR button enabled – Cesium is provided via the import map above
     const viewer = new Cesium.Viewer('cesiumContainer', {
       terrainProvider: Cesium.createWorldTerrain(),
       vrButton: true, // enables WebXR entry point
