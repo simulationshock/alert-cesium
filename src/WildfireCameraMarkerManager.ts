@@ -28,6 +28,7 @@ export class WildfireCameraMarkerManager {
   private cameras: ResolvedWildfireCamera[] = [];
   private entities: Entity[] = [];
   private readonly onMoveEnd: () => void;
+  private readonly onCameraChanged: () => void;
   private readonly clickHandler: ScreenSpaceEventHandler;
 
   constructor(viewer: Viewer, options: MarkerManagerOptions = {}) {
@@ -38,7 +39,9 @@ export class WildfireCameraMarkerManager {
       onSelect: options.onSelect
     };
     this.onMoveEnd = () => this.refresh();
+    this.onCameraChanged = () => this.refresh();
     this.viewer.camera.moveEnd.addEventListener(this.onMoveEnd);
+    this.viewer.camera.changed.addEventListener(this.onCameraChanged);
 
     this.clickHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
     this.clickHandler.setInputAction((event: ScreenSpaceEventHandler.PositionedEvent) => {
@@ -88,6 +91,7 @@ export class WildfireCameraMarkerManager {
 
   destroy(): void {
     this.viewer.camera.moveEnd.removeEventListener(this.onMoveEnd);
+    this.viewer.camera.changed.removeEventListener(this.onCameraChanged);
     this.clickHandler.destroy();
     this.clear();
   }
