@@ -30,8 +30,17 @@
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+*Reference: `.specify/memory/constitution.md`*
 
-[Gates determined based on constitution file]
+Verify or waive each principle for this feature's scope:
+
+- **I. Browser-First Module Architecture**: [Does this feature add anything to `src/`? If so, confirm no Node.js-only APIs.]
+- **II. Immersive Comfort and Safety**: [Does this feature touch camera motion or viewing mode? Confirm smooth motion and valid post-op viewer state.]
+- **III. Explicit Outcome Contracts**: [Does this feature add async ops that mutate camera/session state? Confirm typed outcomes.]
+- **IV. Concern Isolation**: [Name the concern this feature addresses. Confirm scope gate rejects out-of-scope work.]
+- **V. Build-First Validation**: [Confirm `npm run build` passes. Note any e2e tests required.]
+
+**Gate status**: [PASS / FAIL — explain any violations or accepted exceptions]
 
 ## Project Structure
 
