@@ -6,6 +6,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   root: 'web-demo',
+  base: '/alert-cesium/',
   resolve: {
     alias: {
       // Redirect ESM `import ... from 'cesium'` to the shim that reads window.Cesium
