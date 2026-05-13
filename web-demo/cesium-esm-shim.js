@@ -6,6 +6,7 @@ export const {
   Camera,
   Cartesian2,
   Cartesian3,
+  Cartographic,
   Color,
   ConstantProperty,
   CustomDataSource,
