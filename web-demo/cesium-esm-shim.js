@@ -3,6 +3,7 @@
 // is served as its normal IIFE bundle (which correctly sets up workers/assets).
 const C = window.Cesium;
 export const {
+  Camera,
   Cartesian2,
   Cartesian3,
   Color,
@@ -21,4 +22,5 @@ export const {
   ScreenSpaceEventHandler,
   ScreenSpaceEventType,
   VerticalOrigin,
+  Viewer,
 } = C;

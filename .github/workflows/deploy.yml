@@ -30,18 +30,17 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
+      - name: Compile TypeScript
+        run: npm run build
 
-      - name: Copy dist into web-demo
-        run: |
-          mkdir -p web-demo/dist
-          cp -r dist/. web-demo/dist/
+      - name: Bundle with Vite
+        run: npm run build:site
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web-demo
+          path: dist-site
 
       - uses: actions/deploy-pages@v4
         id: deployment
