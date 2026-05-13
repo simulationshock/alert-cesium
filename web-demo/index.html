@@ -11,10 +11,28 @@
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
   <style>
     html, body, #cesiumContainer { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+    #xr-btn {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      padding: 10px 18px;
+      background: rgba(20,20,20,0.85);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 6px;
+      font: bold 15px sans-serif;
+      cursor: pointer;
+      display: none;
+    }
+    #xr-btn:hover { background: rgba(50,50,50,0.95); }
+    #xr-btn.active { border-color: #4af; color: #4af; }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
+  <button id="xr-btn">Enter VR</button>
+
   <script type="importmap">
 {
   "imports": {
@@ -23,27 +41,23 @@
 }
 </script>
 <script type="module">
-    // Import the compiled sandbox bundle (ESM)
     import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
+    import { WebXRCesiumBridge } from './webxr-bridge.js';
 
-    // Terrain: ArcGIS World Elevation 3D — Copernicus DEM, ~10–30 m global, no token required
     const terrainProvider = await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
       'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
     );
 
-    // Imagery: ArcGIS World Topo Map — shaded relief, land cover, roads and labels baked in.
-    // Much lighter than full satellite imagery; renders well draped over 3D elevation.
     const topoLayer = Cesium.ImageryLayer.fromProviderAsync(
       Cesium.ArcGisMapServerImageryProvider.fromUrl(
         'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer'
       )
     );
 
-    // Initialize Cesium Viewer
     const viewer = new Cesium.Viewer('cesiumContainer', {
       terrainProvider,
       baseLayer: topoLayer,
-      vrButton: true, // enables WebXR entry point
+      vrButton: false,
       baseLayerPicker: false,
       fullscreenButton: false,
       animation: false,
@@ -56,13 +70,41 @@
       selectionIndicator: false,
     });
 
-    // Wire up the sandbox
     const sandbox = new WebXRWildfireCameraSandbox(viewer, {
       dataSource: {
         imageUrlPattern: 'https://cameras.alertcalifornia.org/public-camera-data/{id}/latest-frame.jpg'
       },
     });
     sandbox.load('https://cameras.alertcalifornia.org/public-camera-data/all_cameras-v3.json').catch(console.error);
+
+    // Show the VR button only on devices that support immersive-vr
+    const xrBtn = document.getElementById('xr-btn');
+    const bridge = new WebXRCesiumBridge(viewer);
+
+    WebXRCesiumBridge.isSupported().then(supported => {
+      if (supported) xrBtn.style.display = 'block';
+    });
+
+    xrBtn.addEventListener('click', async () => {
+      if (bridge.isActive) {
+        await bridge.exit();
+      } else {
+        try {
+          await bridge.enter();
+          xrBtn.textContent = 'Exit VR';
+          xrBtn.classList.add('active');
+        } catch (err) {
+          console.error('WebXR error:', err);
+          alert('Could not enter VR: ' + err.message);
+        }
+      }
+    });
+
+    // Restore button when the session ends (including from the headset side)
+    bridge.addEventListener('sessionend', () => {
+      xrBtn.textContent = 'Enter VR';
+      xrBtn.classList.remove('active');
+    });
   </script>
 </body>
 </html>
