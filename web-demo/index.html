@@ -22,7 +22,7 @@
 </script>
 <script type="module">
     // Import the compiled sandbox bundle (ESM)
-    import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
+    import { WebXRWildfireCameraSandbox } from './dist/WebXRWildfireCameraSandbox.js';
 
     // Terrain: ArcGIS World Elevation 3D — Copernicus DEM, ~10–30 m global, no token required
     const terrainProvider = await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
@@ -58,9 +58,6 @@
     const sandbox = new WebXRWildfireCameraSandbox(viewer, {
       dataSource: {
         imageUrlPattern: 'https://cameras.alertcalifornia.org/public-camera-data/{id}/latest-frame.jpg'
-      },
-      feed: {
-        proxyBase: window.location.origin,
       },
     });
     sandbox.load('https://cameras.alertcalifornia.org/public-camera-data/all_cameras-v3.json').catch(console.error);
