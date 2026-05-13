@@ -1,19 +1,15 @@
 /**
- * Proper WebXR bridge for Cesium.
+ * WebXR bridge for Cesium — replaces legacy vrButton with a proper immersive-vr session.
  *
- * Cesium's built-in vrButton uses scene.useWebVR=true (legacy StereoCamera)
- * which just splits the canvas — no WebXR session is ever initiated.
- *
- * This bridge replaces it with a genuine immersive-vr session by:
- *  1. Intercepting gl.bindFramebuffer(*, null) so Cesium's render output
- *     lands in the XR session's framebuffer instead of the canvas.
- *  2. Resizing the canvas to the left-eye viewport dimensions so Cesium's
- *     internal viewport matches the eye resolution, then blitting that output
- *     to the right-eye viewport so both eyes receive content.
- *  3. Driving Cesium's render loop from the XR frame callback.
- *  4. Mapping headset yaw/pitch directly to Cesium camera heading/pitch
- *     (XR pitch 0 = horizon, -π/2 = looking down at Earth — same as Cesium).
- *  5. Requesting dom-overlay so UI panels remain visible in VR.
+ * Two bugs in the naive approach are fixed here:
+ *  1. Left-eye-only: blitFramebuffer is unreliable with opaque XR framebuffers.
+ *     Instead, we render once per eye by intercepting gl.viewport to redirect
+ *     Cesium's full-canvas call to each eye's XR region, and enabling gl.scissor
+ *     per eye so gl.clear does not erase the first eye when rendering the second.
+ *  2. World moves with head: heading/pitch Euler extraction has sign/offset issues
+ *     and ScreenSpaceCameraController fights the orientation. Fix: convert the HMD
+ *     quaternion directly to camera direction+up vectors via the local ENU frame,
+ *     and disable the camera controller for the duration of the session.
  */
 export class WebXRCesiumBridge extends EventTarget {
   constructor(viewer) {
@@ -21,11 +17,8 @@ export class WebXRCesiumBridge extends EventTarget {
     this._viewer = viewer;
     this._session = null;
     this._gl = null;
-    this._canvas = null;
     this._originalBindFB = null;
-    this._xrFramebuffer = null;
-    this._origCanvasWidth = 0;
-    this._origCanvasHeight = 0;
+    this._originalViewport = null;
   }
 
   static async isSupported() {
@@ -39,8 +32,6 @@ export class WebXRCesiumBridge extends EventTarget {
   async enter() {
     const viewer = this._viewer;
     const canvas = viewer.scene.canvas;
-    this._canvas = canvas;
-
     const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
     if (!gl) throw new Error('Could not get WebGL context from Cesium canvas.');
     this._gl = gl;
@@ -58,61 +49,51 @@ export class WebXRCesiumBridge extends EventTarget {
     await session.updateRenderState({ baseLayer: xrLayer });
     const refSpace = await session.requestReferenceSpace('local-floor');
 
-    // Redirect every Cesium call to gl.bindFramebuffer(*, null) → XR framebuffer.
-    // Cesium's internal rendering always targets null (the canvas default FBO),
-    // so this single intercept is enough to capture all of its output.
+    // Intercept bindFramebuffer: null → XR framebuffer
     const origBind = gl.bindFramebuffer.bind(gl);
     this._originalBindFB = origBind;
-    this._xrFramebuffer = xrLayer.framebuffer;
-    gl.bindFramebuffer = (target, fb) => origBind(target, fb === null ? this._xrFramebuffer : fb);
+    gl.bindFramebuffer = (target, fb) =>
+      origBind(target, fb === null ? xrLayer.framebuffer : fb);
 
-    // Save the original canvas dimensions so we can restore them on exit.
-    this._origCanvasWidth = canvas.width;
-    this._origCanvasHeight = canvas.height;
-
-    viewer.useDefaultRenderLoop = false;
-
-    let eyesReady = false;
-
-    const onFrame = (_time, frame) => {
-      session.requestAnimationFrame(onFrame);
-
-      const pose = frame.getViewerPose(refSpace);
-      if (!pose || pose.views.length === 0) return;
-
-      // On the first real frame, resize the canvas to the left eye's pixel
-      // dimensions. Cesium uses canvas.width/height for its gl.viewport call,
-      // so this makes the rendered region exactly fill the left-eye area of
-      // the XR framebuffer (Quest 2 left eye always starts at x=0, y=0).
-      if (!eyesReady) {
-        const lv = xrLayer.getViewport(pose.views[0]);
-        canvas.width = lv.width;
-        canvas.height = lv.height;
-        eyesReady = true;
-      }
-
-      this._applyHeadOrientation(pose.transform.orientation);
-      viewer.scene.render(Cesium.JulianDate.now());
-
-      // Copy the left-eye render into the right-eye viewport so both eyes
-      // receive content (monoscopic — no parallax, but fine for a globe).
-      if (pose.views.length >= 2) {
-        const lv = xrLayer.getViewport(pose.views[0]);
-        const rv = xrLayer.getViewport(pose.views[1]);
-        origBind(gl.READ_FRAMEBUFFER, xrLayer.framebuffer);
-        origBind(gl.DRAW_FRAMEBUFFER, xrLayer.framebuffer);
-        gl.blitFramebuffer(
-          lv.x, lv.y, lv.x + lv.width, lv.y + lv.height,
-          rv.x, rv.y, rv.x + rv.width, rv.y + rv.height,
-          gl.COLOR_BUFFER_BIT, gl.LINEAR,
-        );
-        // Re-bind FRAMEBUFFER → XR for Cesium's next frame.
-        origBind(gl.FRAMEBUFFER, xrLayer.framebuffer);
+    // Intercept viewport: redirect Cesium's full-canvas call to the current eye's XR viewport.
+    // Simultaneously set the scissor rectangle so gl.clear is bounded to this eye's area;
+    // without this, the second eye's clear would erase the first eye's render.
+    const origViewport = gl.viewport.bind(gl);
+    this._originalViewport = origViewport;
+    const cw = canvas.width;
+    const ch = canvas.height;
+    let _eyeVP = null;
+    gl.viewport = (x, y, w, h) => {
+      if (_eyeVP && x === 0 && y === 0 && w === cw && h === ch) {
+        origViewport(_eyeVP.x, _eyeVP.y, _eyeVP.width, _eyeVP.height);
+        gl.enable(gl.SCISSOR_TEST);
+        gl.scissor(_eyeVP.x, _eyeVP.y, _eyeVP.width, _eyeVP.height);
+      } else {
+        origViewport(x, y, w, h);
       }
     };
 
-    session.requestAnimationFrame(onFrame);
+    // Prevent Cesium's pointer/touch controller from fighting XR orientation
+    viewer.scene.screenSpaceCameraController.enableInputs = false;
+    viewer.useDefaultRenderLoop = false;
 
+    const onFrame = (_t, frame) => {
+      session.requestAnimationFrame(onFrame);
+      const pose = frame.getViewerPose(refSpace);
+      if (!pose || pose.views.length === 0) return;
+
+      this._applyHeadOrientation(pose.transform.orientation);
+
+      origBind(gl.FRAMEBUFFER, xrLayer.framebuffer);
+      for (const view of pose.views) {
+        _eyeVP = xrLayer.getViewport(view);
+        viewer.scene.render(Cesium.JulianDate.now());
+      }
+      _eyeVP = null;
+      gl.disable(gl.SCISSOR_TEST);
+    };
+
+    session.requestAnimationFrame(onFrame);
     session.addEventListener('end', () => {
       this._teardown();
       this.dispatchEvent(new Event('sessionend'));
@@ -122,32 +103,71 @@ export class WebXRCesiumBridge extends EventTarget {
   }
 
   /**
-   * Maps the XR headset quaternion (Y-up right-hand) to Cesium heading/pitch.
+   * Converts the XR headset quaternion to Cesium camera direction + up in ECEF.
    *
-   * In the local-floor reference space:
-   *   pitch = 0   → looking at the horizon  (same as Cesium pitch 0)
-   *   pitch = -π/2 → looking straight down at Earth (same as Cesium pitch -π/2)
+   * XR local-floor: X=right, Y=up, Z=backward (right-hand Y-up).
+   * The initial XR forward (−Z) maps to Cesium heading=0 (North).
+   * ENU mapping: East←XR+X, North←XR−Z, Up←XR+Y.
    *
-   * No offset is applied — the XR and Cesium pitch conventions are identical.
+   * pose.transform.orientation rotates viewer-space vectors into local-floor space,
+   * so forward_in_floor = R*(0,0,−1) and up_in_floor = R*(0,1,0).
    */
   _applyHeadOrientation(q) {
-    const yaw   = Math.atan2(2 * (q.w * q.y + q.x * q.z), 1 - 2 * (q.y * q.y + q.x * q.x));
-    const pitch = Math.asin(Math.max(-1, Math.min(1, 2 * (q.w * q.x - q.y * q.z))));
+    const { x, y, z, w } = q;
+
+    // Rotation matrix elements needed (R rotates viewer-space → local-floor)
+    const r01 = 2*(x*y - w*z),      r02 = 2*(x*z + w*y);
+    const r11 = 1 - 2*(x*x + z*z),  r12 = 2*(y*z - w*x);
+    const r21 = 2*(y*z + w*x),       r22 = 1 - 2*(x*x + y*y);
+
+    // Forward (0,0,−1) and up (0,1,0) in local-floor space
+    const fxLF = -r02,  fyLF = -r12,  fzLF = -r22;
+    const uxLF =  r01,  uyLF =  r11,  uzLF =  r21;
+
+    // Local-floor → ENU:  (lx, ly, lz) → (lx, −lz, ly)
+    // East=lf+X, North=lf−Z, Up=lf+Y
+    const fE = fxLF, fN = -fzLF, fU = fyLF;
+    const uE = uxLF, uN = -uzLF, uU = uyLF;
+
+    // ENU → ECEF via the local frame at the camera's current position.
+    // eastNorthUpToFixedFrame returns a column-major Matrix4:
+    //   col0=[m0,m1,m2]=East, col1=[m4,m5,m6]=North, col2=[m8,m9,m10]=Up
+    const m = Cesium.Transforms.eastNorthUpToFixedFrame(this._viewer.camera.position);
+    const eX = m[0], eY = m[1], eZ = m[2];
+    const nX = m[4], nY = m[5], nZ = m[6];
+    const uX = m[8], uY = m[9], uZ = m[10];
+
     this._viewer.camera.setView({
-      orientation: { heading: -yaw, pitch, roll: 0 },
+      orientation: {
+        direction: new Cesium.Cartesian3(
+          eX*fE + nX*fN + uX*fU,
+          eY*fE + nY*fN + uY*fU,
+          eZ*fE + nZ*fN + uZ*fU,
+        ),
+        up: new Cesium.Cartesian3(
+          eX*uE + nX*uN + uX*uU,
+          eY*uE + nY*uN + uY*uU,
+          eZ*uE + nZ*uN + uZ*uU,
+        ),
+      },
     });
   }
 
   _teardown() {
-    if (this._gl && this._originalBindFB) {
-      this._gl.bindFramebuffer = this._originalBindFB;
-      this._originalBindFB = null;
-      this._xrFramebuffer = null;
+    const gl = this._gl;
+    if (gl) {
+      if (this._originalBindFB) {
+        gl.bindFramebuffer = this._originalBindFB;
+        this._originalBindFB = null;
+      }
+      if (this._originalViewport) {
+        gl.viewport = this._originalViewport;
+        this._originalViewport = null;
+      }
+      gl.disable(gl.SCISSOR_TEST);
+      this._gl = null;
     }
-    if (this._canvas) {
-      this._canvas.width = this._origCanvasWidth;
-      this._canvas.height = this._origCanvasHeight;
-    }
+    this._viewer.scene.screenSpaceCameraController.enableInputs = true;
     this._viewer.useDefaultRenderLoop = true;
     this._session = null;
   }
