@@ -1,10 +1,10 @@
-import { Camera, Cartesian3, Math as CesiumMath } from 'cesium';
+import { Camera, Cartesian3, Cartographic, Math as CesiumMath } from 'cesium';
 import type { CameraFlightOptions, CameraFlightOutcome, ResolvedCameraFlightOptions } from './types.js';
 
 const MIN_DURATION_SECONDS = 0.35;
 const MAX_DURATION_SECONDS = 4.0;
 const MIN_ARC_HEIGHT_METERS = 0;
-const MAX_ARC_HEIGHT_METERS = 2_500_000;
+const MAX_ARC_HEIGHT_METERS = 500_000;
 const DEFAULT_NEAR_DISTANCE_METERS = 1_000;
 const DEFAULT_FAR_DISTANCE_METERS = 6_000_000;
 const MIN_VALID_RADIUS_METERS = 1;
@@ -63,7 +63,7 @@ export class CameraFlight {
     }
 
     const distance = Cartesian3.distance(startPosition, targetPosition);
-    const resolvedOptions = this.resolveOptions(distance, options);
+    const resolvedOptions = this.resolveOptions(distance, options, startPosition, targetPosition);
     const startOrientation = {
       heading: this.camera.heading,
       pitch: this.camera.pitch,
@@ -185,7 +185,7 @@ export class CameraFlight {
     );
 
     const defaultDuration = 0.6 + distanceRatio * 2.9;
-    const defaultArcHeight = Math.min(Math.max(distanceMeters * 0.22, 2_500), 1_500_000);
+    const defaultArcHeight = Math.min(Math.max(distanceMeters * 0.05, 100), MAX_ARC_HEIGHT_METERS);
 
     return {
       duration: CameraFlight.clampFinite(options.duration, defaultDuration, MIN_DURATION_SECONDS, MAX_DURATION_SECONDS),
@@ -196,8 +196,36 @@ export class CameraFlight {
     };
   }
 
-  private resolveOptions(distanceMeters: number, options: CameraFlightOptions): ResolvedCameraFlightOptions {
-    return CameraFlight.resolveDistanceAwareOptions(distanceMeters, options);
+  private resolveOptions(
+    distanceMeters: number,
+    options: CameraFlightOptions,
+    startPosition: Cartesian3,
+    targetPosition: Cartesian3
+  ): ResolvedCameraFlightOptions {
+    const base = CameraFlight.resolveDistanceAwareOptions(distanceMeters, options);
+
+    // If the caller explicitly set a height, respect it.
+    if (Number.isFinite(options.maximumHeight)) return base;
+
+    const startAlt = CameraFlight.altitudeFromCartesian(startPosition);
+    const endAlt = CameraFlight.altitudeFromCartesian(targetPosition);
+    const altitudeDelta = Math.abs(endAlt - startAlt);
+
+    // When start and end differ significantly in altitude the flight already
+    // has a natural vertical component, so reduce the extra arc proportionally.
+    const arcScale = Math.max(1 - (altitudeDelta / Math.max(base.maximumHeight, 1)) * 0.6, 0.15);
+    const adjustedHeight = Math.max(base.maximumHeight * arcScale, 100);
+
+    // Slightly longer duration for flights with meaningful altitude change.
+    const altBonus = Math.min(altitudeDelta / 5000, 0.5);
+    const adjustedDuration = CameraFlight.clamp(base.duration + altBonus, MIN_DURATION_SECONDS, MAX_DURATION_SECONDS);
+
+    return { ...base, maximumHeight: adjustedHeight, duration: adjustedDuration };
+  }
+
+  private static altitudeFromCartesian(position: Cartesian3): number {
+    const carto = Cartographic.fromCartesian(position);
+    return carto?.height ?? 0;
   }
 
   private finishActiveFlight(outcome: CameraFlightOutcome): void {
