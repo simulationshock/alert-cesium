@@ -13,7 +13,7 @@ import type {
 const DEFAULT_ENDPOINT =
   'https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/CA_Perimeters_NIFC_FIRIS_public_view/FeatureServer/0/query' +
   '?where=displayStatus+%3D+%27Active%27' +
-  '&outFields=incident_name%2Carea_acres%2Ctype%2Cpoly_DateCurrent%2CIncidentName%2CGISAcres%2CDateCurrent' +
+  '&outFields=incident_name%2Carea_acres%2Ctype%2Cpoly_DateCurrent' +
   '&outSR=4326' +
   '&f=geojson';
 
