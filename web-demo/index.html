@@ -157,11 +157,67 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
       margin-bottom: 2px;
     }
+
+    /* ── Altitude snap controls ── */
+    #altitude-snap {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+    #snap-toggle-btn {
+      pointer-events: all;
+      padding: 6px 16px;
+      background: rgba(20,20,20,0.88);
+      color: #bbb;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 20px;
+      font: 12px/1.4 sans-serif;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      white-space: nowrap;
+      transition: color .15s, border-color .15s;
+    }
+    #snap-toggle-btn:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+    #snap-toggle-btn.active { color: #7df; border-color: rgba(100,200,255,0.55); }
+    #snap-level-bar {
+      pointer-events: all;
+      display: none;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 14px;
+      background: rgba(14,14,14,0.92);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      white-space: nowrap;
+    }
+    .snap-level {
+      font: 11px/1.4 sans-serif;
+      color: #555;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: color .1s, background .1s;
+    }
+    .snap-level:hover { color: #aaa; }
+    .snap-level.active { color: #7df; font-weight: 600; background: rgba(100,200,255,0.1); }
+    .snap-sep { color: #333; font-size: 10px; margin: 0 1px; user-select: none; }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
   <button id="xr-btn">Enter VR</button>
+  <div id="altitude-snap">
+    <div id="snap-level-bar"></div>
+    <button id="snap-toggle-btn">⇕ Altitude Snap</button>
+  </div>
 
   <div id="map-legend">
     <h3>Map Legend</h3>
@@ -564,6 +620,104 @@
       xrBtn.textContent = 'Enter VR';
       xrBtn.classList.remove('active');
     });
+
+    // ── Altitude Snap Scroll ──────────────────────────────────────────────
+    const SNAP_LEVELS = [
+      { name: 'Globe',        altitude: 10_000_000 },
+      { name: 'Region',       altitude:  1_500_000 },
+      { name: 'State',        altitude:    500_000 },
+      { name: 'City',         altitude:     50_000 },
+      { name: 'Area',         altitude:      5_000 },
+      { name: 'Neighborhood', altitude:        300 },
+    ];
+
+    let snapActive  = false;
+    let isSnapping  = false;
+
+    const snapToggleBtn = document.getElementById('snap-toggle-btn');
+    const snapLevelBar  = document.getElementById('snap-level-bar');
+
+    // Build the breadcrumb bar once
+    const levelSpans = SNAP_LEVELS.map((level, i) => {
+      const span = document.createElement('span');
+      span.className = 'snap-level';
+      span.textContent = level.name;
+      span.addEventListener('click', () => flyToSnapLevel(i));
+      snapLevelBar.append(span);
+      if (i < SNAP_LEVELS.length - 1) {
+        const sep = document.createElement('span');
+        sep.className = 'snap-sep';
+        sep.textContent = '›';
+        snapLevelBar.append(sep);
+      }
+      return span;
+    });
+
+    function getCurrentSnapIdx() {
+      const h = viewer.camera.positionCartographic.height;
+      let best = 0, bestDist = Infinity;
+      SNAP_LEVELS.forEach((lvl, i) => {
+        const d = Math.abs(Math.log10(lvl.altitude) - Math.log10(h));
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      return best;
+    }
+
+    function updateLevelBar(idx) {
+      levelSpans.forEach((span, i) => span.classList.toggle('active', i === idx));
+    }
+
+    function flyToSnapLevel(idx) {
+      if (isSnapping) return;
+      isSnapping = true;
+      updateLevelBar(idx);
+      const lvl = SNAP_LEVELS[idx];
+      const cam = viewer.camera;
+      const pos = cam.positionCartographic;
+      cam.flyTo({
+        destination: Cesium.Cartesian3.fromRadians(pos.longitude, pos.latitude, lvl.altitude),
+        orientation: { heading: cam.heading, pitch: cam.pitch, roll: cam.roll },
+        duration: 0.6,
+        complete: () => { isSnapping = false; },
+        cancel:   () => { isSnapping = false; },
+      });
+    }
+
+    function getNextSnapIdx(direction) {
+      const h = viewer.camera.positionCartographic.height;
+      if (direction > 0) {
+        // scroll down → zoom in → lower altitude → higher index
+        for (let i = 0; i < SNAP_LEVELS.length; i++) {
+          if (SNAP_LEVELS[i].altitude < h * 0.75) return i;
+        }
+        return SNAP_LEVELS.length - 1;
+      } else {
+        // scroll up → zoom out → higher altitude → lower index
+        for (let i = SNAP_LEVELS.length - 1; i >= 0; i--) {
+          if (SNAP_LEVELS[i].altitude > h * 1.33) return i;
+        }
+        return 0;
+      }
+    }
+
+    function setSnapActive(active) {
+      snapActive = active;
+      viewer.scene.screenSpaceCameraController.enableZoom = !active;
+      snapToggleBtn.textContent = active ? '✕ Exit Snap' : '⇕ Altitude Snap';
+      snapToggleBtn.classList.toggle('active', active);
+      snapLevelBar.style.display = active ? 'flex' : 'none';
+      if (active) updateLevelBar(getCurrentSnapIdx());
+    }
+
+    snapToggleBtn.addEventListener('click', () => setSnapActive(!snapActive));
+
+    viewer.scene.canvas.addEventListener('wheel', (e) => {
+      if (!snapActive) return;
+      e.preventDefault();
+      e.stopPropagation();
+      flyToSnapLevel(getNextSnapIdx(e.deltaY > 0 ? 1 : -1));
+    }, { passive: false, capture: true });
+    // ─────────────────────────────────────────────────────────────────────
   </script>
 </body>
 </html>
