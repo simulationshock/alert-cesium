@@ -158,6 +158,39 @@
       margin-bottom: 2px;
     }
 
+    /* ── Flight info panel ── */
+    #flight-info {
+      display: none;
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      background: rgba(14,14,14,0.92);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 10px 14px 8px;
+      color: #eee;
+      font: 12px/1.6 sans-serif;
+      backdrop-filter: blur(6px);
+      min-width: 220px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.55);
+    }
+    #flight-info .fi-callsign {
+      font: bold 14px/1.3 sans-serif;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    #flight-info .fi-row { display: flex; justify-content: space-between; gap: 16px; }
+    #flight-info .fi-label { color: #888; }
+    #flight-info .fi-val   { color: #eee; font-weight: 600; }
+    #flight-info .fi-note  { color: #666; font-size: 10px; margin-top: 6px; }
+    #flight-info .fi-close {
+      position: absolute; top: 6px; right: 8px;
+      background: none; border: none; color: #666; cursor: pointer; font-size: 14px;
+    }
+    #flight-info .fi-close:hover { color: #bbb; }
+
     /* ── Altitude snap controls ── */
     #altitude-snap {
       position: absolute;
@@ -214,6 +247,17 @@
 <body>
   <div id="cesiumContainer"></div>
   <button id="xr-btn">Enter VR</button>
+  <div id="flight-info">
+    <button class="fi-close" id="flight-info-close">✕</button>
+    <div class="fi-callsign" id="fi-callsign"></div>
+    <div class="fi-row"><span class="fi-label">Altitude</span><span class="fi-val" id="fi-alt"></span></div>
+    <div class="fi-row"><span class="fi-label">Speed</span><span class="fi-val" id="fi-speed"></span></div>
+    <div class="fi-row"><span class="fi-label">Heading</span><span class="fi-val" id="fi-heading"></span></div>
+    <div class="fi-row"><span class="fi-label">Vertical</span><span class="fi-val" id="fi-vrate"></span></div>
+    <div class="fi-row"><span class="fi-label">Origin</span><span class="fi-val" id="fi-country"></span></div>
+    <div class="fi-note" id="fi-note"></div>
+  </div>
+
   <div id="altitude-snap">
     <div id="snap-level-bar"></div>
     <button id="snap-toggle-btn">⇕ Altitude Snap</button>
@@ -244,6 +288,18 @@
       <span class="legend-symbol"><span class="legend-polygon"></span></span>
       <span class="legend-label">Active fire perimeter</span>
       <button class="legend-toggle" id="legend-fires-btn" title="Toggle fire overlay">&#x1F441;</button>
+    </div>
+
+    <hr class="legend-divider">
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:12px;height:12px;background:#81d4fa;border-color:#0277bd;"></span></span>
+      <span class="legend-label">Aircraft</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:12px;height:12px;background:#ffcc80;border-color:#e65100;"></span></span>
+      <span class="legend-label">Helicopter</span>
+      <button class="legend-toggle" id="legend-flights-btn" title="Toggle live flights">&#x1F441;</button>
     </div>
 
     <hr class="legend-divider">
@@ -286,6 +342,7 @@
     import { WebXRCesiumBridge } from './webxr-bridge.js';
     import { EmergencyRadioDataSource, EmergencyRadioMarkerManager, EmergencyRadioPlayer } from '../dist/index.js';
     import { PublicWebcamDataSource, PublicWebcamMarkerManager, PublicWebcamViewer } from '../dist/index.js';
+    import { LiveFlightDataSource, LiveFlightMarkerManager } from '../dist/index.js';
 
     const terrainProvider = await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
       'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
@@ -577,6 +634,51 @@
         console.info(`[Webcams] ${webcams.length} public webcams loaded`);
       })
       .catch(console.error);
+
+    // ── Live Flights ─────────────────────────────────────────────────────────
+    const flightSource  = new LiveFlightDataSource({ refreshIntervalMs: 15_000 });
+    const flightMarkers = new LiveFlightMarkerManager(viewer, {
+      onSelect: (flight) => {
+        const panel = document.getElementById('flight-info');
+        if (!flight) { panel.style.display = 'none'; return; }
+        document.getElementById('fi-callsign').textContent =
+          flight.callsign + (flight.kind === 'helicopter' ? ' 🚁' : ' ✈');
+        document.getElementById('fi-alt').textContent =
+          flight.altitude > 0 ? Math.round(flight.altitude * 3.28084).toLocaleString() + ' ft' : '—';
+        document.getElementById('fi-speed').textContent =
+          Math.round(flight.speed * 1.94384) + ' kn';
+        document.getElementById('fi-heading').textContent =
+          Math.round(flight.heading) + '°';
+        document.getElementById('fi-vrate').textContent = (() => {
+          const fpm = Math.round(flight.verticalRate * 196.85);
+          return fpm === 0 ? 'Level' : (fpm > 0 ? '+' : '') + fpm.toLocaleString() + ' ft/min';
+        })();
+        document.getElementById('fi-country').textContent = flight.originCountry || '—';
+        const pts = flightSource.getTrack(flight.icao24).length;
+        document.getElementById('fi-note').textContent =
+          pts > 1
+            ? `Track: ${pts} pts · collected since page load`
+            : 'Track: accumulating — check back soon';
+        panel.style.display = 'block';
+      },
+    });
+    flightMarkers.setTrackProvider(icao24 => flightSource.getTrack(icao24));
+    flightSource.onUpdate = flights => flightMarkers.update(flights);
+    flightSource.start().then(() => {
+      console.info('[LiveFlight] started — polling OpenSky every 15 s');
+    }).catch(console.error);
+
+    document.getElementById('flight-info-close').addEventListener('click', () => {
+      document.getElementById('flight-info').style.display = 'none';
+    });
+
+    // Legend toggle — flights
+    const flightsBtn = document.getElementById('legend-flights-btn');
+    flightsBtn.addEventListener('click', () => {
+      flightMarkers.setVisible(!flightMarkers.visible);
+      flightsBtn.classList.toggle('off', !flightMarkers.visible);
+    });
+    // ─────────────────────────────────────────────────────────────────────────
 
     // Legend toggle — webcams
     const webcamsBtn = document.getElementById('legend-webcams-btn');

@@ -13,6 +13,8 @@ export { PublicWebcamDataSource } from './PublicWebcamDataSource.js';
 export { PublicWebcamMarkerManager } from './PublicWebcamMarkerManager.js';
 export { PublicWebcamViewer } from './PublicWebcamViewer.js';
 export { FireIncidentOverlay } from './FireIncidentOverlay.js';
+export { LiveFlightDataSource } from './LiveFlightDataSource.js';
+export { LiveFlightMarkerManager } from './LiveFlightMarkerManager.js';
 export { CameraPickerPanel } from './CameraPickerPanel.js';
 export { FloatingCameraFeedCanvas } from './FloatingCameraFeedCanvas.js';
 export { WebXRSessionManager } from './WebXRSessionManager.js';
@@ -41,6 +43,11 @@ export type {
   RadioCategory,
   PublicWebcam,
   ResolvedPublicWebcam,
+  AircraftKind,
+  FlightPoint,
+  LiveFlight,
+  LiveFlightDataSourceOptions,
+  LiveFlightMarkerManagerOptions,
 } from './types.js';
 export type {
   CameraDataProvider,

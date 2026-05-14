@@ -124,6 +124,48 @@ export interface FireIncidentOverlayOptions {
   fetcher?: typeof fetch;
 }
 
+// --- Live Flight types ---
+
+export type AircraftKind = 'plane' | 'helicopter';
+
+export interface FlightPoint {
+  longitude: number;
+  latitude: number;
+  altitude: number;   // metres above sea level
+  heading: number;    // degrees CW from north
+  speed: number;      // m/s
+  timestamp: number;  // Date.now() ms
+}
+
+export interface LiveFlight {
+  icao24: string;
+  callsign: string;
+  originCountry: string;
+  longitude: number;
+  latitude: number;
+  altitude: number;   // barometric altitude, metres
+  speed: number;      // m/s
+  heading: number;    // degrees CW from north
+  verticalRate: number; // m/s, positive = climbing
+  kind: AircraftKind;
+}
+
+export interface LiveFlightDataSourceOptions {
+  /** Bounding box [west, south, east, north]. Defaults to California. */
+  bbox?: [number, number, number, number];
+  /** Poll interval in ms. Defaults to 15 000. */
+  refreshIntervalMs?: number;
+  /** How long to keep track history. Defaults to 3 600 000 (1 hr). */
+  trackDurationMs?: number;
+  fetcher?: typeof fetch;
+}
+
+export interface LiveFlightMarkerManagerOptions {
+  /** Camera altitude above which markers are hidden. Defaults to 2 000 000 m. */
+  visibilityMaxAltitude?: number;
+  onSelect?: (flight: LiveFlight | null) => void;
+}
+
 // --- Public Webcam types ---
 
 export interface PublicWebcam {

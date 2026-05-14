@@ -3,13 +3,16 @@
 // is served as its normal IIFE bundle (which correctly sets up workers/assets).
 const C = window.Cesium;
 export const {
+  ArcType,
   Camera,
   Cartesian2,
   Cartesian3,
   Cartographic,
   Color,
+  ConstantPositionProperty,
   ConstantProperty,
   CustomDataSource,
+  PolylineGlowMaterialProperty,
   DistanceDisplayCondition,
   Entity,
   EntityCluster,
