@@ -75,9 +75,12 @@ export class EmergencyRadioPlayer extends EventTarget {
 
     this.fallbackBtn = document.createElement('a');
     this.fallbackBtn.textContent = 'Open on Broadcastify ↗';
-    this.fallbackBtn.target = '_blank';
-    this.fallbackBtn.rel = 'noopener';
-    this.fallbackBtn.style.cssText = 'color:#7ab;font:11px sans-serif;text-decoration:none;white-space:nowrap;';
+    this.fallbackBtn.style.cssText = 'color:#7ab;font:11px sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer;';
+    this.fallbackBtn.onclick = (e) => {
+      e.preventDefault();
+      const href = this.fallbackBtn.getAttribute('data-href');
+      if (href) window.open(href, 'broadcastify-popout', 'width=460,height=200,resizable=yes');
+    };
 
     controls.append(this.playBtn, this.fallbackBtn);
     body.append(this.countyEl, this.statusEl, controls);
@@ -97,7 +100,8 @@ export class EmergencyRadioPlayer extends EventTarget {
     this.badgeEl.style.background = CATEGORY_COLOR[feed.category] ?? '#555';
     this.titleEl.textContent = feed.name;
     this.countyEl.textContent = feed.county ? `${feed.county} County` : '';
-    this.fallbackBtn.href = feed.webUrl ?? `https://www.broadcastify.com/listen/feed/${feed.id}`;
+    this.fallbackBtn.setAttribute('data-href',
+      feed.webUrl ?? `https://www.broadcastify.com/listen/feed/popout.php?feedId=${feed.id}`);
     this.panel.style.display = 'block';
 
     if (feed.streamUrl) {
