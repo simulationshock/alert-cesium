@@ -22,10 +22,12 @@ export class FloatingCameraFeedCanvas extends EventTarget {
   private readonly titleEl: HTMLSpanElement;
   private readonly badgeEl: HTMLSpanElement;
   private readonly imgEl: HTMLImageElement;
+  private readonly fsBtn: HTMLButtonElement;
   private readonly proxyBase?: string;
   private pollInterval?: ReturnType<typeof setInterval>;
   private state?: FeedState;
   private billboardEntity?: any; // Cesium Entity
+  private _fullscreen = false;
 
   constructor(viewer: Viewer, options: FloatingCameraFeedOptions = {}) {
     super();
@@ -42,33 +44,36 @@ export class FloatingCameraFeedCanvas extends EventTarget {
     ].join(';');
 
     const header = document.createElement('div');
-    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#1a1a1a;';
+    header.style.cssText = 'display:flex;align-items:center;padding:8px 12px;background:#1a1a1a;gap:6px;';
 
     this.titleEl = document.createElement('span');
-    this.titleEl.style.cssText = 'color:#fff;font:bold 13px sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+    this.titleEl.style.cssText = 'color:#fff;font:bold 13px sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;';
 
     this.badgeEl = document.createElement('span');
-    this.badgeEl.style.cssText = 'color:#fff;font:bold 11px sans-serif;padding:2px 8px;border-radius:3px;flex-shrink:0;margin-left:8px;';
+    this.badgeEl.style.cssText = 'color:#fff;font:bold 11px sans-serif;padding:2px 8px;border-radius:3px;flex-shrink:0;';
+
+    this.fsBtn = document.createElement('button');
+    this.fsBtn.textContent = '⛶';
+    this.fsBtn.title = 'Fullscreen';
+    this.fsBtn.style.cssText = 'background:none;border:none;color:#aaa;font-size:15px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;';
+    this.fsBtn.onclick = () => this.toggleFullscreen();
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = 'background:none;border:none;color:#aaa;font-size:16px;cursor:pointer;line-height:1;padding:0;flex-shrink:0;';
+    closeBtn.onclick = () => this.close();
 
     header.appendChild(this.titleEl);
     header.appendChild(this.badgeEl);
+    header.appendChild(this.fsBtn);
+    header.appendChild(closeBtn);
 
     this.imgEl = document.createElement('img');
     this.imgEl.style.cssText = 'width:100%;display:block;';
     this.imgEl.alt = '';
 
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = '✕';
-    closeBtn.style.cssText = [
-      'position:absolute', 'top:6px', 'right:8px', 'background:none',
-      'border:none', 'color:#aaa', 'font-size:16px', 'cursor:pointer',
-      'line-height:1', 'padding:0'
-    ].join(';');
-    closeBtn.onclick = () => this.close();
-
     this.panel.appendChild(header);
     this.panel.appendChild(this.imgEl);
-    this.panel.appendChild(closeBtn);
 
     const container = viewer.container as HTMLElement;
     container.style.position = 'relative';
@@ -97,12 +102,17 @@ export class FloatingCameraFeedCanvas extends EventTarget {
     if (this.pollInterval !== undefined) clearInterval(this.pollInterval);
     this.pollInterval = undefined;
     this.imgEl.src = '';
+    if (this._fullscreen) this.applyPanelLayout(false);
     this.panel.style.display = 'none';
     this.removeBillboard();
     if (this.state) {
       this.state = { ...this.state, status: 'closed' };
       this.dispatchEvent(new CustomEvent('feedstate', { detail: this.state }));
     }
+  }
+
+  toggleFullscreen(): void {
+    this.applyPanelLayout(!this._fullscreen);
   }
 
   getState(): FeedState | undefined {
@@ -112,6 +122,31 @@ export class FloatingCameraFeedCanvas extends EventTarget {
   destroy(): void {
     this.close();
     this.panel.remove();
+  }
+
+  private applyPanelLayout(fullscreen: boolean): void {
+    this._fullscreen = fullscreen;
+    if (fullscreen) {
+      Object.assign(this.panel.style, {
+        top: '0', left: '0', bottom: '0', right: '0',
+        width: '100%', height: '100%',
+        border: 'none', borderRadius: '0', boxShadow: 'none',
+      });
+      this.imgEl.style.cssText = 'width:100%;height:calc(100% - 40px);object-fit:contain;display:block;background:#000;';
+      this.fsBtn.textContent = '⊡';
+      this.fsBtn.title = 'Exit fullscreen';
+    } else {
+      Object.assign(this.panel.style, {
+        top: '', left: '', bottom: '20px', right: '20px',
+        width: '320px', height: '',
+        border: '2px solid rgba(255,255,255,0.3)',
+        borderRadius: '6px',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.6)',
+      });
+      this.imgEl.style.cssText = 'width:100%;display:block;';
+      this.fsBtn.textContent = '⛶';
+      this.fsBtn.title = 'Fullscreen';
+    }
   }
 
   private startImagePoll(camera: ResolvedWildfireCamera): void {
