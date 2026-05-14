@@ -98,13 +98,14 @@ function isRecord(v: unknown): v is Record<string, unknown> {
 
 /**
  * Seed list of major California public-safety feeds.
- * Feed IDs and stream URLs are from Broadcastify (broadcastify.com).
- * Get a free API key at broadcastify.com/api for the full live catalog.
+ * Direct CDN stream URLs require an API-issued token and are not available
+ * without a Broadcastify API key. The seed omits streamUrl so the player
+ * falls back to the Broadcastify web link instead of producing 404s.
+ * Get a free API key at broadcastify.com/api for live streaming.
  */
 function californiaSeed(): EmergencyRadioFeed[] {
   const bf = (id: string) => ({
-    streamUrl: `https://broadcastify.cdnstream1.com/${id}`,
-    webUrl:    `https://www.broadcastify.com/listen/feed/${id}`,
+    webUrl: `https://www.broadcastify.com/listen/feed/${id}`,
   });
   return [
     { id: '39810', name: 'San Diego Sheriff/Police Dispatch',  county: 'San Diego',     latitude: 32.7157, longitude: -117.1611, category: 'law',      ...bf('39810') },

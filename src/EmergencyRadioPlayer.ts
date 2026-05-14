@@ -98,10 +98,17 @@ export class EmergencyRadioPlayer extends EventTarget {
     this.titleEl.textContent = feed.name;
     this.countyEl.textContent = feed.county ? `${feed.county} County` : '';
     this.fallbackBtn.href = feed.webUrl ?? `https://www.broadcastify.com/listen/feed/${feed.id}`;
-    this.setStatus('Ready');
-    this.setPlayBtn(false);
     this.panel.style.display = 'block';
-    this.play();
+
+    if (feed.streamUrl) {
+      this.playBtn.style.display = '';
+      this.setStatus('Ready');
+      this.setPlayBtn(false);
+      this.play();
+    } else {
+      this.playBtn.style.display = 'none';
+      this.setStatus('Direct stream requires API key — open in Broadcastify:');
+    }
   }
 
   close(): void {
