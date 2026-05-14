@@ -6,7 +6,7 @@ import { WildfireCameraDataSource, type WildfireCameraDataSourceOptions } from '
 import { WildfireCameraFlightController } from './WildfireCameraFlightController.js';
 import { WildfireCameraMarkerManager, type MarkerManagerOptions } from './WildfireCameraMarkerManager.js';
 import { WebXRSessionManager } from './WebXRSessionManager.js';
-import type { CameraCluster, FireIncidentOverlayOptions, ResolvedWildfireCamera } from './types.js';
+import type { CameraCluster, FeedState, FireIncidentOverlayOptions, ResolvedWildfireCamera } from './types.js';
 
 export interface WebXRWildfireCameraSandboxOptions {
   dataSource?: WildfireCameraDataSource | WildfireCameraDataSourceOptions;
@@ -46,6 +46,12 @@ export class WebXRWildfireCameraSandbox {
     } else if (options.fireOverlay !== undefined) {
       this.fireOverlay = new FireIncidentOverlay(viewer, { ...options.fireOverlay, markers: this.markers });
     }
+    // Remove frustum highlight when the user closes the feed panel.
+    this.feed.addEventListener('feedstate', (e: Event) => {
+      if ((e as CustomEvent<FeedState>).detail.status === 'closed') {
+        this.markers.setSelectedCamera(null);
+      }
+    });
     this.patchXRSession();
   }
 
@@ -66,7 +72,11 @@ export class WebXRWildfireCameraSandbox {
       { ...camera, position: viewpoint },
       { duration: 2.25, maximumHeight: 120_000 }
     );
+    // open() calls close() internally first, which fires the 'feedstate: closed'
+    // event that would clear any previous selection highlight. Set the new
+    // highlight after open() so it is never immediately wiped by that event.
     await this.feed.open(camera);
+    this.markers.setSelectedCamera(camera);
   }
 
   refreshMarkers(): void {

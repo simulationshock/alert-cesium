@@ -38,6 +38,7 @@ export class WildfireCameraMarkerManager {
   private pickerEl: HTMLDivElement | null = null;
   private pickerDismissHandler: ((e: MouseEvent) => void) | null = null;
   private hoverEntities: Entity[] = [];
+  private selectionEntities: Entity[] = [];
 
   constructor(viewer: Viewer, options: MarkerManagerOptions = {}) {
     this.viewer = viewer;
@@ -161,8 +162,66 @@ export class WildfireCameraMarkerManager {
     this.hoverEntities = [];
   }
 
+  /** Highlight the selected camera's frustum with a persistent lime overlay.
+   *  Pass null to remove the highlight (e.g. when the feed is closed). */
+  setSelectedCamera(camera: ResolvedWildfireCamera | null): void {
+    this.clearSelectedHighlight();
+    if (!camera) return;
+
+    const dot = new Entity({
+      id: `wildfire-camera-selected-dot:${camera.id}`,
+      position: camera.position,
+      point: {
+        pixelSize: 18,
+        color: Color.LIME,
+        outlineColor: Color.WHITE,
+        outlineWidth: 3,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      } as any,
+    });
+    this.selectionEntities.push(dot);
+    this.viewer.entities.add(dot);
+
+    const corners = this.resolveFovCorners(camera);
+    if (corners) {
+      const [left, right] = corners;
+      const camPos   = Cartesian3.fromDegrees(camera.longitude, camera.latitude);
+      const leftPos  = Cartesian3.fromDegrees(left[0],  left[1]);
+      const rightPos = Cartesian3.fromDegrees(right[0], right[1]);
+
+      const fill = new Entity({
+        id: `wildfire-camera-selected-fov-fill:${camera.id}`,
+        polygon: {
+          hierarchy: new PolygonHierarchy([camPos, leftPos, rightPos]),
+          material: Color.LIME.withAlpha(0.28),
+          clampToGround: true,
+        } as any,
+      });
+      const line = new Entity({
+        id: `wildfire-camera-selected-fov-line:${camera.id}`,
+        polyline: {
+          positions: [camPos, leftPos, rightPos, camPos],
+          width: 3,
+          material: Color.LIME.withAlpha(0.95),
+          clampToGround: true,
+        } as any,
+      });
+      this.selectionEntities.push(fill, line);
+      this.viewer.entities.add(fill);
+      this.viewer.entities.add(line);
+    }
+  }
+
+  private clearSelectedHighlight(): void {
+    for (const entity of this.selectionEntities) {
+      this.viewer.entities.remove(entity);
+    }
+    this.selectionEntities = [];
+  }
+
   destroy(): void {
     this.dismissPicker();
+    this.clearSelectedHighlight();
     this.viewer.camera.changed.removeEventListener(this.onCameraChanged);
     this.viewer.camera.moveEnd.removeEventListener(this.onMoveEnd);
     clearTimeout(this._refreshTimer);
