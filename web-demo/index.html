@@ -166,6 +166,11 @@
       selectionIndicator: false,
     });
 
+    // Prevent gimbal-lock at exactly -90° pitch (straight down): at that angle
+    // Cesium continuously corrects the undefined heading, which fires camera.changed
+    // on every frame and prevents the debounce from ever settling.
+    viewer.scene.screenSpaceCameraController.minimumPitchAngle = -Cesium.Math.toRadians(89.99);
+
     const sandbox = new WebXRWildfireCameraSandbox(viewer, {
       dataSource: {
         imageUrlPattern: 'https://cameras.alertcalifornia.org/public-camera-data/{id}/latest-frame.jpg'
