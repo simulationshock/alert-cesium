@@ -123,6 +123,30 @@ export interface FireIncidentOverlayOptions {
   fetcher?: typeof fetch;
 }
 
+// --- Public Webcam types ---
+
+export interface PublicWebcam {
+  id: string;
+  title: string;
+  city?: string;
+  region?: string;
+  latitude: number;
+  longitude: number;
+  status?: string;
+  /** Refreshing still-image URL (changes periodically). */
+  previewUrl?: string;
+  /** Static thumbnail URL. */
+  thumbnailUrl?: string;
+  /** Iframe embed URL for the live player. */
+  playerUrl?: string;
+  /** Link to the webcam detail page. */
+  detailUrl?: string;
+}
+
+export interface ResolvedPublicWebcam extends PublicWebcam {
+  position: Cartesian3;
+}
+
 // --- Emergency Radio types ---
 
 export type RadioCategory = 'law' | 'fire' | 'ems' | 'multi' | 'aircraft' | 'other';

@@ -129,6 +129,14 @@
     </div>
 
     <hr class="legend-divider">
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:14px;height:14px;background:#0097A7;"></span></span>
+      <span class="legend-label">Public webcam</span>
+      <button class="legend-toggle" id="legend-webcams-btn" title="Toggle public webcams">&#x1F441;</button>
+    </div>
+
+    <hr class="legend-divider">
     <div class="legend-row">
       <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#1565C0;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">PD</span></span>
       <span class="legend-label">Law Enforcement</span>
@@ -159,6 +167,7 @@
     import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
     import { WebXRCesiumBridge } from './webxr-bridge.js';
     import { EmergencyRadioDataSource, EmergencyRadioMarkerManager, EmergencyRadioPlayer } from '../dist/index.js';
+    import { PublicWebcamDataSource, PublicWebcamMarkerManager, PublicWebcamViewer } from '../dist/index.js';
 
     const terrainProvider = await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
       'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
@@ -249,6 +258,28 @@
       if (!overlay) return;
       overlay.setVisible(!overlay.visible);
       firesBtn.classList.toggle('off', !overlay.visible);
+    });
+
+    // Public Webcams
+    const webcamSource = new PublicWebcamDataSource({
+      // apiKey: 'YOUR_WINDY_API_KEY', // free at windy.com/webcams/api
+    });
+    const webcamViewer  = new PublicWebcamViewer(viewer.container);
+    const webcamMarkers = new PublicWebcamMarkerManager(viewer, {
+      onSelect: (webcam) => webcamViewer.open(webcam),
+    });
+    webcamSource.load()
+      .then(webcams => {
+        webcamMarkers.setWebcams(webcams);
+        console.info(`[Webcams] ${webcams.length} public webcams loaded`);
+      })
+      .catch(console.error);
+
+    // Legend toggle — webcams
+    const webcamsBtn = document.getElementById('legend-webcams-btn');
+    webcamsBtn.addEventListener('click', () => {
+      webcamMarkers.setVisible(!webcamMarkers.visible);
+      webcamsBtn.classList.toggle('off', !webcamMarkers.visible);
     });
 
     // Legend toggle — radio markers
