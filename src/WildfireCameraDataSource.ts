@@ -96,6 +96,11 @@ export class WildfireCameraDataSource {
     const thumbnailUrl = stringFrom(firstValue(item, ['thumbnailUrl', 'thumbnail_url']))
       ?? (this.imageUrlPattern ? this.imageUrlPattern.replace('{id}', id).replace('latest-frame', 'latest-thumb') : undefined);
 
+    const azimuth = firstNumber(item, ['az_current', 'azimuth', 'bearing', 'heading']);
+    const fieldOfView = firstNumber(item, ['fov', 'field_of_view', 'fieldOfView']);
+    const fovLeft = lonLatPair(item['fov_lft']);
+    const fovRight = lonLatPair(item['fov_rt']);
+
     return {
       id,
       name,
@@ -105,6 +110,10 @@ export class WildfireCameraDataSource {
       streamUrl,
       imageUrl,
       thumbnailUrl,
+      azimuth,
+      fieldOfView,
+      fovLeft,
+      fovRight,
       metadata: item,
       position: Cartesian3.fromDegrees(longitude, latitude, height ?? 0)
     };
@@ -147,4 +156,12 @@ function numberFrom(value: unknown): number | undefined {
 
 function stringFrom(value: unknown): string | undefined {
   return typeof value === 'string' && value.length > 0 ? value : undefined;
+}
+
+function lonLatPair(value: unknown): [number, number] | undefined {
+  if (!Array.isArray(value) || value.length < 2) return undefined;
+  const lon = numberFrom(value[0]);
+  const lat = numberFrom(value[1]);
+  if (lon === undefined || lat === undefined) return undefined;
+  return [lon, lat];
 }

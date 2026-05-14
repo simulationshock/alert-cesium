@@ -9,6 +9,14 @@ export interface WildfireCamera {
   streamUrl?: string;
   imageUrl?: string;
   thumbnailUrl?: string;
+  /** Current pan bearing in degrees clockwise from north (0–360). */
+  azimuth?: number;
+  /** Horizontal field of view in degrees. */
+  fieldOfView?: number;
+  /** [lon, lat] of the left FOV edge at current zoom. */
+  fovLeft?: [number, number];
+  /** [lon, lat] of the right FOV edge at current zoom. */
+  fovRight?: [number, number];
   metadata?: Record<string, unknown>;
 }
 

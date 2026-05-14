@@ -20,6 +20,7 @@ export const {
   LabelStyle,
   Math,
   NearFarScalar,
+  PolygonHierarchy,
   SceneTransforms,
   ScreenSpaceEventHandler,
   ScreenSpaceEventType,
