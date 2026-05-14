@@ -74,8 +74,28 @@
       dataSource: {
         imageUrlPattern: 'https://cameras.alertcalifornia.org/public-camera-data/{id}/latest-frame.jpg'
       },
+      fireOverlay: {
+        proximityThresholdKm: 5,
+        refreshIntervalMs: 300_000,
+      },
     });
-    sandbox.load('https://cameras.alertcalifornia.org/public-camera-data/all_cameras-v3.json').catch(console.error);
+
+    sandbox.load('https://cameras.alertcalifornia.org/public-camera-data/all_cameras-v3.json')
+      .then(cameras => {
+        const overlay = sandbox.fireOverlay;
+        if (!overlay) return;
+        console.info(`[FireOverlay] status: ${overlay.status}`);
+        console.info(`[FireOverlay] ${overlay.incidents.length} active fire incident(s) loaded`);
+        console.info(`[FireOverlay] ${overlay.status === 'loaded' ? '✅ API reachable' : '❌ API error — check network tab'}`);
+        if (overlay.incidents.length > 0) {
+          console.table(overlay.incidents.map(i => ({
+            name: i.name,
+            acres: i.acresBurned ?? '—',
+            contained: i.percentContained != null ? `${i.percentContained}%` : '—',
+          })));
+        }
+      })
+      .catch(console.error);
 
     // Show the VR button only on devices that support immersive-vr
     const xrBtn = document.getElementById('xr-btn');
