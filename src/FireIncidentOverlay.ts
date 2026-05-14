@@ -218,8 +218,9 @@ export class FireIncidentOverlay {
 
     const ds = await GeoJsonDataSource.load(featureCollection, {
       stroke: Color.RED,
-      fill: Color.RED.withAlpha(0.25),
-      strokeWidth: 2,
+      fill: Color.RED.withAlpha(0.4),
+      strokeWidth: 3,
+      clampToGround: true,
     });
     this._dataSource = ds;
     if (this._visible && !this._destroyed) {

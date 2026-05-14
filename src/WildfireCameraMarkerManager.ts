@@ -28,6 +28,7 @@ export class WildfireCameraMarkerManager {
   private cameras: ResolvedWildfireCamera[] = [];
   private entities: Entity[] = [];
   private fireHighlights: Map<string, FireProximityStatus> = new Map();
+  private _visible = true;
   private readonly onMoveEnd: () => void;
   private readonly onCameraChanged: () => void;
   private readonly clickHandler: ScreenSpaceEventHandler;
@@ -74,7 +75,20 @@ export class WildfireCameraMarkerManager {
     this.refresh();
   }
 
+  setVisible(visible: boolean): void {
+    if (this._visible === visible) return;
+    this._visible = visible;
+    if (visible) {
+      this.refresh();
+    } else {
+      this.clear();
+    }
+  }
+
+  get visible(): boolean { return this._visible; }
+
   refresh(): void {
+    if (!this._visible) return;
     this.clear();
     const clusters = this.clusterVisibleCameras();
     const visible = clusters.slice(0, this.options.maximumVisibleMarkers);

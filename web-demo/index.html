@@ -27,11 +27,107 @@
     }
     #xr-btn:hover { background: rgba(50,50,50,0.95); }
     #xr-btn.active { border-color: #4af; color: #4af; }
+
+    #map-legend {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      color: #eee;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 12px 14px 10px;
+      font: 13px/1.5 sans-serif;
+      backdrop-filter: blur(6px);
+      min-width: 180px;
+      user-select: none;
+    }
+    #map-legend h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 0;
+    }
+    .legend-symbol {
+      flex-shrink: 0;
+      width: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .legend-dot {
+      border-radius: 50%;
+      border: 2px solid #fff;
+      display: inline-block;
+    }
+    .legend-polygon {
+      width: 16px;
+      height: 10px;
+      border: 2px solid #f44;
+      background: rgba(255,68,68,0.35);
+      border-radius: 2px;
+    }
+    .legend-label { flex: 1; font-size: 12px; }
+    .legend-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity .15s;
+    }
+    .legend-toggle:hover { opacity: 1; }
+    .legend-toggle.off { opacity: 0.35; }
+    .legend-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      margin: 6px 0;
+    }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
   <button id="xr-btn">Enter VR</button>
+
+  <div id="map-legend">
+    <h3>Map Legend</h3>
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:10px;height:10px;background:#ff4500;"></span></span>
+      <span class="legend-label">Camera</span>
+      <button class="legend-toggle" id="legend-cameras-btn" title="Toggle camera markers">&#x1F441;</button>
+    </div>
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:12px;height:12px;background:#ffa500;"></span></span>
+      <span class="legend-label">Near fire (&lt;5 km)</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:14px;height:14px;background:#ff0000;"></span></span>
+      <span class="legend-label">Inside fire perimeter</span>
+    </div>
+
+    <hr class="legend-divider">
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-polygon"></span></span>
+      <span class="legend-label">Active fire perimeter</span>
+      <button class="legend-toggle" id="legend-fires-btn" title="Toggle fire overlay">&#x1F441;</button>
+    </div>
+  </div>
 
   <script type="importmap">
 {
@@ -77,6 +173,7 @@
       fireOverlay: {
         proximityThresholdKm: 5,
         refreshIntervalMs: 300_000,
+        showToggleButton: false,
       },
     });
 
@@ -96,6 +193,23 @@
         }
       })
       .catch(console.error);
+
+    // Legend toggle — cameras
+    const camerasBtn = document.getElementById('legend-cameras-btn');
+    camerasBtn.addEventListener('click', () => {
+      const markers = sandbox.markers;
+      markers.setVisible(!markers.visible);
+      camerasBtn.classList.toggle('off', !markers.visible);
+    });
+
+    // Legend toggle — fire overlay
+    const firesBtn = document.getElementById('legend-fires-btn');
+    firesBtn.addEventListener('click', () => {
+      const overlay = sandbox.fireOverlay;
+      if (!overlay) return;
+      overlay.setVisible(!overlay.visible);
+      firesBtn.classList.toggle('off', !overlay.visible);
+    });
 
     // Show the VR button only on devices that support immersive-vr
     const xrBtn = document.getElementById('xr-btn');
