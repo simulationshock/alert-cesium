@@ -101,7 +101,6 @@
       display: none;
       position: absolute;
       left: calc(100% + 6px);
-      bottom: 0;
       width: 240px;
       max-height: 65vh;
       overflow-y: auto;
@@ -149,6 +148,15 @@
     }
     .fp-fire:hover { color: #ffaaaa; background: rgba(255,80,60,0.14); }
     .fp-fire-meta { color: #777; font-size: 10px; margin-top: 1px; }
+    .fp-header {
+      padding: 5px 12px 4px;
+      font: bold 10px/1.4 sans-serif;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 2px;
+    }
   </style>
 </head>
 <body>
@@ -373,6 +381,11 @@
       subPopup.id = 'fire-sub-popup';
       legend.append(popup, subPopup);
 
+      const popupHeader = document.createElement('div');
+      popupHeader.className = 'fp-header';
+      popupHeader.textContent = 'City / County';
+      popup.append(popupHeader);
+
       // Group by resolved city name
       const groupMap = new Map();
       for (const inc of incidents) {
@@ -427,6 +440,10 @@
             subPopup.style.top    = Math.max(0, idealTop) + 'px';
             subPopup.style.bottom = 'auto';
             subPopup.innerHTML = '';
+            const subHeader = document.createElement('div');
+            subHeader.className = 'fp-header';
+            subHeader.textContent = 'Fires';
+            subPopup.append(subHeader);
             [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => subPopup.append(makeFireItem(f)));
             subPopup.style.display = 'block';
             // Clamp bottom so sub-popup doesn't overflow viewport
@@ -452,7 +469,19 @@
       const fireRow = document.getElementById('fire-legend-row');
       const hoverZone = [fireRow?.querySelector('.legend-symbol'), fireRow?.querySelector('.legend-label')];
       hoverZone.forEach(el => {
-        el?.addEventListener('mouseenter', () => { cancelMain(); popup.style.display = 'block'; });
+        el?.addEventListener('mouseenter', () => {
+          cancelMain();
+          const rowRect    = fireRow.getBoundingClientRect();
+          const legendRect = legend.getBoundingClientRect();
+          const idealTop   = rowRect.top - legendRect.top;
+          popup.style.top    = Math.max(0, idealTop) + 'px';
+          popup.style.bottom = 'auto';
+          popup.style.display = 'block';
+          // Clamp bottom to viewport
+          const popupRect  = popup.getBoundingClientRect();
+          const overflow   = popupRect.bottom - (window.innerHeight - 8);
+          if (overflow > 0) popup.style.top = Math.max(0, idealTop - overflow) + 'px';
+        });
         el?.addEventListener('mouseleave', scheduleMain);
       });
       popup.addEventListener('mouseenter', cancelMain);
