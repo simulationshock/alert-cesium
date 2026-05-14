@@ -127,6 +127,25 @@
       <span class="legend-label">Active fire perimeter</span>
       <button class="legend-toggle" id="legend-fires-btn" title="Toggle fire overlay">&#x1F441;</button>
     </div>
+
+    <hr class="legend-divider">
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#1565C0;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">PD</span></span>
+      <span class="legend-label">Law Enforcement</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#C62828;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">FD</span></span>
+      <span class="legend-label">Fire Dispatch</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#2E7D32;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">+</span></span>
+      <span class="legend-label">EMS</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#E65100;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">MC</span></span>
+      <span class="legend-label">Multi-Agency</span>
+      <button class="legend-toggle" id="legend-radio-btn" title="Toggle radio markers">&#x1F441;</button>
+    </div>
   </div>
 
   <script type="importmap">
@@ -139,6 +158,7 @@
 <script type="module">
     import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
     import { WebXRCesiumBridge } from './webxr-bridge.js';
+    import { EmergencyRadioDataSource, EmergencyRadioMarkerManager, EmergencyRadioPlayer } from '../dist/index.js';
 
     const terrainProvider = await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
       'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
@@ -199,6 +219,21 @@
       })
       .catch(console.error);
 
+    // Emergency Radio
+    const radioSource = new EmergencyRadioDataSource({
+      // apiKey: 'YOUR_BROADCASTIFY_API_KEY', // get free key at broadcastify.com/api
+    });
+    const radioPlayer = new EmergencyRadioPlayer(viewer.container);
+    const radioMarkers = new EmergencyRadioMarkerManager(viewer, {
+      onSelect: (feed) => radioPlayer.open(feed),
+    });
+    radioSource.load()
+      .then(feeds => {
+        radioMarkers.setFeeds(feeds);
+        console.info(`[Radio] ${feeds.length} emergency radio feeds loaded`);
+      })
+      .catch(console.error);
+
     // Legend toggle — cameras
     const camerasBtn = document.getElementById('legend-cameras-btn');
     camerasBtn.addEventListener('click', () => {
@@ -214,6 +249,13 @@
       if (!overlay) return;
       overlay.setVisible(!overlay.visible);
       firesBtn.classList.toggle('off', !overlay.visible);
+    });
+
+    // Legend toggle — radio markers
+    const radioBtn = document.getElementById('legend-radio-btn');
+    radioBtn.addEventListener('click', () => {
+      radioMarkers.setVisible(!radioMarkers.visible);
+      radioBtn.classList.toggle('off', !radioMarkers.visible);
     });
 
     // Show the VR button only on devices that support immersive-vr

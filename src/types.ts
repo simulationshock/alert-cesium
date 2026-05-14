@@ -122,3 +122,25 @@ export interface FireIncidentOverlayOptions {
   /** Custom fetch implementation. Defaults to globalThis.fetch. */
   fetcher?: typeof fetch;
 }
+
+// --- Emergency Radio types ---
+
+export type RadioCategory = 'law' | 'fire' | 'ems' | 'multi' | 'aircraft' | 'other';
+
+export interface EmergencyRadioFeed {
+  id: string;
+  name: string;
+  county?: string;
+  latitude: number;
+  longitude: number;
+  category: RadioCategory;
+  /** Direct audio stream URL (e.g. Broadcastify CDN). */
+  streamUrl?: string;
+  /** Broadcastify web player URL. */
+  webUrl?: string;
+  listeners?: number;
+}
+
+export interface ResolvedEmergencyRadioFeed extends EmergencyRadioFeed {
+  position: Cartesian3;
+}

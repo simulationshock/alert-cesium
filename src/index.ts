@@ -6,6 +6,9 @@
  */
 
 export { CameraFlight } from './CameraFlight.js';
+export { EmergencyRadioDataSource } from './EmergencyRadioDataSource.js';
+export { EmergencyRadioMarkerManager } from './EmergencyRadioMarkerManager.js';
+export { EmergencyRadioPlayer } from './EmergencyRadioPlayer.js';
 export { FireIncidentOverlay } from './FireIncidentOverlay.js';
 export { CameraPickerPanel } from './CameraPickerPanel.js';
 export { FloatingCameraFeedCanvas } from './FloatingCameraFeedCanvas.js';
@@ -30,6 +33,9 @@ export type {
   FireOverlayStatus,
   FireProximityStatus,
   FireHighlightTarget,
+  EmergencyRadioFeed,
+  ResolvedEmergencyRadioFeed,
+  RadioCategory,
 } from './types.js';
 export type {
   CameraDataProvider,
