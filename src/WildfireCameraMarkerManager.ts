@@ -34,6 +34,8 @@ export class WildfireCameraMarkerManager {
   private readonly onCameraChanged: () => void;
   private _refreshTimer?: ReturnType<typeof setTimeout>;
   private readonly clickHandler: ScreenSpaceEventHandler;
+  private pickerEl: HTMLDivElement | null = null;
+  private pickerDismissHandler: ((e: MouseEvent) => void) | null = null;
 
   constructor(viewer: Viewer, options: MarkerManagerOptions = {}) {
     this.viewer = viewer;
@@ -54,15 +56,27 @@ export class WildfireCameraMarkerManager {
     this.clickHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
     this.clickHandler.setInputAction((event: ScreenSpaceEventHandler.PositionedEvent) => {
       const picked = this.viewer.scene.pick(event.position);
-      console.log('[MarkerManager] click picked:', picked);
       const entity: Entity | undefined = picked?.id instanceof Entity ? picked.id : undefined;
-      console.log('[MarkerManager] entity:', entity?.id, 'selection:', (entity as any)?.wildfireSelection);
 
-      if (!entity) return;
+      if (!entity) {
+        this.dismissPicker();
+        return;
+      }
+
       const selection: MarkerSelection | undefined = (entity as any).wildfireSelection;
-      if (selection) {
-        console.log('[MarkerManager] firing onSelect with:', selection);
+      if (!selection) return;
+
+      if (selection.camera) {
+        this.dismissPicker();
         this.options.onSelect?.(selection);
+      } else if (selection.cluster) {
+        const { cameras } = selection.cluster;
+        if (cameras.length === 1) {
+          this.dismissPicker();
+          this.options.onSelect?.({ camera: cameras[0] });
+        } else {
+          this.showPicker(cameras, event.position);
+        }
       }
     }, ScreenSpaceEventType.LEFT_CLICK);
   }
@@ -100,19 +114,18 @@ export class WildfireCameraMarkerManager {
     const visible = clusters.slice(0, this.options.maximumVisibleMarkers);
 
     for (const cluster of visible) {
-      if (cluster.cameras.length <= 4) {
-        // Individual dots + FOV cones so each dot sits at its cone's apex.
-        // For co-located cameras the dots stack; clicking opens that camera's feed.
-        for (const camera of cluster.cameras) {
-          for (const fovEntity of this.createFovEntities(camera)) {
-            this.entities.push(fovEntity);
-            this.viewer.entities.add(fovEntity);
-          }
-          const dot = this.createCameraEntity(camera);
-          this.entities.push(dot);
-          this.viewer.entities.add(dot);
+      if (cluster.cameras.length === 1) {
+        // Solo camera: individual dot + FOV cone.
+        const camera = cluster.cameras[0];
+        for (const fovEntity of this.createFovEntities(camera)) {
+          this.entities.push(fovEntity);
+          this.viewer.entities.add(fovEntity);
         }
+        const dot = this.createCameraEntity(camera);
+        this.entities.push(dot);
+        this.viewer.entities.add(dot);
       } else {
+        // 2+ cameras in same screen cell: cluster entity; picker on click.
         const entity = this.createClusterEntity(cluster);
         this.entities.push(entity);
         this.viewer.entities.add(entity);
@@ -128,6 +141,7 @@ export class WildfireCameraMarkerManager {
   }
 
   destroy(): void {
+    this.dismissPicker();
     this.viewer.camera.changed.removeEventListener(this.onCameraChanged);
     clearTimeout(this._refreshTimer);
     this.clickHandler.destroy();
@@ -140,6 +154,66 @@ export class WildfireCameraMarkerManager {
     const selection = { camera };
     this.options.onSelect?.(selection);
     return selection;
+  }
+
+  private showPicker(cameras: ResolvedWildfireCamera[], pos: { x: number; y: number }): void {
+    this.dismissPicker();
+
+    const el = document.createElement('div');
+    el.style.cssText = [
+      'position:absolute',
+      `left:${pos.x + 12}px`,
+      `top:${pos.y - 8}px`,
+      'background:#1a1a1a',
+      'border:1px solid rgba(255,255,255,0.25)',
+      'border-radius:6px',
+      'padding:4px 0',
+      'z-index:500',
+      'box-shadow:0 4px 16px rgba(0,0,0,0.55)',
+      'min-width:160px',
+      'max-height:260px',
+      'overflow-y:auto',
+    ].join(';');
+
+    for (const camera of cameras) {
+      const btn = document.createElement('button');
+      btn.textContent = camera.name;
+      btn.style.cssText = [
+        'display:block', 'width:100%', 'padding:6px 14px',
+        'background:none', 'border:none', 'color:#eee',
+        'text-align:left', 'cursor:pointer', 'font:13px sans-serif',
+        'white-space:nowrap',
+      ].join(';');
+      btn.addEventListener('mouseenter', () => { btn.style.background = 'rgba(255,255,255,0.1)'; });
+      btn.addEventListener('mouseleave', () => { btn.style.background = 'none'; });
+      btn.addEventListener('click', () => {
+        this.options.onSelect?.({ camera });
+        this.dismissPicker();
+      });
+      el.appendChild(btn);
+    }
+
+    const container = this.viewer.container as HTMLElement;
+    container.style.position = 'relative';
+    container.appendChild(el);
+    this.pickerEl = el;
+
+    const dismiss = (e: MouseEvent) => {
+      if (!this.pickerEl?.contains(e.target as Node)) this.dismissPicker();
+    };
+    this.pickerDismissHandler = dismiss;
+    setTimeout(() => document.addEventListener('mousedown', dismiss), 0);
+  }
+
+  private dismissPicker(): void {
+    if (this.pickerDismissHandler) {
+      document.removeEventListener('mousedown', this.pickerDismissHandler);
+      this.pickerDismissHandler = null;
+    }
+    if (this.pickerEl) {
+      this.pickerEl.remove();
+      this.pickerEl = null;
+    }
   }
 
   private clusterVisibleCameras(): CameraCluster[] {
