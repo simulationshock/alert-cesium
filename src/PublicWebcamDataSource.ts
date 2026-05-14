@@ -120,9 +120,11 @@ function strOrUndef(v: unknown): string | undefined {
  * detail links only.  Get a free key at https://windy.com/webcams/api
  */
 function californiaSeed(): PublicWebcam[] {
+  // Seed IDs are illustrative location anchors; they may not match real Windy
+  // webcam IDs, so we omit playerUrl/previewUrl to avoid 404 iframe embeds.
+  // A real API key returns accurate IDs with working player and preview URLs.
   const w = (id: string) => ({
     detailUrl: `https://www.windy.com/webcams/${id}`,
-    playerUrl: `https://webcams.windy.com/webcams/public/embed/player/${id}/day`,
   });
   return [
     // San Diego coast
