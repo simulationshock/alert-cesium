@@ -96,68 +96,52 @@
       margin: 6px 0;
     }
 
-    /* ── Fire cascade menu ──────────────────────────────────────── */
-    #fire-legend-row { position: relative; }
-
-    .fire-cascade {
+    /* ── Fire popup panel (vertical accordion, no horizontal scrolling) ── */
+    #fire-popup {
       display: none;
       position: absolute;
       left: calc(100% + 6px);
-      bottom: -4px;
+      bottom: 0;
+      width: 240px;
+      max-height: 65vh;
+      overflow-y: auto;
       background: rgba(14,14,14,0.96);
       border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 7px;
-      min-width: 210px;
-      max-height: 55vh;
-      overflow-y: auto;
+      border-radius: 8px;
       z-index: 250;
       backdrop-filter: blur(8px);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.55);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
       padding: 4px 0;
     }
-    .fire-county-item {
-      position: relative;
+    .fp-city-head {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 10px 6px 12px;
+      padding: 7px 10px 7px 12px;
       cursor: pointer;
       color: #ddd;
       font: 12px/1.4 sans-serif;
-      border-radius: 4px;
-      margin: 1px 4px;
+      user-select: none;
     }
-    .fire-county-item:hover { background: rgba(255,255,255,0.09); color: #fff; }
-    .fire-county-arrow { opacity: 0.45; font-size: 11px; margin-left: auto; flex-shrink: 0; }
-
-    .fire-incidents {
+    .fp-city-head:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .fp-city-name { flex: 1; }
+    .fp-city-arrow { opacity: 0.5; font-size: 9px; flex-shrink: 0; }
+    .fp-city-fires {
       display: none;
-      position: absolute;
-      left: calc(100% + 4px);
-      top: -4px;
-      background: rgba(14,14,14,0.96);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 7px;
-      min-width: 220px;
-      max-height: 50vh;
-      overflow-y: auto;
-      z-index: 251;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.55);
-      padding: 4px 0;
+      margin: 0 8px 4px 20px;
+      border-left: 2px solid rgba(255,80,60,0.3);
+      padding-left: 8px;
     }
-    .fire-county-item:hover > .fire-incidents { display: block; }
-
-    .fire-incident-item {
-      padding: 6px 14px;
+    .fp-city-fires.open { display: block; }
+    .fp-fire {
+      padding: 5px 8px;
       cursor: pointer;
-      color: #ddd;
-      font: 12px/1.4 sans-serif;
+      color: #ccc;
+      font: 11px/1.4 sans-serif;
       border-radius: 4px;
-      margin: 1px 4px;
     }
-    .fire-incident-item:hover { background: rgba(255,80,60,0.18); color: #ffaaaa; }
-    .fire-incident-meta { color: #888; font-size: 10px; margin-top: 1px; }
+    .fp-fire:hover { color: #ffaaaa; background: rgba(255,80,60,0.14); }
+    .fp-fire-meta { color: #777; font-size: 10px; margin-top: 1px; }
   </style>
 </head>
 <body>
@@ -352,7 +336,7 @@
 
     function makeFireItem(fire) {
       const item = document.createElement('div');
-      item.className = 'fire-incident-item';
+      item.className = 'fp-fire';
       const nameLine = document.createElement('div');
       nameLine.textContent = toTitleCase(fire.name);
       item.append(nameLine);
@@ -361,7 +345,7 @@
       if (fire.percentContained != null) parts.push(`${fire.percentContained}% contained`);
       if (parts.length) {
         const meta = document.createElement('div');
-        meta.className = 'fire-incident-meta';
+        meta.className = 'fp-fire-meta';
         meta.textContent = parts.join(' · ');
         item.append(meta);
       }
@@ -370,10 +354,13 @@
     }
 
     function buildFireMenu(incidents, cityMap) {
-      const fireRow = document.getElementById('fire-legend-row');
-      if (!fireRow) return;
-      fireRow.querySelector('.fire-cascade')?.remove();
+      const legend = document.getElementById('map-legend');
+      if (!legend) return;
+      document.getElementById('fire-popup')?.remove();
       if (!incidents || incidents.length === 0) return;
+
+      const popup = document.createElement('div');
+      popup.id = 'fire-popup';
 
       // Group by resolved city name
       const groupMap = new Map();
@@ -384,54 +371,53 @@
         groupMap.get(city).push(inc);
       }
 
-      const cascade = document.createElement('div');
-      cascade.className = 'fire-cascade';
-
       if (groupMap.size > 0) {
         for (const [city, fires] of [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-          const cityItem = document.createElement('div');
-          cityItem.className = 'fire-county-item';
-          const label = document.createElement('span');
-          label.style.flex = '1';
-          label.textContent = fires.length > 1 ? `${city} (${fires.length})` : city;
-          cityItem.append(label);
+          const head = document.createElement('div');
+          head.className = 'fp-city-head';
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'fp-city-name';
+          nameSpan.textContent = fires.length > 1 ? `${city} (${fires.length})` : city;
           const arrow = document.createElement('span');
-          arrow.className = 'fire-county-arrow';
-          arrow.textContent = '›';
-          cityItem.append(arrow);
-          cityItem.addEventListener('click', (e) => {
+          arrow.className = 'fp-city-arrow';
+          arrow.textContent = '▶';
+          head.append(nameSpan, arrow);
+
+          const firesDiv = document.createElement('div');
+          firesDiv.className = 'fp-city-fires';
+          [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => firesDiv.append(makeFireItem(f)));
+
+          head.addEventListener('click', (e) => {
             e.stopPropagation();
-            flyToBBox({
-              west:  Math.min(...fires.map(f => f.boundingBox.west)),
-              south: Math.min(...fires.map(f => f.boundingBox.south)),
-              east:  Math.max(...fires.map(f => f.boundingBox.east)),
-              north: Math.max(...fires.map(f => f.boundingBox.north)),
-            });
+            const isOpen = firesDiv.classList.toggle('open');
+            arrow.textContent = isOpen ? '▼' : '▶';
+            if (isOpen) {
+              flyToBBox({
+                west:  Math.min(...fires.map(f => f.boundingBox.west)),
+                south: Math.min(...fires.map(f => f.boundingBox.south)),
+                east:  Math.max(...fires.map(f => f.boundingBox.east)),
+                north: Math.max(...fires.map(f => f.boundingBox.north)),
+              });
+            }
           });
-          const subDrop = document.createElement('div');
-          subDrop.className = 'fire-incidents';
-          [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => subDrop.append(makeFireItem(f)));
-          cityItem.append(subDrop);
-          cascade.append(cityItem);
+
+          popup.append(head, firesDiv);
         }
       } else {
         // Geocoding returned nothing — flat list
-        [...incidents].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => cascade.append(makeFireItem(f)));
+        [...incidents].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => popup.append(makeFireItem(f)));
       }
 
-      fireRow.append(cascade);
+      legend.append(popup);
 
-      const hoverZone = [fireRow.querySelector('.legend-symbol'), fireRow.querySelector('.legend-label')];
+      const fireRow = document.getElementById('fire-legend-row');
+      const hoverZone = [fireRow?.querySelector('.legend-symbol'), fireRow?.querySelector('.legend-label')];
       let hideTimer;
-      const show = () => { clearTimeout(hideTimer); cascade.style.display = 'block'; };
-      const hideDelayed = () => {
-        hideTimer = setTimeout(() => {
-          if (!cascade.matches(':hover') && !cascade.querySelector(':hover')) cascade.style.display = 'none';
-        }, 150);
-      };
+      const show = () => { clearTimeout(hideTimer); popup.style.display = 'block'; };
+      const hideDelayed = () => { hideTimer = setTimeout(() => { popup.style.display = 'none'; }, 150); };
       hoverZone.forEach(el => { el?.addEventListener('mouseenter', show); el?.addEventListener('mouseleave', hideDelayed); });
-      cascade.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-      cascade.addEventListener('mouseleave', () => { cascade.style.display = 'none'; });
+      popup.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+      popup.addEventListener('mouseleave', hideDelayed);
     }
     // ─────────────────────────────────────────────────────────────────────────
 
