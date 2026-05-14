@@ -95,19 +95,18 @@ export class WildfireCameraMarkerManager {
     const visible = clusters.slice(0, this.options.maximumVisibleMarkers);
 
     for (const cluster of visible) {
-      // Show FOV cones for small clusters (each individual camera in the cluster)
       if (cluster.cameras.length <= 4) {
+        // Individual dots + FOV cones so each dot sits at its cone's apex.
+        // For co-located cameras the dots stack; clicking opens that camera's feed.
         for (const camera of cluster.cameras) {
           for (const fovEntity of this.createFovEntities(camera)) {
             this.entities.push(fovEntity);
             this.viewer.entities.add(fovEntity);
           }
+          const dot = this.createCameraEntity(camera);
+          this.entities.push(dot);
+          this.viewer.entities.add(dot);
         }
-      }
-      if (cluster.cameras.length === 1) {
-        const entity = this.createCameraEntity(cluster.cameras[0]!);
-        this.entities.push(entity);
-        this.viewer.entities.add(entity);
       } else {
         const entity = this.createClusterEntity(cluster);
         this.entities.push(entity);
