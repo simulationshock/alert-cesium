@@ -712,6 +712,7 @@
     }
 
     snapToggleBtn.addEventListener('click', () => setSnapActive(!snapActive));
+    setSnapActive(true); // start in snap mode by default
 
     viewer.scene.canvas.addEventListener('wheel', (e) => {
       if (!snapActive) return;
@@ -734,7 +735,8 @@
         destLat = carto.latitude;
       }
 
-      flyToSnapLevel(getNextSnapIdx(e.deltaY > 0 ? 1 : -1), destLon, destLat);
+      // deltaY > 0 = scroll down = zoom out (higher altitude), matches Cesium free mode
+      flyToSnapLevel(getNextSnapIdx(e.deltaY > 0 ? -1 : 1), destLon, destLat);
     }, { passive: false, capture: true });
     // ─────────────────────────────────────────────────────────────────────
   </script>
