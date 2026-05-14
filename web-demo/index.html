@@ -418,18 +418,22 @@
 
           head.addEventListener('mouseenter', () => {
             cancelSub(); cancelMain();
-            // Position sub-popup to the right of popup, top-aligned with this city head
+            // Position sub-popup flush against the right edge of popup, top-aligned with this city head
             const headRect   = head.getBoundingClientRect();
             const legendRect = legend.getBoundingClientRect();
             const popupRect  = popup.getBoundingClientRect();
-            subPopup.style.left   = (popupRect.right - legendRect.left + 6) + 'px';
-            subPopup.style.top    = Math.max(0, headRect.top - legendRect.top) + 'px';
+            const idealTop   = headRect.top - legendRect.top;
+            subPopup.style.left   = (popupRect.right - legendRect.left) + 'px'; // zero gap for easy traversal
+            subPopup.style.top    = Math.max(0, idealTop) + 'px';
             subPopup.style.bottom = 'auto';
             subPopup.innerHTML = '';
             [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => subPopup.append(makeFireItem(f)));
             subPopup.style.display = 'block';
+            // Clamp bottom so sub-popup doesn't overflow viewport
+            const subRect    = subPopup.getBoundingClientRect();
+            const overflow   = subRect.bottom - (window.innerHeight - 8);
+            if (overflow > 0) subPopup.style.top = Math.max(0, idealTop - overflow) + 'px';
           });
-          head.addEventListener('mouseleave', scheduleSub);
 
           popup.append(head);
         }
@@ -438,6 +442,9 @@
         [...incidents].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => popup.append(makeFireItem(f)));
       }
 
+      // Sub-popup stays open while mouse is anywhere in popup or sub-popup
+      popup.addEventListener('mouseleave', scheduleSub);
+      popup.addEventListener('mouseenter', cancelSub);
       subPopup.addEventListener('mouseenter', () => { cancelSub(); cancelMain(); });
       subPopup.addEventListener('mouseleave', scheduleSub);
 
