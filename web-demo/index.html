@@ -126,13 +126,20 @@
     .fp-city-head:hover { background: rgba(255,255,255,0.08); color: #fff; }
     .fp-city-name { flex: 1; }
     .fp-city-arrow { opacity: 0.5; font-size: 9px; flex-shrink: 0; }
-    .fp-city-fires {
+    #fire-sub-popup {
       display: none;
-      margin: 0 8px 4px 20px;
-      border-left: 2px solid rgba(255,80,60,0.3);
-      padding-left: 8px;
+      position: absolute;
+      width: 220px;
+      max-height: 65vh;
+      overflow-y: auto;
+      background: rgba(14,14,14,0.96);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      z-index: 260;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      padding: 4px 0;
     }
-    .fp-city-fires.open { display: block; }
     .fp-fire {
       padding: 5px 8px;
       cursor: pointer;
@@ -357,10 +364,14 @@
       const legend = document.getElementById('map-legend');
       if (!legend) return;
       document.getElementById('fire-popup')?.remove();
+      document.getElementById('fire-sub-popup')?.remove();
       if (!incidents || incidents.length === 0) return;
 
       const popup = document.createElement('div');
       popup.id = 'fire-popup';
+      const subPopup = document.createElement('div');
+      subPopup.id = 'fire-sub-popup';
+      legend.append(popup, subPopup);
 
       // Group by resolved city name
       const groupMap = new Map();
@@ -371,6 +382,18 @@
         groupMap.get(city).push(inc);
       }
 
+      // ── Shared timers ────────────────────────────────────────────────────
+      let mainTimer, subTimer;
+      const cancelMain = () => clearTimeout(mainTimer);
+      const cancelSub  = () => clearTimeout(subTimer);
+      const scheduleMain = () => {
+        mainTimer = setTimeout(() => { popup.style.display = 'none'; subPopup.style.display = 'none'; }, 150);
+      };
+      const scheduleSub = () => {
+        subTimer = setTimeout(() => { subPopup.style.display = 'none'; }, 150);
+      };
+
+      // ── City items ───────────────────────────────────────────────────────
       if (groupMap.size > 0) {
         for (const [city, fires] of [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
           const head = document.createElement('div');
@@ -380,44 +403,54 @@
           nameSpan.textContent = fires.length > 1 ? `${city} (${fires.length})` : city;
           const arrow = document.createElement('span');
           arrow.className = 'fp-city-arrow';
-          arrow.textContent = '▶';
+          arrow.textContent = '›';
           head.append(nameSpan, arrow);
-
-          const firesDiv = document.createElement('div');
-          firesDiv.className = 'fp-city-fires';
-          [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => firesDiv.append(makeFireItem(f)));
 
           head.addEventListener('click', (e) => {
             e.stopPropagation();
-            const isOpen = firesDiv.classList.toggle('open');
-            arrow.textContent = isOpen ? '▼' : '▶';
-            if (isOpen) {
-              flyToBBox({
-                west:  Math.min(...fires.map(f => f.boundingBox.west)),
-                south: Math.min(...fires.map(f => f.boundingBox.south)),
-                east:  Math.max(...fires.map(f => f.boundingBox.east)),
-                north: Math.max(...fires.map(f => f.boundingBox.north)),
-              });
-            }
+            flyToBBox({
+              west:  Math.min(...fires.map(f => f.boundingBox.west)),
+              south: Math.min(...fires.map(f => f.boundingBox.south)),
+              east:  Math.max(...fires.map(f => f.boundingBox.east)),
+              north: Math.max(...fires.map(f => f.boundingBox.north)),
+            });
           });
 
-          popup.append(head, firesDiv);
+          head.addEventListener('mouseenter', () => {
+            cancelSub(); cancelMain();
+            // Position sub-popup to the right of popup, top-aligned with this city head
+            const headRect   = head.getBoundingClientRect();
+            const legendRect = legend.getBoundingClientRect();
+            const popupRect  = popup.getBoundingClientRect();
+            subPopup.style.left   = (popupRect.right - legendRect.left + 6) + 'px';
+            subPopup.style.top    = Math.max(0, headRect.top - legendRect.top) + 'px';
+            subPopup.style.bottom = 'auto';
+            subPopup.innerHTML = '';
+            [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => subPopup.append(makeFireItem(f)));
+            subPopup.style.display = 'block';
+          });
+          head.addEventListener('mouseleave', scheduleSub);
+
+          popup.append(head);
         }
       } else {
         // Geocoding returned nothing — flat list
         [...incidents].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => popup.append(makeFireItem(f)));
       }
 
-      legend.append(popup);
+      subPopup.addEventListener('mouseenter', () => { cancelSub(); cancelMain(); });
+      subPopup.addEventListener('mouseleave', scheduleSub);
 
+      // ── Main popup hover management ──────────────────────────────────────
       const fireRow = document.getElementById('fire-legend-row');
       const hoverZone = [fireRow?.querySelector('.legend-symbol'), fireRow?.querySelector('.legend-label')];
-      let hideTimer;
-      const show = () => { clearTimeout(hideTimer); popup.style.display = 'block'; };
-      const hideDelayed = () => { hideTimer = setTimeout(() => { popup.style.display = 'none'; }, 150); };
-      hoverZone.forEach(el => { el?.addEventListener('mouseenter', show); el?.addEventListener('mouseleave', hideDelayed); });
-      popup.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-      popup.addEventListener('mouseleave', hideDelayed);
+      hoverZone.forEach(el => {
+        el?.addEventListener('mouseenter', () => { cancelMain(); popup.style.display = 'block'; });
+        el?.addEventListener('mouseleave', scheduleMain);
+      });
+      popup.addEventListener('mouseenter', cancelMain);
+      popup.addEventListener('mouseleave', scheduleMain);
+      subPopup.addEventListener('mouseenter', cancelMain); // keep main open while browsing fires
     }
     // ─────────────────────────────────────────────────────────────────────────
 
