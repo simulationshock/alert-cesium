@@ -57,14 +57,16 @@ export class WebXRWildfireCameraSandbox {
   }
 
   async selectCamera(cameraId: string): Promise<void> {
-    console.log('[Sandbox] selectCamera', cameraId);
     const camera = this.cameras.find((candidate) => candidate.id === cameraId);
-    if (!camera) { console.warn('[Sandbox] camera not found:', cameraId); throw new Error(`Unknown wildfire camera: ${cameraId}`); }
-    console.log('[Sandbox] camera found:', camera.name, 'imageUrl:', camera.imageUrl);
-    const flightResult = await this.flights.flyToCamera(camera, { duration: 2.25, maximumHeight: 120000 });
-    console.log('[Sandbox] flight result:', flightResult);
-    const feedState = await this.feed.open(camera);
-    console.log('[Sandbox] feed state:', feedState);
+    if (!camera) throw new Error(`Unknown wildfire camera: ${cameraId}`);
+    // Fly to a birds-eye position that frames the camera's FOV frustum rather
+    // than landing right on top of the camera at ground level.
+    const viewpoint = frustumBirdsEyeViewpoint(camera);
+    await this.flights.flyToCamera(
+      { ...camera, position: viewpoint },
+      { duration: 2.25, maximumHeight: 120_000 }
+    );
+    await this.feed.open(camera);
   }
 
   refreshMarkers(): void {
@@ -126,6 +128,44 @@ export class WebXRWildfireCameraSandbox {
       });
     }
   }
+}
+
+/**
+ * Returns a Cartesian3 position overhead the camera's FOV frustum at an altitude
+ * that frames the full frustum with a comfortable margin. Falls back to a modest
+ * birds-eye altitude when no FOV data is available.
+ */
+function frustumBirdsEyeViewpoint(camera: ResolvedWildfireCamera): Cartesian3 {
+  let left  = camera.fovLeft;
+  let right = camera.fovRight;
+
+  // Synthesise FOV corners from azimuth + fieldOfView when the raw corners are absent.
+  if ((!left || !right) && camera.azimuth !== undefined && camera.fieldOfView !== undefined) {
+    const rangeDeg = 15 / 111;
+    const halfFov  = (camera.fieldOfView / 2) * (Math.PI / 180);
+    const az       = camera.azimuth * (Math.PI / 180);
+    const cosLat   = Math.cos(camera.latitude * (Math.PI / 180));
+    left  = [camera.longitude + (rangeDeg * Math.sin(az - halfFov)) / cosLat,
+             camera.latitude  +  rangeDeg * Math.cos(az - halfFov)];
+    right = [camera.longitude + (rangeDeg * Math.sin(az + halfFov)) / cosLat,
+             camera.latitude  +  rangeDeg * Math.cos(az + halfFov)];
+  }
+
+  const lons: number[] = [camera.longitude];
+  const lats: number[] = [camera.latitude];
+  if (left)  { lons.push(left[0]);  lats.push(left[1]); }
+  if (right) { lons.push(right[0]); lats.push(right[1]); }
+
+  const west  = Math.min(...lons),  east  = Math.max(...lons);
+  const south = Math.min(...lats),  north = Math.max(...lats);
+
+  const extentDeg    = Math.max(east - west, north - south);
+  const extentMeters = extentDeg * 111_320;
+  // At Cesium's ~60° vertical FOV, visible ground = altitude × tan(30°) × 2 ≈ altitude.
+  // Multiply by 1.8 to add margin; minimum 2 km for cameras without FOV data.
+  const altitude = lons.length === 1 ? 4_000 : Math.max(extentMeters * 1.8, 2_000);
+
+  return Cartesian3.fromDegrees((west + east) / 2, (south + north) / 2, altitude);
 }
 
 /** Returns the diagonal of the bounding box of camera positions, in degrees. */

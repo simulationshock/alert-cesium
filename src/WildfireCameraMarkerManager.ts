@@ -36,6 +36,7 @@ export class WildfireCameraMarkerManager {
   private readonly clickHandler: ScreenSpaceEventHandler;
   private pickerEl: HTMLDivElement | null = null;
   private pickerDismissHandler: ((e: MouseEvent) => void) | null = null;
+  private hoverEntities: Entity[] = [];
 
   constructor(viewer: Viewer, options: MarkerManagerOptions = {}) {
     this.viewer = viewer;
@@ -134,10 +135,18 @@ export class WildfireCameraMarkerManager {
   }
 
   clear(): void {
+    this.clearHoverEntities();
     for (const entity of this.entities) {
       this.viewer.entities.remove(entity);
     }
     this.entities = [];
+  }
+
+  private clearHoverEntities(): void {
+    for (const entity of this.hoverEntities) {
+      this.viewer.entities.remove(entity);
+    }
+    this.hoverEntities = [];
   }
 
   destroy(): void {
@@ -184,8 +193,59 @@ export class WildfireCameraMarkerManager {
         'text-align:left', 'cursor:pointer', 'font:13px sans-serif',
         'white-space:nowrap',
       ].join(';');
-      btn.addEventListener('mouseenter', () => { btn.style.background = 'rgba(255,255,255,0.1)'; });
-      btn.addEventListener('mouseleave', () => { btn.style.background = 'none'; });
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = 'rgba(255,255,255,0.1)';
+        this.clearHoverEntities();
+
+        // Yellow highlight dot so the user can locate this camera on the globe.
+        const dot = new Entity({
+          id: `wildfire-camera-hover-dot:${camera.id}`,
+          position: camera.position,
+          point: {
+            pixelSize: 18,
+            color: Color.YELLOW,
+            outlineColor: Color.WHITE,
+            outlineWidth: 2,
+            disableDepthTestDistance: Number.POSITIVE_INFINITY,
+          } as any,
+        });
+        this.hoverEntities.push(dot);
+        this.viewer.entities.add(dot);
+
+        // FOV frustum preview in yellow so it reads as "hover state".
+        const corners = this.resolveFovCorners(camera);
+        if (corners) {
+          const [left, right] = corners;
+          const camPos   = Cartesian3.fromDegrees(camera.longitude, camera.latitude);
+          const leftPos  = Cartesian3.fromDegrees(left[0],  left[1]);
+          const rightPos = Cartesian3.fromDegrees(right[0], right[1]);
+
+          const fill = new Entity({
+            id: `wildfire-camera-hover-fov-fill:${camera.id}`,
+            polygon: {
+              hierarchy: new PolygonHierarchy([camPos, leftPos, rightPos]),
+              material: Color.YELLOW.withAlpha(0.22),
+              clampToGround: true,
+            } as any,
+          });
+          const line = new Entity({
+            id: `wildfire-camera-hover-fov-line:${camera.id}`,
+            polyline: {
+              positions: [camPos, leftPos, rightPos, camPos],
+              width: 2,
+              material: Color.YELLOW.withAlpha(0.9),
+              clampToGround: true,
+            } as any,
+          });
+          this.hoverEntities.push(fill, line);
+          this.viewer.entities.add(fill);
+          this.viewer.entities.add(line);
+        }
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = 'none';
+        this.clearHoverEntities();
+      });
       btn.addEventListener('click', () => {
         this.options.onSelect?.({ camera });
         this.dismissPicker();
@@ -206,6 +266,7 @@ export class WildfireCameraMarkerManager {
   }
 
   private dismissPicker(): void {
+    this.clearHoverEntities();
     if (this.pickerDismissHandler) {
       document.removeEventListener('mousedown', this.pickerDismissHandler);
       this.pickerDismissHandler = null;
