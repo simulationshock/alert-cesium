@@ -667,15 +667,17 @@
       levelSpans.forEach((span, i) => span.classList.toggle('active', i === idx));
     }
 
-    function flyToSnapLevel(idx) {
+    function flyToSnapLevel(idx, destLon, destLat) {
       if (isSnapping) return;
       isSnapping = true;
       updateLevelBar(idx);
       const lvl = SNAP_LEVELS[idx];
       const cam = viewer.camera;
       const pos = cam.positionCartographic;
+      const lon = destLon ?? pos.longitude;
+      const lat = destLat ?? pos.latitude;
       cam.flyTo({
-        destination: Cesium.Cartesian3.fromRadians(pos.longitude, pos.latitude, lvl.altitude),
+        destination: Cesium.Cartesian3.fromRadians(lon, lat, lvl.altitude),
         orientation: { heading: cam.heading, pitch: cam.pitch, roll: cam.roll },
         duration: 0.6,
         complete: () => { isSnapping = false; },
@@ -715,7 +717,24 @@
       if (!snapActive) return;
       e.preventDefault();
       e.stopPropagation();
-      flyToSnapLevel(getNextSnapIdx(e.deltaY > 0 ? 1 : -1));
+
+      // Pick the globe surface under the mouse cursor so the snap flies
+      // toward where the user is pointing rather than the camera center.
+      // Touch pinch doesn't produce wheel events so touch is unaffected.
+      const rect = viewer.scene.canvas.getBoundingClientRect();
+      const canvasPos = new Cesium.Cartesian2(e.clientX - rect.left, e.clientY - rect.top);
+      const ray = viewer.camera.getPickRay(canvasPos);
+      const hit = viewer.scene.globe.pick(ray, viewer.scene)
+               ?? viewer.camera.pickEllipsoid(canvasPos); // fallback: smooth ellipsoid
+
+      let destLon, destLat;
+      if (hit) {
+        const carto = Cesium.Cartographic.fromCartesian(hit);
+        destLon = carto.longitude;
+        destLat = carto.latitude;
+      }
+
+      flyToSnapLevel(getNextSnapIdx(e.deltaY > 0 ? 1 : -1), destLon, destLat);
     }, { passive: false, capture: true });
     // ─────────────────────────────────────────────────────────────────────
   </script>
