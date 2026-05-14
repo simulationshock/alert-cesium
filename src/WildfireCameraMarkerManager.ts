@@ -293,14 +293,12 @@ export class WildfireCameraMarkerManager {
   private clusterVisibleCameras(): CameraCluster[] {
     const buckets = new Map<string, ResolvedWildfireCamera[]>();
     const scene = this.viewer.scene;
-    // EllipsoidalOccluder reliably identifies back-of-globe cameras regardless
-    // of pitch — worldToWindowCoordinates returns null in top-down views even
-    // for visible surface points, so we can't use it as a visibility gate.
-    // Normalize the viewer position once; a surface camera is on the visible
-    // hemisphere when dot(viewerDir, cameraDir) > 0.  This works at any pitch
-    // including straight down, unlike worldToWindowCoordinates which returns
-    // null for surface points in top-down views.
+    // Quick back-of-globe reject: a surface camera is on the visible hemisphere
+    // when dot(normalize(viewerPos), normalize(cameraPos)) > 0.
     const viewerDir = Cartesian3.normalize(scene.camera.positionWC, new Cartesian3());
+    const canvas = scene.canvas;
+    const cw = canvas.clientWidth;
+    const ch = canvas.clientHeight;
 
     for (const camera of this.cameras) {
       const camDir = Cartesian3.normalize(camera.position, new Cartesian3());
@@ -308,10 +306,20 @@ export class WildfireCameraMarkerManager {
 
       const screen = SceneTransforms.worldToWindowCoordinates(
         scene, camera.position, new Cartesian2());
-      // Use screen-space grid cell when available; fall back to a coarse
-      // geographic key for cameras the projector can't place (view edge cases).
-      const key = screen
-        ? `${Math.floor(screen.x / this.options.clusterPixelSize)}:${Math.floor(screen.y / this.options.clusterPixelSize)}`
+
+      // worldToWindowCoordinates returns a valid Cartesian2 for ANY camera in
+      // front of the viewer — including the 2000+ cameras across all of
+      // California when looking straight down. Treating all of them as
+      // "on-screen" fills the 250-entity limit with off-viewport cameras,
+      // leaving none for the cameras actually visible in the window.
+      // Only use the screen-space bucket key when the coordinates are truly
+      // inside the canvas; everything else falls back to the geographic grid.
+      const inViewport = screen !== undefined &&
+        screen.x >= 0 && screen.x < cw &&
+        screen.y >= 0 && screen.y < ch;
+
+      const key = inViewport
+        ? `${Math.floor(screen!.x / this.options.clusterPixelSize)}:${Math.floor(screen!.y / this.options.clusterPixelSize)}`
         : `geo:${Math.round(camera.longitude * 4)}:${Math.round(camera.latitude * 4)}`;
       const bucket = buckets.get(key) ?? [];
       bucket.push(camera);
