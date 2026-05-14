@@ -13,7 +13,7 @@ import type {
 const DEFAULT_ENDPOINT =
   'https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/CA_Perimeters_NIFC_FIRIS_public_view/FeatureServer/0/query' +
   '?where=displayStatus+%3D+%27Active%27' +
-  '&outFields=incident_name%2Carea_acres%2Ctype%2Cpoly_DateCurrent' +
+  '&outFields=*' +
   '&outSR=4326' +
   '&f=geojson';
 
@@ -184,10 +184,12 @@ export class FireIncidentOverlay {
     const rawDate = props['DateCurrent'] ?? props['poly_DateCurrent'] ?? props['CreateDate'];
     const dateUpdated = typeof rawDate === 'number' ? new Date(rawDate as number) : undefined;
     const boundingBox = computeBoundingBox(outerRing as number[][]);
+    const county = strProp(props, ['POOCounty', 'county', 'County', 'LocalRegion', 'GACGName']);
 
     return {
       id,
       name: rawName,
+      county,
       acresBurned,
       percentContained,
       dateUpdated,
@@ -312,6 +314,15 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function numberProp(props: Record<string, unknown>, keys: string[]): number | undefined {
   for (const key of keys) {
     if (typeof props[key] === 'number') return props[key] as number;
+  }
+  return undefined;
+}
+
+function strProp(props: Record<string, unknown>, keys: string[]): string | undefined {
+  for (const key of keys) {
+    if (typeof props[key] === 'string' && (props[key] as string).trim()) {
+      return (props[key] as string).trim();
+    }
   }
   return undefined;
 }

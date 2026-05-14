@@ -95,6 +95,69 @@
       border-top: 1px solid rgba(255,255,255,0.12);
       margin: 6px 0;
     }
+
+    /* ── Fire cascade menu ──────────────────────────────────────── */
+    #fire-legend-row { position: relative; }
+
+    .fire-cascade {
+      display: none;
+      position: absolute;
+      left: calc(100% + 6px);
+      bottom: -4px;
+      background: rgba(14,14,14,0.96);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      min-width: 210px;
+      max-height: 55vh;
+      overflow-y: auto;
+      z-index: 250;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.55);
+      padding: 4px 0;
+    }
+    .fire-county-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px 6px 12px;
+      cursor: pointer;
+      color: #ddd;
+      font: 12px/1.4 sans-serif;
+      border-radius: 4px;
+      margin: 1px 4px;
+    }
+    .fire-county-item:hover { background: rgba(255,255,255,0.09); color: #fff; }
+    .fire-county-arrow { opacity: 0.45; font-size: 11px; margin-left: auto; flex-shrink: 0; }
+
+    .fire-incidents {
+      display: none;
+      position: absolute;
+      left: calc(100% + 4px);
+      top: -4px;
+      background: rgba(14,14,14,0.96);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      min-width: 220px;
+      max-height: 50vh;
+      overflow-y: auto;
+      z-index: 251;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.55);
+      padding: 4px 0;
+    }
+    .fire-county-item:hover > .fire-incidents { display: block; }
+
+    .fire-incident-item {
+      padding: 6px 14px;
+      cursor: pointer;
+      color: #ddd;
+      font: 12px/1.4 sans-serif;
+      border-radius: 4px;
+      margin: 1px 4px;
+    }
+    .fire-incident-item:hover { background: rgba(255,80,60,0.18); color: #ffaaaa; }
+    .fire-incident-meta { color: #888; font-size: 10px; margin-top: 1px; }
   </style>
 </head>
 <body>
@@ -122,7 +185,7 @@
 
     <hr class="legend-divider">
 
-    <div class="legend-row">
+    <div class="legend-row" id="fire-legend-row">
       <span class="legend-symbol"><span class="legend-polygon"></span></span>
       <span class="legend-label">Active fire perimeter</span>
       <button class="legend-toggle" id="legend-fires-btn" title="Toggle fire overlay">&#x1F441;</button>
@@ -217,14 +280,7 @@
         if (!overlay) return;
         console.info(`[FireOverlay] status: ${overlay.status}`);
         console.info(`[FireOverlay] ${overlay.incidents.length} active fire incident(s) loaded`);
-        console.info(`[FireOverlay] ${overlay.status === 'loaded' ? '✅ API reachable' : '❌ API error — check network tab'}`);
-        if (overlay.incidents.length > 0) {
-          console.table(overlay.incidents.map(i => ({
-            name: i.name,
-            acres: i.acresBurned ?? '—',
-            contained: i.percentContained != null ? `${i.percentContained}%` : '—',
-          })));
-        }
+        buildFireMenu(overlay.incidents);
       })
       .catch(console.error);
 
@@ -242,6 +298,129 @@
         console.info(`[Radio] ${feeds.length} emergency radio feeds loaded`);
       })
       .catch(console.error);
+
+    // ── Fire cascade menu ─────────────────────────────────────────────────
+    function flyToBBox(bbox, pad = 0.05) {
+      viewer.camera.flyTo({
+        destination: Cesium.Rectangle.fromDegrees(
+          bbox.west  - pad,
+          bbox.south - pad,
+          bbox.east  + pad,
+          bbox.north + pad,
+        ),
+        duration: 1.5,
+      });
+    }
+
+    function buildFireMenu(incidents) {
+      const fireRow = document.getElementById('fire-legend-row');
+      if (!fireRow) return;
+      fireRow.querySelector('.fire-cascade')?.remove();
+      if (!incidents || incidents.length === 0) return;
+
+      // Group by county. If no county data at all, use a single 'Active Fires' bucket.
+      const countyMap = new Map();
+      let hasCounty = false;
+      for (const inc of incidents) {
+        const key = inc.county || null;
+        if (key) hasCounty = true;
+        const bucket = key ?? 'Active Fires';
+        if (!countyMap.has(bucket)) countyMap.set(bucket, []);
+        countyMap.get(bucket).push(inc);
+      }
+
+      const groups = hasCounty
+        ? [...countyMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+        : [['Active Fires', incidents]];
+
+      const cascade = document.createElement('div');
+      cascade.className = 'fire-cascade';
+
+      for (const [groupName, fires] of groups) {
+        const countyItem = document.createElement('div');
+        countyItem.className = 'fire-county-item';
+
+        const labelSpan = document.createElement('span');
+        labelSpan.style.flex = '1';
+        labelSpan.textContent = fires.length > 1
+          ? `${groupName} (${fires.length})`
+          : groupName;
+        countyItem.append(labelSpan);
+
+        const arrow = document.createElement('span');
+        arrow.className = 'fire-county-arrow';
+        arrow.textContent = '›';
+        countyItem.append(arrow);
+
+        // Click county → fly to union of all fires in that county
+        countyItem.addEventListener('click', (e) => {
+          e.stopPropagation();
+          flyToBBox({
+            west:  Math.min(...fires.map(f => f.boundingBox.west)),
+            south: Math.min(...fires.map(f => f.boundingBox.south)),
+            east:  Math.max(...fires.map(f => f.boundingBox.east)),
+            north: Math.max(...fires.map(f => f.boundingBox.north)),
+          });
+        });
+
+        // Sub-dropdown: individual fires
+        const subDrop = document.createElement('div');
+        subDrop.className = 'fire-incidents';
+
+        for (const fire of [...fires].sort((a, b) => a.name.localeCompare(b.name))) {
+          const item = document.createElement('div');
+          item.className = 'fire-incident-item';
+
+          const nameLine = document.createElement('div');
+          nameLine.textContent = fire.name;
+          item.append(nameLine);
+
+          const parts = [];
+          if (fire.acresBurned  != null) parts.push(`${Math.round(fire.acresBurned).toLocaleString()} ac`);
+          if (fire.percentContained != null) parts.push(`${fire.percentContained}% contained`);
+          if (parts.length) {
+            const meta = document.createElement('div');
+            meta.className = 'fire-incident-meta';
+            meta.textContent = parts.join(' · ');
+            item.append(meta);
+          }
+
+          item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            flyToBBox(fire.boundingBox);
+          });
+          subDrop.append(item);
+        }
+
+        countyItem.append(subDrop);
+        cascade.append(countyItem);
+      }
+
+      fireRow.append(cascade);
+
+      // Show cascade when hovering symbol or label (not the toggle button).
+      // 150 ms grace period lets the mouse cross the gap without hiding.
+      const hoverZone = [
+        fireRow.querySelector('.legend-symbol'),
+        fireRow.querySelector('.legend-label'),
+      ];
+      let hideTimer;
+      const show = () => { clearTimeout(hideTimer); cascade.style.display = 'block'; };
+      const hideDelayed = () => {
+        hideTimer = setTimeout(() => {
+          if (!cascade.matches(':hover') && !cascade.querySelector(':hover')) {
+            cascade.style.display = 'none';
+          }
+        }, 150);
+      };
+      hoverZone.forEach(el => {
+        el?.addEventListener('mouseenter', show);
+        el?.addEventListener('mouseleave', hideDelayed);
+      });
+      cascade.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+      cascade.addEventListener('mouseleave', () => { cascade.style.display = 'none'; });
+    }
+    // ─────────────────────────────────────────────────────────────────────────
 
     // Legend toggle — cameras
     const camerasBtn = document.getElementById('legend-cameras-btn');

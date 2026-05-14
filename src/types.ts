@@ -86,6 +86,7 @@ export type FireProximityStatus = 'inside' | 'proximity';
 export interface FireIncident {
   id: string;
   name: string;
+  county?: string;
   acresBurned?: number;
   percentContained?: number;
   dateUpdated?: Date;
