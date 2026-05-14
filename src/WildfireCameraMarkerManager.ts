@@ -2,6 +2,7 @@ import {
   Cartesian2,
   Cartesian3,
   Color,
+  DistanceDisplayCondition,
   Entity,
   HorizontalOrigin,
   LabelStyle,
@@ -30,8 +31,8 @@ export class WildfireCameraMarkerManager {
   private entities: Entity[] = [];
   private fireHighlights: Map<string, FireProximityStatus> = new Map();
   private _visible = true;
-  private readonly onMoveEnd: () => void;
   private readonly onCameraChanged: () => void;
+  private _refreshTimer?: ReturnType<typeof setTimeout>;
   private readonly clickHandler: ScreenSpaceEventHandler;
 
   constructor(viewer: Viewer, options: MarkerManagerOptions = {}) {
@@ -41,9 +42,13 @@ export class WildfireCameraMarkerManager {
       maximumVisibleMarkers: options.maximumVisibleMarkers ?? 250,
       onSelect: options.onSelect
     };
-    this.onMoveEnd = () => this.refresh();
-    this.onCameraChanged = () => this.refresh();
-    this.viewer.camera.moveEnd.addEventListener(this.onMoveEnd);
+    // Debounce camera movement: refresh 100 ms after the last change event so
+    // entities are never cleared mid-frame (camera.changed fires inside Cesium's
+    // render loop; clearing entities there prevents them rendering that frame).
+    this.onCameraChanged = () => {
+      clearTimeout(this._refreshTimer);
+      this._refreshTimer = setTimeout(() => this.refresh(), 100);
+    };
     this.viewer.camera.changed.addEventListener(this.onCameraChanged);
 
     this.clickHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
@@ -123,8 +128,8 @@ export class WildfireCameraMarkerManager {
   }
 
   destroy(): void {
-    this.viewer.camera.moveEnd.removeEventListener(this.onMoveEnd);
     this.viewer.camera.changed.removeEventListener(this.onCameraChanged);
+    clearTimeout(this._refreshTimer);
     this.clickHandler.destroy();
     this.clear();
   }
@@ -207,15 +212,17 @@ export class WildfireCameraMarkerManager {
       },
       label: {
         text: camera.name,
-        font: '14px sans-serif',
+        font: '13px sans-serif',
         fillColor: Color.WHITE,
         outlineColor: Color.BLACK,
-        outlineWidth: 3,
+        outlineWidth: 2,
         style: LabelStyle.FILL_AND_OUTLINE,
-        pixelOffset: new Cartesian2(0, -22),
+        pixelOffset: new Cartesian2(0, -18),
         horizontalOrigin: HorizontalOrigin.CENTER,
         verticalOrigin: VerticalOrigin.BOTTOM,
-        disableDepthTestDistance: Number.POSITIVE_INFINITY
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        // Only show labels when close enough that cameras are well-separated
+        distanceDisplayCondition: new DistanceDisplayCondition(0, 30_000),
       },
       properties: { wildfireCamera: camera, markerType: 'camera' }
     });
