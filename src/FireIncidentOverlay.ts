@@ -9,11 +9,11 @@ import type {
   ResolvedWildfireCamera,
 } from './types.js';
 
-// ESRI Living Atlas — USA Wildfires v1, Current Perimeters layer (anonymously queryable)
+// CAL FIRE + NIFC FIRIS combined California perimeters (anonymously queryable public view)
 const DEFAULT_ENDPOINT =
-  'https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/1/query' +
-  '?where=1%3D1' +
-  '&outFields=IncidentName%2CGISAcres%2CCreateDate%2CDateCurrent' +
+  'https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/CA_Perimeters_NIFC_FIRIS_public_view/FeatureServer/0/query' +
+  '?where=displayStatus+%3D+%27Active%27' +
+  '&outFields=incident_name%2Carea_acres%2Ctype%2Cpoly_DateCurrent%2CIncidentName%2CGISAcres%2CDateCurrent' +
   '&outSR=4326' +
   '&f=geojson';
 
@@ -175,11 +175,13 @@ export class FireIncidentOverlay {
       : (coordinates as unknown[][][])[0]?.[0];
     if (!Array.isArray(outerRing) || outerRing.length < 3) return undefined;
 
-    const rawName = String(props['IncidentName'] ?? props['name'] ?? props['NAME'] ?? `Fire ${index + 1}`).trim();
+    const rawName = String(
+      props['IncidentName'] ?? props['incident_name'] ?? props['name'] ?? props['NAME'] ?? `Fire ${index + 1}`
+    ).trim();
     const id = String(feature.id ?? slugify(rawName, index));
-    const acresBurned = typeof props['GISAcres'] === 'number' ? (props['GISAcres'] as number) : undefined;
-    const percentContained = typeof props['PercentContained'] === 'number' ? (props['PercentContained'] as number) : undefined;
-    const rawDate = props['DateCurrent'] ?? props['CreateDate'];
+    const acresBurned = numberProp(props, ['GISAcres', 'area_acres']);
+    const percentContained = numberProp(props, ['PercentContained', 'percent_contained']);
+    const rawDate = props['DateCurrent'] ?? props['poly_DateCurrent'] ?? props['CreateDate'];
     const dateUpdated = typeof rawDate === 'number' ? new Date(rawDate as number) : undefined;
     const boundingBox = computeBoundingBox(outerRing as number[][]);
 
@@ -304,6 +306,13 @@ export class FireIncidentOverlay {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
+}
+
+function numberProp(props: Record<string, unknown>, keys: string[]): number | undefined {
+  for (const key of keys) {
+    if (typeof props[key] === 'number') return props[key] as number;
+  }
+  return undefined;
 }
 
 function slugify(name: string, index: number): string {
