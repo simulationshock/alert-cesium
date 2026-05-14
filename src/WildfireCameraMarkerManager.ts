@@ -140,9 +140,8 @@ export class WildfireCameraMarkerManager {
 
     for (const camera of this.cameras) {
       const screen = SceneTransforms.worldToWindowCoordinates(scene, camera.position, new Cartesian2());
-      const key = screen
-        ? `${Math.floor(screen.x / this.options.clusterPixelSize)}:${Math.floor(screen.y / this.options.clusterPixelSize)}`
-        : `offscreen:${camera.id}`;
+      if (!screen) continue; // behind the globe — not renderable, skip entirely
+      const key = `${Math.floor(screen.x / this.options.clusterPixelSize)}:${Math.floor(screen.y / this.options.clusterPixelSize)}`;
       const bucket = buckets.get(key) ?? [];
       bucket.push(camera);
       buckets.set(key, bucket);
