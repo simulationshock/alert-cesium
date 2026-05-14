@@ -95,14 +95,16 @@ export class WildfireCameraMarkerManager {
     const visible = clusters.slice(0, this.options.maximumVisibleMarkers);
 
     for (const cluster of visible) {
-      if (cluster.cameras.length === 1) {
-        const camera = cluster.cameras[0]!;
-        const fovEntity = this.createFovEntity(camera);
-        if (fovEntity) {
-          this.entities.push(fovEntity);
-          this.viewer.entities.add(fovEntity);
+      if (cluster.cameras.length <= 4) {
+        for (const camera of cluster.cameras) {
+          for (const fovEntity of this.createFovEntities(camera)) {
+            this.entities.push(fovEntity);
+            this.viewer.entities.add(fovEntity);
+          }
         }
-        const entity = this.createCameraEntity(camera);
+      }
+      if (cluster.cameras.length === 1) {
+        const entity = this.createCameraEntity(cluster.cameras[0]!);
         this.entities.push(entity);
         this.viewer.entities.add(entity);
       } else {
@@ -199,61 +201,68 @@ export class WildfireCameraMarkerManager {
     return entity;
   }
 
-  private createFovEntity(camera: ResolvedWildfireCamera): Entity | undefined {
+  private resolveFovCorners(camera: ResolvedWildfireCamera): [[number, number], [number, number]] | undefined {
     let left: [number, number] | undefined = camera.fovLeft;
     let right: [number, number] | undefined = camera.fovRight;
 
-    // Fall back to computing FOV corners from azimuth + field-of-view when geographic
-    // corners aren't available. Use a 15 km nominal range so the wedge is legible.
     if ((!left || !right) && camera.azimuth !== undefined && camera.fieldOfView !== undefined) {
-      const rangeKm = 15;
-      const rangeDeg = rangeKm / 111;
+      const rangeDeg = 15 / 111;
       const halfFov = (camera.fieldOfView / 2) * (Math.PI / 180);
       const az = camera.azimuth * (Math.PI / 180);
-      const leftAz = az - halfFov;
-      const rightAz = az + halfFov;
-      const lat = camera.latitude * (Math.PI / 180);
+      const cosLat = Math.cos(camera.latitude * (Math.PI / 180));
       left = [
-        camera.longitude + (rangeDeg * Math.sin(leftAz)) / Math.cos(lat),
-        camera.latitude + rangeDeg * Math.cos(leftAz),
+        camera.longitude + (rangeDeg * Math.sin(az - halfFov)) / cosLat,
+        camera.latitude + rangeDeg * Math.cos(az - halfFov),
       ];
       right = [
-        camera.longitude + (rangeDeg * Math.sin(rightAz)) / Math.cos(lat),
-        camera.latitude + rangeDeg * Math.cos(rightAz),
+        camera.longitude + (rangeDeg * Math.sin(az + halfFov)) / cosLat,
+        camera.latitude + rangeDeg * Math.cos(az + halfFov),
       ];
     }
 
-    if (!left || !right) return undefined;
+    return left && right ? [left, right] : undefined;
+  }
+
+  private createFovEntities(camera: ResolvedWildfireCamera): Entity[] {
+    const corners = this.resolveFovCorners(camera);
+    if (!corners) return [];
+    const [left, right] = corners;
 
     const fireStatus = this.fireHighlights.get(camera.id);
-    const coneColor = fireStatus === 'inside'
-      ? Color.RED.withAlpha(0.18)
+    const fillColor = fireStatus === 'inside'
+      ? Color.RED.withAlpha(0.22)
       : fireStatus === 'proximity'
-        ? Color.ORANGE.withAlpha(0.18)
-        : Color.WHITE.withAlpha(0.12);
-    const outlineColor = fireStatus === 'inside'
-      ? Color.RED.withAlpha(0.7)
+        ? Color.ORANGE.withAlpha(0.22)
+        : Color.CYAN.withAlpha(0.15);
+    const lineColor = fireStatus === 'inside'
+      ? Color.RED.withAlpha(0.9)
       : fireStatus === 'proximity'
-        ? Color.ORANGE.withAlpha(0.7)
-        : Color.WHITE.withAlpha(0.5);
+        ? Color.ORANGE.withAlpha(0.9)
+        : Color.CYAN.withAlpha(0.8);
 
-    const positions = Cartesian3.fromDegreesArray([
-      camera.longitude, camera.latitude,
-      left[0], left[1],
-      right[0], right[1],
-    ]);
+    const camPos  = Cartesian3.fromDegrees(camera.longitude, camera.latitude);
+    const leftPos = Cartesian3.fromDegrees(left[0], left[1]);
+    const rightPos = Cartesian3.fromDegrees(right[0], right[1]);
 
-    return new Entity({
-      id: `wildfire-camera-fov:${camera.id}`,
-      polygon: {
-        hierarchy: new PolygonHierarchy(positions),
-        material: coneColor,
-        outline: true,
-        outlineColor,
-        outlineWidth: 1,
-        clampToGround: true,
-      } as any,
-    });
+    return [
+      new Entity({
+        id: `wildfire-camera-fov-fill:${camera.id}`,
+        polygon: {
+          hierarchy: new PolygonHierarchy([camPos, leftPos, rightPos]),
+          material: fillColor,
+          clampToGround: true,
+        } as any,
+      }),
+      new Entity({
+        id: `wildfire-camera-fov-line:${camera.id}`,
+        polyline: {
+          positions: [camPos, leftPos, rightPos, camPos],
+          width: 1.5,
+          material: lineColor,
+          clampToGround: true,
+        } as any,
+      }),
+    ];
   }
 
   private createClusterEntity(cluster: CameraCluster): Entity {
