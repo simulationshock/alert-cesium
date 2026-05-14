@@ -312,111 +312,96 @@
       });
     }
 
+    function toTitleCase(str) {
+      return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function makeFireItem(fire) {
+      const item = document.createElement('div');
+      item.className = 'fire-incident-item';
+      const nameLine = document.createElement('div');
+      nameLine.textContent = toTitleCase(fire.name);
+      item.append(nameLine);
+      const parts = [];
+      if (fire.acresBurned     != null) parts.push(`${Math.round(fire.acresBurned).toLocaleString()} ac`);
+      if (fire.percentContained != null) parts.push(`${fire.percentContained}% contained`);
+      if (parts.length) {
+        const meta = document.createElement('div');
+        meta.className = 'fire-incident-meta';
+        meta.textContent = parts.join(' · ');
+        item.append(meta);
+      }
+      item.addEventListener('click', (e) => { e.stopPropagation(); flyToBBox(fire.boundingBox); });
+      return item;
+    }
+
     function buildFireMenu(incidents) {
       const fireRow = document.getElementById('fire-legend-row');
       if (!fireRow) return;
       fireRow.querySelector('.fire-cascade')?.remove();
       if (!incidents || incidents.length === 0) return;
 
-      // Group by county. If no county data at all, use a single 'Active Fires' bucket.
-      const countyMap = new Map();
-      let hasCounty = false;
+      // Group by city/county. If none is set, show fires directly (no intermediate level).
+      const cityMap = new Map();
       for (const inc of incidents) {
-        const key = inc.county || null;
-        if (key) hasCounty = true;
-        const bucket = key ?? 'Active Fires';
-        if (!countyMap.has(bucket)) countyMap.set(bucket, []);
-        countyMap.get(bucket).push(inc);
+        const key = inc.county ? toTitleCase(inc.county) : null;
+        if (!key) continue;
+        if (!cityMap.has(key)) cityMap.set(key, []);
+        cityMap.get(key).push(inc);
       }
-
-      const groups = hasCounty
-        ? [...countyMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-        : [['Active Fires', incidents]];
 
       const cascade = document.createElement('div');
       cascade.className = 'fire-cascade';
 
-      for (const [groupName, fires] of groups) {
-        const countyItem = document.createElement('div');
-        countyItem.className = 'fire-county-item';
+      if (cityMap.size > 0) {
+        // City → Fire (two levels)
+        for (const [city, fires] of [...cityMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+          const cityItem = document.createElement('div');
+          cityItem.className = 'fire-county-item';
 
-        const labelSpan = document.createElement('span');
-        labelSpan.style.flex = '1';
-        labelSpan.textContent = fires.length > 1
-          ? `${groupName} (${fires.length})`
-          : groupName;
-        countyItem.append(labelSpan);
+          const label = document.createElement('span');
+          label.style.flex = '1';
+          label.textContent = fires.length > 1 ? `${city} (${fires.length})` : city;
+          cityItem.append(label);
 
-        const arrow = document.createElement('span');
-        arrow.className = 'fire-county-arrow';
-        arrow.textContent = '›';
-        countyItem.append(arrow);
+          const arrow = document.createElement('span');
+          arrow.className = 'fire-county-arrow';
+          arrow.textContent = '›';
+          cityItem.append(arrow);
 
-        // Click county → fly to union of all fires in that county
-        countyItem.addEventListener('click', (e) => {
-          e.stopPropagation();
-          flyToBBox({
-            west:  Math.min(...fires.map(f => f.boundingBox.west)),
-            south: Math.min(...fires.map(f => f.boundingBox.south)),
-            east:  Math.max(...fires.map(f => f.boundingBox.east)),
-            north: Math.max(...fires.map(f => f.boundingBox.north)),
-          });
-        });
-
-        // Sub-dropdown: individual fires
-        const subDrop = document.createElement('div');
-        subDrop.className = 'fire-incidents';
-
-        for (const fire of [...fires].sort((a, b) => a.name.localeCompare(b.name))) {
-          const item = document.createElement('div');
-          item.className = 'fire-incident-item';
-
-          const nameLine = document.createElement('div');
-          nameLine.textContent = fire.name;
-          item.append(nameLine);
-
-          const parts = [];
-          if (fire.acresBurned  != null) parts.push(`${Math.round(fire.acresBurned).toLocaleString()} ac`);
-          if (fire.percentContained != null) parts.push(`${fire.percentContained}% contained`);
-          if (parts.length) {
-            const meta = document.createElement('div');
-            meta.className = 'fire-incident-meta';
-            meta.textContent = parts.join(' · ');
-            item.append(meta);
-          }
-
-          item.addEventListener('click', (e) => {
+          cityItem.addEventListener('click', (e) => {
             e.stopPropagation();
-            flyToBBox(fire.boundingBox);
+            flyToBBox({
+              west:  Math.min(...fires.map(f => f.boundingBox.west)),
+              south: Math.min(...fires.map(f => f.boundingBox.south)),
+              east:  Math.max(...fires.map(f => f.boundingBox.east)),
+              north: Math.max(...fires.map(f => f.boundingBox.north)),
+            });
           });
-          subDrop.append(item);
-        }
 
-        countyItem.append(subDrop);
-        cascade.append(countyItem);
+          const subDrop = document.createElement('div');
+          subDrop.className = 'fire-incidents';
+          [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => subDrop.append(makeFireItem(f)));
+          cityItem.append(subDrop);
+          cascade.append(cityItem);
+        }
+      } else {
+        // No city data — list fires directly, one level only
+        [...incidents].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => cascade.append(makeFireItem(f)));
       }
 
       fireRow.append(cascade);
 
-      // Show cascade when hovering symbol or label (not the toggle button).
-      // 150 ms grace period lets the mouse cross the gap without hiding.
-      const hoverZone = [
-        fireRow.querySelector('.legend-symbol'),
-        fireRow.querySelector('.legend-label'),
-      ];
+      // Show on hover of symbol/label; 150 ms grace period to cross the gap.
+      const hoverZone = [fireRow.querySelector('.legend-symbol'), fireRow.querySelector('.legend-label')];
       let hideTimer;
       const show = () => { clearTimeout(hideTimer); cascade.style.display = 'block'; };
       const hideDelayed = () => {
         hideTimer = setTimeout(() => {
-          if (!cascade.matches(':hover') && !cascade.querySelector(':hover')) {
-            cascade.style.display = 'none';
-          }
+          if (!cascade.matches(':hover') && !cascade.querySelector(':hover')) cascade.style.display = 'none';
         }, 150);
       };
-      hoverZone.forEach(el => {
-        el?.addEventListener('mouseenter', show);
-        el?.addEventListener('mouseleave', hideDelayed);
-      });
+      hoverZone.forEach(el => { el?.addEventListener('mouseenter', show); el?.addEventListener('mouseleave', hideDelayed); });
       cascade.addEventListener('mouseenter', () => clearTimeout(hideTimer));
       cascade.addEventListener('mouseleave', () => { cascade.style.display = 'none'; });
     }
