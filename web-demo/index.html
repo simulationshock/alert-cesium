@@ -275,12 +275,11 @@
     });
 
     sandbox.load('https://cameras.alertcalifornia.org/public-camera-data/all_cameras-v3.json')
-      .then(cameras => {
+      .then(async cameras => {
         const overlay = sandbox.fireOverlay;
-        if (!overlay) return;
-        console.info(`[FireOverlay] status: ${overlay.status}`);
+        if (!overlay || overlay.incidents.length === 0) return;
         console.info(`[FireOverlay] ${overlay.incidents.length} active fire incident(s) loaded`);
-        buildFireMenu(overlay.incidents);
+        await enrichAndBuildFireMenu([...overlay.incidents]);
       })
       .catch(console.error);
 
@@ -316,6 +315,41 @@
       return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
     }
 
+    /** Pull the best city/locality name from a BigDataCloud reverse-geocode result. */
+    function extractCity(d) {
+      if (!d) return null;
+      if (d.city) return d.city;
+      if (d.locality) return d.locality;
+      // Walk admin hierarchy from most-specific; strip trailing "County"
+      const admins = (d.localityInfo?.administrative ?? [])
+        .filter(a => a.adminLevel >= 5 && a.adminLevel <= 8)
+        .sort((a, b) => b.adminLevel - a.adminLevel);
+      return admins[0]?.name?.replace(/\s+County$/i, '') ?? null;
+    }
+
+    /**
+     * Reverse-geocodes every incident's bounding-box centre via BigDataCloud
+     * (free, no key, CORS-enabled) then calls buildFireMenu with the results.
+     * Incidents that already have a county field skip the API call.
+     */
+    async function enrichAndBuildFireMenu(incidents) {
+      const cityMap = new Map();
+      await Promise.all(incidents.map(async (inc) => {
+        if (inc.county) { cityMap.set(inc.id, toTitleCase(inc.county)); return; }
+        const lat = (inc.boundingBox.north + inc.boundingBox.south) / 2;
+        const lon = (inc.boundingBox.east  + inc.boundingBox.west)  / 2;
+        try {
+          const r = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+          );
+          if (!r.ok) return;
+          const city = extractCity(await r.json());
+          if (city) cityMap.set(inc.id, city);
+        } catch {}
+      }));
+      buildFireMenu(incidents, cityMap);
+    }
+
     function makeFireItem(fire) {
       const item = document.createElement('div');
       item.className = 'fire-incident-item';
@@ -323,7 +357,7 @@
       nameLine.textContent = toTitleCase(fire.name);
       item.append(nameLine);
       const parts = [];
-      if (fire.acresBurned     != null) parts.push(`${Math.round(fire.acresBurned).toLocaleString()} ac`);
+      if (fire.acresBurned      != null) parts.push(`${Math.round(fire.acresBurned).toLocaleString()} ac`);
       if (fire.percentContained != null) parts.push(`${fire.percentContained}% contained`);
       if (parts.length) {
         const meta = document.createElement('div');
@@ -335,40 +369,36 @@
       return item;
     }
 
-    function buildFireMenu(incidents) {
+    function buildFireMenu(incidents, cityMap) {
       const fireRow = document.getElementById('fire-legend-row');
       if (!fireRow) return;
       fireRow.querySelector('.fire-cascade')?.remove();
       if (!incidents || incidents.length === 0) return;
 
-      // Group by city/county. If none is set, show fires directly (no intermediate level).
-      const cityMap = new Map();
+      // Group by resolved city name
+      const groupMap = new Map();
       for (const inc of incidents) {
-        const key = inc.county ? toTitleCase(inc.county) : null;
-        if (!key) continue;
-        if (!cityMap.has(key)) cityMap.set(key, []);
-        cityMap.get(key).push(inc);
+        const city = cityMap?.get(inc.id) ?? null;
+        if (!city) continue;
+        if (!groupMap.has(city)) groupMap.set(city, []);
+        groupMap.get(city).push(inc);
       }
 
       const cascade = document.createElement('div');
       cascade.className = 'fire-cascade';
 
-      if (cityMap.size > 0) {
-        // City → Fire (two levels)
-        for (const [city, fires] of [...cityMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+      if (groupMap.size > 0) {
+        for (const [city, fires] of [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
           const cityItem = document.createElement('div');
           cityItem.className = 'fire-county-item';
-
           const label = document.createElement('span');
           label.style.flex = '1';
           label.textContent = fires.length > 1 ? `${city} (${fires.length})` : city;
           cityItem.append(label);
-
           const arrow = document.createElement('span');
           arrow.className = 'fire-county-arrow';
           arrow.textContent = '›';
           cityItem.append(arrow);
-
           cityItem.addEventListener('click', (e) => {
             e.stopPropagation();
             flyToBBox({
@@ -378,7 +408,6 @@
               north: Math.max(...fires.map(f => f.boundingBox.north)),
             });
           });
-
           const subDrop = document.createElement('div');
           subDrop.className = 'fire-incidents';
           [...fires].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => subDrop.append(makeFireItem(f)));
@@ -386,13 +415,12 @@
           cascade.append(cityItem);
         }
       } else {
-        // No city data — list fires directly, one level only
+        // Geocoding returned nothing — flat list
         [...incidents].sort((a, b) => a.name.localeCompare(b.name)).forEach(f => cascade.append(makeFireItem(f)));
       }
 
       fireRow.append(cascade);
 
-      // Show on hover of symbol/label; 150 ms grace period to cross the gap.
       const hoverZone = [fireRow.querySelector('.legend-symbol'), fireRow.querySelector('.legend-label')];
       let hideTimer;
       const show = () => { clearTimeout(hideTimer); cascade.style.display = 'block'; };
