@@ -32,6 +32,7 @@ export class WildfireCameraMarkerManager {
   private fireHighlights: Map<string, FireProximityStatus> = new Map();
   private _visible = true;
   private readonly onCameraChanged: () => void;
+  private readonly onMoveEnd: () => void;
   private _refreshTimer?: ReturnType<typeof setTimeout>;
   private readonly clickHandler: ScreenSpaceEventHandler;
   private pickerEl: HTMLDivElement | null = null;
@@ -53,6 +54,17 @@ export class WildfireCameraMarkerManager {
       this._refreshTimer = setTimeout(() => this.refresh(), 100);
     };
     this.viewer.camera.changed.addEventListener(this.onCameraChanged);
+
+    // At near-vertical pitch Cesium continuously fires heading-correction events
+    // that keep resetting the debounce so refresh() never runs.  moveEnd fires
+    // when the user releases input (independent of internal corrections), so we
+    // use it as a guaranteed refresh point after every interaction.
+    this.onMoveEnd = () => {
+      if (!this._visible) return;
+      clearTimeout(this._refreshTimer);
+      this.refresh();
+    };
+    this.viewer.camera.moveEnd.addEventListener(this.onMoveEnd);
 
     this.clickHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
     this.clickHandler.setInputAction((event: ScreenSpaceEventHandler.PositionedEvent) => {
@@ -152,6 +164,7 @@ export class WildfireCameraMarkerManager {
   destroy(): void {
     this.dismissPicker();
     this.viewer.camera.changed.removeEventListener(this.onCameraChanged);
+    this.viewer.camera.moveEnd.removeEventListener(this.onMoveEnd);
     clearTimeout(this._refreshTimer);
     this.clickHandler.destroy();
     this.clear();
