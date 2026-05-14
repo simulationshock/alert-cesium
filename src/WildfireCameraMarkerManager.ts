@@ -11,7 +11,7 @@ import {
   VerticalOrigin,
   Viewer
 } from 'cesium';
-import type { CameraCluster, MarkerSelection, ResolvedWildfireCamera } from './types.js';
+import type { CameraCluster, FireProximityStatus, MarkerSelection, ResolvedWildfireCamera } from './types.js';
 
 export interface MarkerManagerOptions {
   /** Screen-space size in pixels used to group crowded markers. */
@@ -27,6 +27,7 @@ export class WildfireCameraMarkerManager {
   private readonly options: Required<Omit<MarkerManagerOptions, 'onSelect'>> & Pick<MarkerManagerOptions, 'onSelect'>;
   private cameras: ResolvedWildfireCamera[] = [];
   private entities: Entity[] = [];
+  private fireHighlights: Map<string, FireProximityStatus> = new Map();
   private readonly onMoveEnd: () => void;
   private readonly onCameraChanged: () => void;
   private readonly clickHandler: ScreenSpaceEventHandler;
@@ -66,6 +67,11 @@ export class WildfireCameraMarkerManager {
 
   getCameras(): ResolvedWildfireCamera[] {
     return [...this.cameras];
+  }
+
+  setFireHighlights(highlights: Map<string, FireProximityStatus>): void {
+    this.fireHighlights = highlights;
+    this.refresh();
   }
 
   refresh(): void {
@@ -135,15 +141,19 @@ export class WildfireCameraMarkerManager {
   }
 
   private createCameraEntity(camera: ResolvedWildfireCamera): Entity {
+    const fireStatus = this.fireHighlights.get(camera.id);
+    const pointColor = fireStatus === 'inside' ? Color.RED : fireStatus === 'proximity' ? Color.ORANGE : Color.ORANGERED;
+    const pixelSize = fireStatus === 'inside' ? 16 : fireStatus === 'proximity' ? 14 : 12;
+    const outlineWidth = fireStatus === 'inside' ? 3 : 2;
     const entity = new Entity({
       id: `wildfire-camera:${camera.id}`,
       name: camera.name,
       position: camera.position,
       point: {
-        pixelSize: 12,
-        color: Color.ORANGERED,
+        pixelSize,
+        color: pointColor,
         outlineColor: Color.WHITE,
-        outlineWidth: 2,
+        outlineWidth,
         disableDepthTestDistance: Number.POSITIVE_INFINITY
       },
       label: {

@@ -70,3 +70,47 @@ export interface ResolvedCameraFlightOptions {
   pitch?: number;
   roll?: number;
 }
+
+// --- Fire Incident Overlay types ---
+
+export type FireProximityStatus = 'inside' | 'proximity';
+
+export interface FireIncident {
+  id: string;
+  name: string;
+  acresBurned?: number;
+  percentContained?: number;
+  dateUpdated?: Date;
+  geometry: { type: 'Polygon' | 'MultiPolygon'; coordinates: number[][][] | number[][][][] };
+  boundingBox: { west: number; south: number; east: number; north: number };
+}
+
+export type FireOverlayStatus = 'idle' | 'loading' | 'loaded' | 'error';
+
+export interface FireOverlayLoadResult {
+  status: 'loaded' | 'error';
+  incidentCount: number;
+  highlightedCameraCount: number;
+  error?: Error;
+}
+
+/** Structural interface for any marker manager that supports fire proximity highlighting. */
+export interface FireHighlightTarget {
+  setFireHighlights(highlights: Map<string, FireProximityStatus>): void;
+  getCameras(): ResolvedWildfireCamera[];
+}
+
+export interface FireIncidentOverlayOptions {
+  /** GeoJSON endpoint URL. Defaults to NIFC/IRWIN Active Fires FeatureServer. */
+  endpoint?: string;
+  /** Camera proximity threshold in kilometers. Defaults to 5. */
+  proximityThresholdKm?: number;
+  /** Refresh interval in milliseconds. Defaults to 300_000 (5 min). Set to 0 to disable. */
+  refreshIntervalMs?: number;
+  /** Whether to inject a toggle button into viewer.container. Defaults to true. */
+  showToggleButton?: boolean;
+  /** Marker manager reference for fire proximity highlighting. */
+  markers?: FireHighlightTarget;
+  /** Custom fetch implementation. Defaults to globalThis.fetch. */
+  fetcher?: typeof fetch;
+}

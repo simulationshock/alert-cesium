@@ -1,16 +1,18 @@
 import { Cartesian2, Cartesian3, Viewer } from 'cesium';
 import { CameraPickerPanel } from './CameraPickerPanel.js';
+import { FireIncidentOverlay } from './FireIncidentOverlay.js';
 import { FloatingCameraFeedCanvas, type FloatingCameraFeedOptions } from './FloatingCameraFeedCanvas.js';
 import { WildfireCameraDataSource, type WildfireCameraDataSourceOptions } from './WildfireCameraDataSource.js';
 import { WildfireCameraFlightController } from './WildfireCameraFlightController.js';
 import { WildfireCameraMarkerManager, type MarkerManagerOptions } from './WildfireCameraMarkerManager.js';
 import { WebXRSessionManager } from './WebXRSessionManager.js';
-import type { CameraCluster, ResolvedWildfireCamera } from './types.js';
+import type { CameraCluster, FireIncidentOverlayOptions, ResolvedWildfireCamera } from './types.js';
 
 export interface WebXRWildfireCameraSandboxOptions {
   dataSource?: WildfireCameraDataSource | WildfireCameraDataSourceOptions;
   markers?: MarkerManagerOptions;
   feed?: FloatingCameraFeedOptions;
+  fireOverlay?: FireIncidentOverlay | FireIncidentOverlayOptions;
 }
 
 /** High-level wiring for the WebXR wildfire camera feature. */
@@ -20,6 +22,7 @@ export class WebXRWildfireCameraSandbox {
   readonly markers: WildfireCameraMarkerManager;
   readonly feed: FloatingCameraFeedCanvas;
   readonly flights: WildfireCameraFlightController;
+  readonly fireOverlay: FireIncidentOverlay | undefined;
   private readonly picker: CameraPickerPanel;
   private cameras: ResolvedWildfireCamera[] = [];
 
@@ -38,12 +41,18 @@ export class WebXRWildfireCameraSandbox {
         if (selection.cluster) void this.handleClusterSelect(selection.cluster);
       }
     });
+    if (options.fireOverlay instanceof FireIncidentOverlay) {
+      this.fireOverlay = options.fireOverlay;
+    } else if (options.fireOverlay !== undefined) {
+      this.fireOverlay = new FireIncidentOverlay(viewer, { ...options.fireOverlay, markers: this.markers });
+    }
     this.patchXRSession();
   }
 
   async load(endpoint?: string): Promise<ResolvedWildfireCamera[]> {
     this.cameras = await this.dataSource.load(endpoint);
     this.markers.setCameras(this.cameras);
+    await this.fireOverlay?.load();
     return [...this.cameras];
   }
 
@@ -66,6 +75,7 @@ export class WebXRWildfireCameraSandbox {
     this.feed.close();
     this.markers.destroy();
     this.picker.destroy();
+    this.fireOverlay?.destroy();
   }
 
   /**

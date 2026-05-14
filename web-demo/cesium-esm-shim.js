@@ -13,6 +13,7 @@ export const {
   DistanceDisplayCondition,
   Entity,
   EntityCluster,
+  GeoJsonDataSource,
   HeadingPitchRange,
   HeightReference,
   HorizontalOrigin,

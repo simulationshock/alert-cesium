@@ -6,6 +6,7 @@
  */
 
 export { CameraFlight } from './CameraFlight.js';
+export { FireIncidentOverlay } from './FireIncidentOverlay.js';
 export { CameraPickerPanel } from './CameraPickerPanel.js';
 export { FloatingCameraFeedCanvas } from './FloatingCameraFeedCanvas.js';
 export { WebXRSessionManager } from './WebXRSessionManager.js';
@@ -22,7 +23,13 @@ export type {
   WildfireCameraLocation,
   CameraFlightOptions,
   CameraFlightOutcome,
-  CameraFlightStatus
+  CameraFlightStatus,
+  FireIncident,
+  FireIncidentOverlayOptions,
+  FireOverlayLoadResult,
+  FireOverlayStatus,
+  FireProximityStatus,
+  FireHighlightTarget,
 } from './types.js';
 export type {
   CameraDataProvider,
