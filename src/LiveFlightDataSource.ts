@@ -1,9 +1,9 @@
 import type { FlightPoint, LiveFlight, LiveFlightDataSourceOptions } from './types.js';
 
-// adsb.lol — free community ADS-B API, no key required, CORS-open
+// opendata.adsb.fi — free community ADS-B API, no key required, CORS wildcard.
 // Response uses feet for altitude, knots for speed, ft/min for vertical rate.
 // category field (ADS-B emitter category): B1 = rotorcraft, B2 = glider, etc.
-const ADSB_LOL = 'https://api.adsb.lol/v2/lat/{lat}/lon/{lon}/dist/{nm}';
+const ADSB_LOL = 'https://opendata.adsb.fi/api/v2/lat/{lat}/lon/{lon}/dist/{nm}';
 
 /** Compute search circle from a bounding box: centre lat/lon + radius in nautical miles. */
 function bboxToCircle(bbox: [number, number, number, number]): { lat: number; lon: number; nm: number } {
