@@ -95,13 +95,17 @@ export class WildfireCameraMarkerManager {
     const visible = clusters.slice(0, this.options.maximumVisibleMarkers);
 
     for (const cluster of visible) {
-      if (cluster.cameras.length === 1) {
-        const camera = cluster.cameras[0]!;
-        for (const fovEntity of this.createFovEntities(camera)) {
-          this.entities.push(fovEntity);
-          this.viewer.entities.add(fovEntity);
+      // Show FOV cones for small clusters (each individual camera in the cluster)
+      if (cluster.cameras.length <= 4) {
+        for (const camera of cluster.cameras) {
+          for (const fovEntity of this.createFovEntities(camera)) {
+            this.entities.push(fovEntity);
+            this.viewer.entities.add(fovEntity);
+          }
         }
-        const entity = this.createCameraEntity(camera);
+      }
+      if (cluster.cameras.length === 1) {
+        const entity = this.createCameraEntity(cluster.cameras[0]!);
         this.entities.push(entity);
         this.viewer.entities.add(entity);
       } else {
@@ -137,17 +141,40 @@ export class WildfireCameraMarkerManager {
   private clusterVisibleCameras(): CameraCluster[] {
     const buckets = new Map<string, ResolvedWildfireCamera[]>();
     const scene = this.viewer.scene;
+    // EllipsoidalOccluder reliably identifies back-of-globe cameras regardless
+    // of pitch — worldToWindowCoordinates returns null in top-down views even
+    // for visible surface points, so we can't use it as a visibility gate.
+    // Normalize the viewer position once; a surface camera is on the visible
+    // hemisphere when dot(viewerDir, cameraDir) > 0.  This works at any pitch
+    // including straight down, unlike worldToWindowCoordinates which returns
+    // null for surface points in top-down views.
+    const viewerDir = Cartesian3.normalize(scene.camera.positionWC, new Cartesian3());
 
     for (const camera of this.cameras) {
-      const screen = SceneTransforms.worldToWindowCoordinates(scene, camera.position, new Cartesian2());
-      if (!screen) continue; // behind the globe — not renderable, skip entirely
-      const key = `${Math.floor(screen.x / this.options.clusterPixelSize)}:${Math.floor(screen.y / this.options.clusterPixelSize)}`;
+      const camDir = Cartesian3.normalize(camera.position, new Cartesian3());
+      if (Cartesian3.dot(viewerDir, camDir) <= 0) continue; // back of globe
+
+      const screen = SceneTransforms.worldToWindowCoordinates(
+        scene, camera.position, new Cartesian2());
+      // Use screen-space grid cell when available; fall back to a coarse
+      // geographic key for cameras the projector can't place (view edge cases).
+      const key = screen
+        ? `${Math.floor(screen.x / this.options.clusterPixelSize)}:${Math.floor(screen.y / this.options.clusterPixelSize)}`
+        : `geo:${Math.round(camera.longitude * 4)}:${Math.round(camera.latitude * 4)}`;
       const bucket = buckets.get(key) ?? [];
       bucket.push(camera);
       buckets.set(key, bucket);
     }
 
-    return [...buckets.entries()].map(([id, bucket]) => this.createCluster(id, bucket));
+    // On-screen clusters first so the maximumVisibleMarkers limit only
+    // trims geographic-fallback edge clusters, never viewport-visible ones.
+    const onScreen: CameraCluster[] = [];
+    const geoFallback: CameraCluster[] = [];
+    for (const [id, cams] of buckets) {
+      const cluster = this.createCluster(id, cams);
+      (id.startsWith('geo:') ? geoFallback : onScreen).push(cluster);
+    }
+    return [...onScreen, ...geoFallback].slice(0, this.options.maximumVisibleMarkers);
   }
 
   private createCluster(id: string, cameras: ResolvedWildfireCamera[]): CameraCluster {
