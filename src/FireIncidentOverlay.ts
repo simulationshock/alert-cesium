@@ -9,10 +9,11 @@ import type {
   ResolvedWildfireCamera,
 } from './types.js';
 
+// ESRI Living Atlas — USA Wildfires v1, Current Perimeters layer (anonymously queryable)
 const DEFAULT_ENDPOINT =
-  'https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/Active_Fires/FeatureServer/0/query' +
+  'https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/1/query' +
   '?where=1%3D1' +
-  '&outFields=IncidentName%2CGISAcres%2CPercentContained%2CCreateDate%2CDateCurrent' +
+  '&outFields=IncidentName%2CGISAcres%2CCreateDate%2CDateCurrent' +
   '&outSR=4326' +
   '&f=geojson';
 
