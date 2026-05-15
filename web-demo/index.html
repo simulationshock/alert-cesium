@@ -300,6 +300,50 @@
     .ms-option:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .ms-option input { accent-color: #7df; cursor: pointer; }
     .ms-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; }
+    .ms-key-row {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+      align-items: center;
+    }
+    .ms-key-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: #ddd;
+      font: 11px/1.4 sans-serif;
+      padding: 4px 6px;
+      min-width: 0;
+    }
+    .ms-key-input::placeholder { color: #555; }
+    .ms-key-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .ms-btn {
+      padding: 4px 8px;
+      background: rgba(100,200,255,0.12);
+      border: 1px solid rgba(100,200,255,0.3);
+      border-radius: 4px;
+      color: #7df;
+      font: 11px/1.4 sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ms-btn:hover { background: rgba(100,200,255,0.22); }
+    .ms-btn:disabled { opacity: 0.4; cursor: default; }
+    .ms-select {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: #ccc;
+      font: 12px/1.4 sans-serif;
+      padding: 5px 6px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .ms-select:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .ms-hint { font: 10px/1.4 sans-serif; color: #555; margin-top: 4px; padding: 0 4px; }
   </style>
 </head>
 <body>
@@ -328,13 +372,37 @@
       <div class="ms-options">
         <label class="ms-option"><input type="radio" name="ms-imagery" value="topo" checked> Topo</label>
         <label class="ms-option"><input type="radio" name="ms-imagery" value="satellite"> Satellite</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="3d-satellite"> 3D Satellite</label>
         <label class="ms-option"><input type="radio" name="ms-imagery" value="street"> Street</label>
         <label class="ms-option"><input type="radio" name="ms-imagery" value="dark"> Dark</label>
+      </div>
+      <hr class="ms-divider">
+      <div class="ms-title">Photorealistic 3D</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="checkbox" id="ms-google3d"> Google 3D Tiles</label>
+      </div>
+      <div id="ms-google3d-key" style="display:none">
+        <div class="ms-key-row">
+          <input type="password" class="ms-key-input" id="ms-google3d-input" placeholder="Google Maps API key">
+          <button class="ms-btn" id="ms-google3d-load">Load</button>
+        </div>
+        <div class="ms-hint">Free tier · <a href="https://developers.google.com/maps/documentation/tile/get-api-key" target="_blank" style="color:#7df">Get key</a></div>
       </div>
       <hr class="ms-divider">
       <div class="ms-title">Terrain</div>
       <div class="ms-options">
         <label class="ms-option"><input type="checkbox" id="ms-elevation" checked> 3D Elevation</label>
+      </div>
+      <hr class="ms-divider">
+      <div class="ms-title">Load Region</div>
+      <select class="ms-select" id="ms-region">
+        <option value="world">World (no limit)</option>
+        <option value="california" selected>California</option>
+        <option value="so-cal">Southern California</option>
+        <option value="pacific-nw">Pacific Northwest</option>
+      </select>
+      <div style="margin-top:5px">
+        <button class="ms-btn" id="ms-clip-view" style="width:100%">📍 Clip to Current View</button>
       </div>
     </div>
   </div>
@@ -939,9 +1007,12 @@
     const ELEVATION_TERRAIN_URL =
       'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer';
 
+    // ── Imagery ─────────────────────────────────────────────────────────
+
     function createImageryLayer(type) {
       switch (type) {
         case 'satellite':
+        case '3d-satellite':
           return Cesium.ImageryLayer.fromProviderAsync(
             Cesium.ArcGisMapServerImageryProvider.fromUrl(
               'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
@@ -969,21 +1040,121 @@
       }
     }
 
+    const elevationCheckbox = document.getElementById('ms-elevation');
+
     document.querySelectorAll('input[name="ms-imagery"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (!radio.checked) return;
         viewer.imageryLayers.removeAll();
         viewer.imageryLayers.add(createImageryLayer(radio.value));
+        // 3D Satellite preset: auto-enable elevation for the full 3D effect
+        if (radio.value === '3d-satellite' && !elevationCheckbox.checked) {
+          elevationCheckbox.checked = true;
+          elevationCheckbox.dispatchEvent(new Event('change'));
+        }
       });
     });
 
-    const elevationCheckbox = document.getElementById('ms-elevation');
+    // ── Elevation ────────────────────────────────────────────────────────
+
     elevationCheckbox.addEventListener('change', async () => {
       if (elevationCheckbox.checked) {
         viewer.terrainProvider =
           await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(ELEVATION_TERRAIN_URL);
       } else {
         viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+      }
+    });
+
+    // ── Google Photorealistic 3D Tiles ──────────────────────────────────
+
+    let googleTileset = null;
+    const google3dCheckbox = document.getElementById('ms-google3d');
+    const google3dKeyRow   = document.getElementById('ms-google3d-key');
+    const google3dInput    = document.getElementById('ms-google3d-input');
+    const google3dLoadBtn  = document.getElementById('ms-google3d-load');
+
+    // Restore saved key
+    const savedGoogleKey = localStorage.getItem('ms-google3d-key');
+    if (savedGoogleKey) google3dInput.value = savedGoogleKey;
+
+    google3dCheckbox.addEventListener('change', () => {
+      google3dKeyRow.style.display = google3dCheckbox.checked ? 'block' : 'none';
+      if (!google3dCheckbox.checked) unloadGoogleTiles();
+    });
+
+    google3dLoadBtn.addEventListener('click', async () => {
+      const key = google3dInput.value.trim();
+      if (!key) return;
+      localStorage.setItem('ms-google3d-key', key);
+      google3dLoadBtn.disabled = true;
+      google3dLoadBtn.textContent = '…';
+      try {
+        await loadGoogleTiles(key);
+      } catch (err) {
+        console.warn('[Map] Google 3D tiles failed:', err.message);
+        alert('Could not load Google 3D tiles: ' + err.message);
+        google3dCheckbox.checked = false;
+        google3dKeyRow.style.display = 'none';
+        unloadGoogleTiles();
+      } finally {
+        google3dLoadBtn.disabled = false;
+        google3dLoadBtn.textContent = 'Load';
+      }
+    });
+
+    async function loadGoogleTiles(apiKey) {
+      unloadGoogleTiles();
+      googleTileset = await Cesium.Cesium3DTileset.fromUrl(
+        `https://tile.googleapis.com/v1/3dtiles/root.json?key=${encodeURIComponent(apiKey)}`
+      );
+      viewer.scene.primitives.add(googleTileset);
+      viewer.scene.globe.show = false;
+    }
+
+    function unloadGoogleTiles() {
+      if (googleTileset) {
+        viewer.scene.primitives.remove(googleTileset);
+        googleTileset = null;
+        viewer.scene.globe.show = true;
+      }
+    }
+
+    // ── Region (cartographicLimitRectangle) ──────────────────────────────
+
+    const REGIONS = {
+      'world':       null,
+      'california':  Cesium.Rectangle.fromDegrees(-124.48, 32.53, -114.13, 42.01),
+      'so-cal':      Cesium.Rectangle.fromDegrees(-120.5,  32.5,  -114.1,  35.8),
+      'pacific-nw':  Cesium.Rectangle.fromDegrees(-124.85, 42.0,  -116.5,  49.0),
+    };
+
+    function applyRegion(rect) {
+      viewer.scene.globe.cartographicLimitRectangle =
+        rect ?? Cesium.Rectangle.MAX_VALUE;
+    }
+
+    const regionSelect = document.getElementById('ms-region');
+    regionSelect.addEventListener('change', () => {
+      applyRegion(REGIONS[regionSelect.value] ?? null);
+    });
+
+    // Apply the default selection (California) on load
+    applyRegion(REGIONS[regionSelect.value] ?? null);
+
+    document.getElementById('ms-clip-view').addEventListener('click', () => {
+      const rect = viewer.camera.computeViewRectangle(viewer.scene.globe.ellipsoid);
+      if (rect) {
+        viewer.scene.globe.cartographicLimitRectangle = rect;
+        // Add a "Custom" option if not already present, then select it
+        let customOpt = regionSelect.querySelector('option[value="custom"]');
+        if (!customOpt) {
+          customOpt = document.createElement('option');
+          customOpt.value = 'custom';
+          customOpt.textContent = 'Custom (current view)';
+          regionSelect.append(customOpt);
+        }
+        regionSelect.value = 'custom';
       }
     });
     // ─────────────────────────────────────────────────────────────────────
