@@ -242,6 +242,64 @@
     .snap-level:hover { color: #aaa; }
     .snap-level.active { color: #7df; font-weight: 600; background: rgba(100,200,255,0.1); }
     .snap-sep { color: #333; font-size: 10px; margin: 0 1px; user-select: none; }
+
+    /* ── Map Settings Panel ── */
+    #map-settings {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 200;
+    }
+    #map-settings-toggle {
+      display: block;
+      margin-left: auto;
+      padding: 6px 12px;
+      background: rgba(18,18,18,0.88);
+      color: #ccc;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 6px;
+      font: 12px/1.4 sans-serif;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: color .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    #map-settings-toggle:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    #map-settings-toggle.open  { color: #7df; border-color: rgba(100,200,255,0.45); }
+    #map-settings-panel {
+      display: none;
+      margin-top: 6px;
+      padding: 10px 12px 12px;
+      background: rgba(18,18,18,0.93);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.55);
+      min-width: 160px;
+    }
+    .ms-title {
+      font: bold 10px/1.4 sans-serif;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 5px;
+    }
+    .ms-options { display: flex; flex-direction: column; gap: 1px; }
+    .ms-option {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 6px;
+      color: #ccc;
+      font: 12px/1.4 sans-serif;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: background .1s;
+    }
+    .ms-option:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .ms-option input { accent-color: #7df; cursor: pointer; }
+    .ms-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; }
   </style>
 </head>
 <body>
@@ -261,6 +319,24 @@
   <div id="altitude-snap">
     <div id="snap-level-bar"></div>
     <button id="snap-toggle-btn">⇕ Altitude Snap</button>
+  </div>
+
+  <div id="map-settings">
+    <button id="map-settings-toggle">⚙ Map</button>
+    <div id="map-settings-panel">
+      <div class="ms-title">Imagery</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="topo" checked> Topo</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="satellite"> Satellite</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="street"> Street</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="dark"> Dark</label>
+      </div>
+      <hr class="ms-divider">
+      <div class="ms-title">Terrain</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="checkbox" id="ms-elevation" checked> 3D Elevation</label>
+      </div>
+    </div>
   </div>
 
   <div id="map-legend">
@@ -665,7 +741,7 @@
     flightMarkers.setTrackProvider(icao24 => flightSource.getTrack(icao24));
     flightSource.onUpdate = flights => flightMarkers.update(flights);
     flightSource.start().then(() => {
-      console.info('[LiveFlight] started — polling OpenSky every 15 s');
+      console.info('[LiveFlight] started — polling adsb.fi every 15 s');
     }).catch(console.error);
 
     document.getElementById('flight-info-close').addEventListener('click', () => {
@@ -840,6 +916,76 @@
       // deltaY > 0 = scroll down = zoom out (higher altitude), matches Cesium free mode
       flyToSnapLevel(getNextSnapIdx(e.deltaY > 0 ? -1 : 1), destLon, destLat);
     }, { passive: false, capture: true });
+    // ─────────────────────────────────────────────────────────────────────
+
+    // ── Map Settings Panel ────────────────────────────────────────────────
+    const mapSettingsToggle = document.getElementById('map-settings-toggle');
+    const mapSettingsPanel  = document.getElementById('map-settings-panel');
+
+    mapSettingsToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = mapSettingsPanel.style.display !== 'block';
+      mapSettingsPanel.style.display = open ? 'block' : 'none';
+      mapSettingsToggle.classList.toggle('open', open);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#map-settings')) {
+        mapSettingsPanel.style.display = 'none';
+        mapSettingsToggle.classList.remove('open');
+      }
+    });
+
+    const ELEVATION_TERRAIN_URL =
+      'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer';
+
+    function createImageryLayer(type) {
+      switch (type) {
+        case 'satellite':
+          return Cesium.ImageryLayer.fromProviderAsync(
+            Cesium.ArcGisMapServerImageryProvider.fromUrl(
+              'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+            )
+          );
+        case 'street':
+          return Cesium.ImageryLayer.fromProviderAsync(
+            Promise.resolve(new Cesium.UrlTemplateImageryProvider({
+              url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              credit: '© OpenStreetMap contributors',
+            }))
+          );
+        case 'dark':
+          return Cesium.ImageryLayer.fromProviderAsync(
+            Cesium.ArcGisMapServerImageryProvider.fromUrl(
+              'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer'
+            )
+          );
+        default: // topo
+          return Cesium.ImageryLayer.fromProviderAsync(
+            Cesium.ArcGisMapServerImageryProvider.fromUrl(
+              'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer'
+            )
+          );
+      }
+    }
+
+    document.querySelectorAll('input[name="ms-imagery"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return;
+        viewer.imageryLayers.removeAll();
+        viewer.imageryLayers.add(createImageryLayer(radio.value));
+      });
+    });
+
+    const elevationCheckbox = document.getElementById('ms-elevation');
+    elevationCheckbox.addEventListener('change', async () => {
+      if (elevationCheckbox.checked) {
+        viewer.terrainProvider =
+          await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(ELEVATION_TERRAIN_URL);
+      } else {
+        viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+      }
+    });
     // ─────────────────────────────────────────────────────────────────────
   </script>
 </body>
