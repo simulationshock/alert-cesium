@@ -79,6 +79,8 @@ export class EmergencyRadioMarkerManager {
   private readonly onMoveEnd: () => void;
   private _refreshTimer?: ReturnType<typeof setTimeout>;
   private readonly clickHandler: ScreenSpaceEventHandler;
+  private pickerEl: HTMLDivElement | null = null;
+  private pickerDismissHandler: ((e: MouseEvent) => void) | null = null;
 
   constructor(viewer: Viewer, options: RadioMarkerManagerOptions = {}) {
     this.viewer = viewer;
@@ -106,9 +108,28 @@ export class EmergencyRadioMarkerManager {
       const picked = this.viewer.scene.pick(event.position);
       const entity: Entity | undefined =
         picked?.id instanceof Entity ? picked.id : undefined;
-      if (!entity) return;
+
+      if (!entity) {
+        this.dismissPicker();
+        return;
+      }
+
+      const clusterFeeds: ResolvedEmergencyRadioFeed[] | undefined = (entity as any).radioCluster;
+      if (clusterFeeds) {
+        if (clusterFeeds.length === 1) {
+          this.dismissPicker();
+          this.options.onSelect?.(clusterFeeds[0]);
+        } else {
+          this.showPicker(clusterFeeds, event.position);
+        }
+        return;
+      }
+
       const feed: ResolvedEmergencyRadioFeed | undefined = (entity as any).radioFeed;
-      if (feed) this.options.onSelect?.(feed);
+      if (feed) {
+        this.dismissPicker();
+        this.options.onSelect?.(feed);
+      }
     }, ScreenSpaceEventType.LEFT_CLICK);
   }
 
@@ -171,6 +192,7 @@ export class EmergencyRadioMarkerManager {
   }
 
   clear(): void {
+    this.dismissPicker();
     for (const entity of this.entities) this.viewer.entities.remove(entity);
     this.entities = [];
   }
@@ -181,6 +203,81 @@ export class EmergencyRadioMarkerManager {
     clearTimeout(this._refreshTimer);
     this.clickHandler.destroy();
     this.clear();
+  }
+
+  private showPicker(feeds: ResolvedEmergencyRadioFeed[], pos: { x: number; y: number }): void {
+    this.dismissPicker();
+
+    const el = document.createElement('div');
+    el.style.cssText = [
+      'position:absolute',
+      `left:${pos.x + 12}px`,
+      `top:${pos.y - 8}px`,
+      'background:#1a1a1a',
+      'border:1px solid rgba(255,255,255,0.25)',
+      'border-radius:6px',
+      'padding:4px 0',
+      'z-index:500',
+      'box-shadow:0 4px 16px rgba(0,0,0,0.55)',
+      'min-width:190px',
+      'max-height:280px',
+      'overflow-y:auto',
+    ].join(';');
+
+    for (const feed of feeds) {
+      const style = CATEGORY_STYLE[feed.category];
+      const btn = document.createElement('button');
+      btn.style.cssText = [
+        'display:flex', 'align-items:center', 'gap:8px',
+        'width:100%', 'padding:6px 12px',
+        'background:none', 'border:none', 'color:#eee',
+        'text-align:left', 'cursor:pointer', 'font:13px sans-serif',
+        'white-space:nowrap',
+      ].join(';');
+
+      const badge = document.createElement('span');
+      badge.textContent = style.label;
+      badge.style.cssText = [
+        `background:${style.bg}`, 'color:#fff',
+        'font:bold 9px sans-serif', 'padding:2px 5px',
+        'border-radius:3px', 'flex-shrink:0',
+      ].join(';');
+
+      const name = document.createElement('span');
+      name.textContent = feed.name;
+      name.style.cssText = 'overflow:hidden;text-overflow:ellipsis;';
+
+      btn.append(badge, name);
+      btn.addEventListener('mouseenter', () => { btn.style.background = 'rgba(255,255,255,0.1)'; });
+      btn.addEventListener('mouseleave', () => { btn.style.background = 'none'; });
+      btn.addEventListener('click', () => {
+        this.options.onSelect?.(feed);
+        this.dismissPicker();
+      });
+      el.appendChild(btn);
+    }
+
+    const container = this.viewer.container as HTMLElement;
+    container.style.position = 'relative';
+    container.appendChild(el);
+    this.pickerEl = el;
+
+    const dismiss = (e: MouseEvent) => {
+      if (!this.pickerEl?.contains(e.target as Node)) this.dismissPicker();
+    };
+    this.pickerDismissHandler = dismiss;
+    setTimeout(() => document.addEventListener('mousedown', dismiss), 0);
+  }
+
+  private dismissPicker(): void {
+    if (this.pickerDismissHandler) {
+      document.removeEventListener('mousedown', this.pickerDismissHandler);
+      this.pickerDismissHandler = null;
+    }
+    if (this.pickerEl) {
+      this.pickerEl.remove();
+      this.pickerEl = null;
+    }
   }
 
   private addFeedEntity(feed: ResolvedEmergencyRadioFeed): void {
@@ -233,7 +330,7 @@ export class EmergencyRadioMarkerManager {
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       } as any,
     });
-    (entity as any).radioFeed = feeds[0]; // clicking zooms to first feed in cluster
+    (entity as any).radioCluster = feeds;
     this.entities.push(entity);
     this.viewer.entities.add(entity);
   }
