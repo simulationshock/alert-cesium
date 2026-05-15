@@ -14,7 +14,9 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const OUT_DIR  = join(__dir, '../web-demo/data');
+// Vite copies web-demo/public/** verbatim to dist-site/ — this is the right place for
+// static assets that are fetched at runtime rather than imported as modules.
+const OUT_DIR  = join(__dir, '../web-demo/public/data');
 const OUT_FILE = join(OUT_DIR, 'radio-feeds.json');
 
 const BASE    = 'https://www.broadcastify.com';
