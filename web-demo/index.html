@@ -539,8 +539,9 @@
       })
       .catch(console.error);
 
-    // Emergency Radio
+    // Emergency Radio — feed list from scripts/fetch-broadcastify.mjs (511 CA feeds)
     const radioSource = new EmergencyRadioDataSource({
+      feedsUrl: './data/radio-feeds.json',
       // apiKey: 'YOUR_BROADCASTIFY_API_KEY', // get free key at broadcastify.com/api
     });
     const radioPlayer = new EmergencyRadioPlayer(viewer.container);

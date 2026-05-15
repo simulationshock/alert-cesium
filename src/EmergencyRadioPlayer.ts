@@ -79,7 +79,7 @@ export class EmergencyRadioPlayer extends EventTarget {
     this.fallbackBtn.onclick = (e) => {
       e.preventDefault();
       const href = this.fallbackBtn.getAttribute('data-href');
-      if (href) window.open(href, 'broadcastify-popout', 'width=460,height=200,resizable=yes');
+      if (href) window.open(href, 'broadcastify-popout', 'width=620,height=520,resizable=yes,scrollbars=yes');
     };
 
     controls.append(this.playBtn, this.fallbackBtn);
@@ -101,7 +101,7 @@ export class EmergencyRadioPlayer extends EventTarget {
     this.titleEl.textContent = feed.name;
     this.countyEl.textContent = feed.county ? `${feed.county} County` : '';
     this.fallbackBtn.setAttribute('data-href',
-      feed.webUrl ?? `https://www.broadcastify.com/listen/feed/popout.php?feedId=${feed.id}`);
+      feed.webUrl ?? `https://www.broadcastify.com/listen/feed/${feed.id}`);
     this.panel.style.display = 'block';
 
     if (feed.streamUrl) {
