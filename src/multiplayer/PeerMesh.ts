@@ -25,7 +25,12 @@ export class PeerMesh {
   }
 
   setIceServers(servers: RTCIceServer[]): void {
-    this.iceServers = servers;
+    const validTurn = servers.filter(s => (Array.isArray(s.urls) ? s.urls.length > 0 : !!s.urls));
+    this.iceServers = [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      ...validTurn,
+    ];
   }
 
   addPeer(peerId: string, isInitiator: boolean): RTCPeerConnection {
