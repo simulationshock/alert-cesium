@@ -22,6 +22,7 @@ interface DrawState {
   color: string;
   isDrawing: boolean;
   startCartographic: [number, number] | null;
+  currentPos: [number, number] | null;
   points: [number, number][];
   previewEntity: unknown | null;
 }
@@ -37,6 +38,7 @@ export class AnnotationManager {
     color: '#ff0000',
     isDrawing: false,
     startCartographic: null,
+    currentPos: null,
     points: [],
     previewEntity: null,
   };
@@ -85,10 +87,14 @@ export class AnnotationManager {
       const pos = this.pickPosition(e.clientX, e.clientY);
       if (!pos) return;
 
+      this.draw.currentPos = pos;
       if (this.draw.tool === 'stroke') {
         this.draw.points.push(pos);
       }
-      this.updatePreview(pos);
+      // Create the preview entity once; CallbackProperty keeps it live each frame.
+      if (!this.draw.previewEntity) {
+        this.createPreviewEntity();
+      }
     };
 
     this.pointerUpHandler = (e: PointerEvent) => {
@@ -100,6 +106,7 @@ export class AnnotationManager {
       this.cancelPreview();
       this.draw.points = [];
       this.draw.startCartographic = null;
+      this.draw.currentPos = null;
     };
 
     canvas.addEventListener('pointerdown', this.pointerDownHandler);
@@ -123,57 +130,78 @@ export class AnnotationManager {
     ];
   }
 
-  private updatePreview(currentPos: [number, number]): void {
-    this.cancelPreview();
-    const { tool, color, startCartographic, points } = this.draw;
+  private createPreviewEntity(): void {
+    const { tool, color, startCartographic } = this.draw;
     if (!tool || !startCartographic) return;
 
+    const draw = this.draw;
     const cesiumColor = Cesium.Color.fromCssColorString(color).withAlpha(0.5);
+    const outlineColor = Cesium.Color.fromCssColorString(color);
 
-    if (tool === 'line' && points.length >= 1) {
+    if (tool === 'line') {
       this.draw.previewEntity = this.viewer.entities.add({
         polyline: {
-          positions: Cesium.Cartesian3.fromDegreesArray([...startCartographic, ...currentPos]),
+          positions: new Cesium.CallbackProperty(() => {
+            if (!draw.startCartographic || !draw.currentPos) return [];
+            return Cesium.Cartesian3.fromDegreesArray([...draw.startCartographic, ...draw.currentPos]);
+          }, false),
           width: 2,
           material: new Cesium.ColorMaterialProperty(cesiumColor),
+          clampToGround: true,
+        },
+      });
+    } else if (tool === 'stroke') {
+      this.draw.previewEntity = this.viewer.entities.add({
+        polyline: {
+          positions: new Cesium.CallbackProperty(() => {
+            if (draw.points.length < 2) return [];
+            return Cesium.Cartesian3.fromDegreesArray(draw.points.flatMap(p => p));
+          }, false),
+          width: 2,
+          material: new Cesium.ColorMaterialProperty(cesiumColor),
+          clampToGround: true,
         },
       });
     } else if (tool === 'circle') {
-      const centerCart = Cesium.Cartesian3.fromDegrees(...startCartographic);
-      const edgeCart = Cesium.Cartesian3.fromDegrees(...currentPos);
-      const radiusM = Cesium.Cartesian3.distance(centerCart, edgeCart);
       this.draw.previewEntity = this.viewer.entities.add({
-        position: centerCart,
+        position: new Cesium.CallbackProperty(() =>
+          draw.startCartographic ? Cesium.Cartesian3.fromDegrees(...draw.startCartographic) : new Cesium.Cartesian3()
+        , false) as unknown as Cesium.PositionProperty,
         ellipse: {
-          semiMajorAxis: radiusM,
-          semiMinorAxis: radiusM,
+          semiMajorAxis: new Cesium.CallbackProperty(() => {
+            if (!draw.startCartographic || !draw.currentPos) return 1;
+            return Math.max(1, Cesium.Cartesian3.distance(
+              Cesium.Cartesian3.fromDegrees(...draw.startCartographic),
+              Cesium.Cartesian3.fromDegrees(...draw.currentPos),
+            ));
+          }, false),
+          semiMinorAxis: new Cesium.CallbackProperty(() => {
+            if (!draw.startCartographic || !draw.currentPos) return 1;
+            return Math.max(1, Cesium.Cartesian3.distance(
+              Cesium.Cartesian3.fromDegrees(...draw.startCartographic),
+              Cesium.Cartesian3.fromDegrees(...draw.currentPos),
+            ));
+          }, false),
           material: cesiumColor,
           outline: true,
-          outlineColor: Cesium.Color.fromCssColorString(color),
+          outlineColor,
         },
       });
     } else if (tool === 'rectangle') {
-      const [w, s, e, n] = [
-        Math.min(startCartographic[0], currentPos[0]),
-        Math.min(startCartographic[1], currentPos[1]),
-        Math.max(startCartographic[0], currentPos[0]),
-        Math.max(startCartographic[1], currentPos[1]),
-      ];
       this.draw.previewEntity = this.viewer.entities.add({
         rectangle: {
-          coordinates: Cesium.Rectangle.fromDegrees(w, s, e, n),
+          coordinates: new Cesium.CallbackProperty(() => {
+            if (!draw.startCartographic || !draw.currentPos) return Cesium.Rectangle.fromDegrees(0, 0, 0.001, 0.001);
+            const [sx, sy] = draw.startCartographic;
+            const [cx, cy] = draw.currentPos;
+            return Cesium.Rectangle.fromDegrees(
+              Math.min(sx, cx), Math.min(sy, cy),
+              Math.max(sx, cx), Math.max(sy, cy),
+            );
+          }, false),
           material: cesiumColor,
           outline: true,
-          outlineColor: Cesium.Color.fromCssColorString(color),
-        },
-      });
-    } else if (tool === 'stroke' && points.length >= 2) {
-      const flatPoints = points.flatMap(p => p);
-      this.draw.previewEntity = this.viewer.entities.add({
-        polyline: {
-          positions: Cesium.Cartesian3.fromDegreesArray(flatPoints),
-          width: 2,
-          material: new Cesium.ColorMaterialProperty(cesiumColor),
+          outlineColor,
         },
       });
     }
@@ -339,6 +367,7 @@ export class AnnotationManager {
     this.draw.isDrawing = false;
     this.draw.points = [];
     this.draw.startCartographic = null;
+    this.draw.currentPos = null;
     this.cancelPreview();
   }
 
