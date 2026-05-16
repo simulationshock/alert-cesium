@@ -14,7 +14,7 @@ function bboxToCircle(bbox: [number, number, number, number]): { lat: number; lo
   const dlon = (east  - lon) * (Math.PI / 180);
   const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat * Math.PI / 180) ** 2 * Math.sin(dlon / 2) ** 2;
   const km = 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return { lat, lon, nm: Math.ceil(km / 1.852) + 60 }; // +60 nm margin
+  return { lat, lon, nm: Math.min(Math.ceil(km / 1.852) + 60, 250) }; // capped at adsb.fi's 250 nm limit
 }
 
 /** Polls adsb.lol for real-time ADS-B state vectors. Free, no API key, CORS-open. */
