@@ -8,10 +8,11 @@ function injectFirebaseConfig() {
   return {
     name: 'inject-firebase-config',
     transformIndexHtml(html) {
-      const config = process.env.VITE_FIREBASE_CONFIG ?? 'null';
+      const firebaseConfig = process.env.VITE_FIREBASE_CONFIG ?? 'null';
+      const signalingUrl = process.env.VITE_SIGNALING_URL ?? 'null';
       return html.replace(
         '</head>',
-        `<script>window.FIREBASE_CONFIG = ${config};</script></head>`
+        `<script>window.FIREBASE_CONFIG = ${firebaseConfig};window.SIGNALING_URL = ${signalingUrl ? JSON.stringify(signalingUrl) : 'null'};</script></head>`
       );
     },
   };

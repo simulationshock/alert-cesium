@@ -32,6 +32,7 @@ jobs:
         env:
           VITE_BASE: /alert-cesium/dev/
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+          VITE_SIGNALING_URL: ${{ secrets.SIGNALING_URL }}
         run: npm run build:site
 
       - uses: peaceiris/actions-gh-pages@v4
