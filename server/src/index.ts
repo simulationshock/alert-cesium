@@ -1,5 +1,7 @@
 import 'dotenv/config';
-import { createServer, IncomingMessage, ServerResponse } from 'http';
+import { createServer as createHttpServer, IncomingMessage, ServerResponse } from 'http';
+import { createServer as createHttpsServer } from 'https';
+import { readFileSync } from 'fs';
 import { randomUUID } from 'crypto';
 import { WebSocketServer, WebSocket } from 'ws';
 import { validateToken } from './AuthValidator.js';
@@ -185,9 +187,12 @@ function onDisconnect(peerId: string): void {
   }
 }
 
-// ─── HTTP server ──────────────────────────────────────────────────────────────
+// ─── HTTP/HTTPS server ────────────────────────────────────────────────────────
 
-const httpServer = createServer((req: IncomingMessage, res: ServerResponse) => {
+const TLS_CERT = process.env['TLS_CERT_PATH'];
+const TLS_KEY  = process.env['TLS_KEY_PATH'];
+
+const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
   const origin = req.headers.origin ?? '';
   if (ALLOWED_ORIGINS.length > 0 && !ALLOWED_ORIGINS.includes(origin)) {
     res.writeHead(403);
@@ -213,7 +218,11 @@ const httpServer = createServer((req: IncomingMessage, res: ServerResponse) => {
 
   res.writeHead(404);
   res.end();
-});
+};
+
+const httpServer = TLS_CERT && TLS_KEY
+  ? createHttpsServer({ cert: readFileSync(TLS_CERT), key: readFileSync(TLS_KEY) }, requestHandler)
+  : createHttpServer(requestHandler);
 
 // ─── WebSocket server ─────────────────────────────────────────────────────────
 
