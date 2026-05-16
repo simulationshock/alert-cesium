@@ -68,6 +68,7 @@ export class PeerMesh {
         this.handleTransferStateChannel(peerId, channel);
         return;
       }
+      // 'mesh' channel arrives on the non-initiator side
       this.callbacks.onDataChannel?.(peerId, channel);
     });
 
@@ -76,6 +77,11 @@ export class PeerMesh {
     });
 
     if (isInitiator) {
+      // A data channel must exist before createOffer so the SDP has an m=application
+      // line — without it, setLocalDescription has nothing to gather ICE candidates for.
+      const meshChannel = conn.createDataChannel('mesh', { ordered: true });
+      this.callbacks.onDataChannel?.(peerId, meshChannel);
+
       console.log(`[PeerMesh] creating offer for ${peerId}`);
       conn.createOffer()
         .then(offer => conn.setLocalDescription(offer))
