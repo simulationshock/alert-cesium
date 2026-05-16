@@ -93,10 +93,14 @@ export class PeerMesh {
       void conn;
     }
     const { conn } = entry;
+    console.log(`[PeerMesh] handleOffer signalingState=${conn.signalingState}`);
     try {
       await conn.setRemoteDescription(new RTCSessionDescription(sdp));
+      console.log(`[PeerMesh] setRemoteDescription done`);
       const answer = await conn.createAnswer();
+      console.log(`[PeerMesh] createAnswer done`);
       await conn.setLocalDescription(answer);
+      console.log(`[PeerMesh] setLocalDescription done — sending answer`);
       this.lobbyClient.sendAnswer(peerId, conn.localDescription!);
     } catch (err) {
       console.error('[PeerMesh] handleOffer failed:', err);
