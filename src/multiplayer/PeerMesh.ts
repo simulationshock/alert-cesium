@@ -68,10 +68,12 @@ export class PeerMesh {
     });
 
     if (isInitiator) {
+      console.log(`[PeerMesh] creating offer for ${peerId}`);
       conn.createOffer()
         .then(offer => conn.setLocalDescription(offer))
         .then(() => {
           if (conn.localDescription) {
+            console.log(`[PeerMesh] sending offer to ${peerId}`);
             this.lobbyClient.sendOffer(peerId, conn.localDescription);
           }
         })
@@ -82,6 +84,7 @@ export class PeerMesh {
   }
 
   async handleOffer(peerId: string, sdp: RTCSessionDescriptionInit): Promise<void> {
+    console.log(`[PeerMesh] handleOffer from ${peerId}`);
     let entry = this.peers.get(peerId);
     if (!entry) {
       const conn = this.addPeer(peerId, false);
