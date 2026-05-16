@@ -35,6 +35,7 @@ export class PresenceAvatarManager {
         width: 36,
         height: 36,
         verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        pixelOffset: new Cesium.Cartesian2(0, 0),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
         scaleByDistance: new Cesium.NearFarScalar(1.5e3, 1.0, 8e6, 0.5),
       },
