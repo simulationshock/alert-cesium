@@ -29,6 +29,8 @@ jobs:
         run: npm run build
 
       - name: Bundle with Vite
+        env:
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
         run: npm run build:site
 
       - uses: peaceiris/actions-gh-pages@v4
