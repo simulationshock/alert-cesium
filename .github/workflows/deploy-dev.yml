@@ -2,7 +2,7 @@ name: Deploy Dev to GitHub Pages
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, 005-multiplayer-lobbies]
   workflow_dispatch:
 
 permissions:
