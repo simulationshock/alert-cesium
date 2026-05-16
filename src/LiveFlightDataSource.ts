@@ -66,7 +66,7 @@ export class LiveFlightDataSource {
     try {
       const res = await this.fetcher(url, { headers: { accept: 'application/json' } });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-      const data = await res.json() as { ac?: unknown[] };
+      const data = await res.json() as { ac?: unknown[]; aircraft?: unknown[] };
       if (this._destroyed) return;
 
       const now     = Date.now();
@@ -74,7 +74,7 @@ export class LiveFlightDataSource {
       const seen    = new Set<string>();
       const [west, south, east, north] = this.bbox;
 
-      for (const raw of (data.ac ?? [])) {
+      for (const raw of (data.aircraft ?? data.ac ?? [])) {
         if (typeof raw !== 'object' || raw === null) continue;
         const a = raw as Record<string, unknown>;
 
