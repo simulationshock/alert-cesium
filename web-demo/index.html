@@ -344,10 +344,492 @@
     }
     .ms-select:focus { outline: none; border-color: rgba(100,200,255,0.5); }
     .ms-hint { font: 10px/1.4 sans-serif; color: #555; margin-top: 4px; padding: 0 4px; }
+
+    /* ── Auth Panel ────────────────────────────────────────────────────── */
+    #auth-panel {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 10px 12px;
+      backdrop-filter: blur(6px);
+      color: #eee;
+      font: 12px/1.5 sans-serif;
+      min-width: 170px;
+      user-select: none;
+    }
+    .auth-title {
+      font: bold 10px/1.4 sans-serif;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 7px;
+    }
+    .auth-provider-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      width: 100%;
+      padding: 5px 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 5px;
+      color: #bbb;
+      font: 12px/1.4 sans-serif;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 4px;
+      transition: background .1s, border-color .1s;
+    }
+    .auth-provider-btn:last-child { margin-bottom: 0; }
+    .auth-provider-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); color: #fff; }
+    .auth-provider-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+    .auth-user-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    #auth-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1565C0;
+      border: 2px solid rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: bold 11px sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+    #auth-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    #auth-display-name {
+      font: 600 13px/1.3 sans-serif;
+      color: #eee;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+    .auth-actions { display: flex; gap: 4px; }
+    .auth-action-btn {
+      flex: 1;
+      padding: 4px 6px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 4px;
+      color: #aaa;
+      font: 11px/1.4 sans-serif;
+      cursor: pointer;
+      transition: background .1s;
+    }
+    .auth-action-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    /* ── Profile Modal ─────────────────────────────────────────────────── */
+    #profile-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+    #profile-modal.open { display: flex; }
+    .pm-box {
+      background: rgba(20,20,20,0.97);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 20px 22px 16px;
+      min-width: 280px;
+      max-width: 340px;
+      width: 90vw;
+      color: #eee;
+      font: 13px/1.5 sans-serif;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+    .pm-title { font: bold 14px/1.3 sans-serif; color: #fff; margin-bottom: 14px; }
+    .pm-label { font: 11px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+    .pm-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: #ddd;
+      font: 13px/1.4 sans-serif;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+    }
+    .pm-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .pm-avatar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    #pm-avatar-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1565C0;
+      border: 2px solid rgba(255,255,255,0.2);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .pm-error { color: #f88; font-size: 11px; margin-bottom: 8px; display: none; }
+    .pm-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+    .pm-btn { padding: 6px 14px; border-radius: 5px; font: 12px/1.4 sans-serif; cursor: pointer; transition: background .1s; }
+    .pm-btn-cancel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); color: #aaa; }
+    .pm-btn-cancel:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .pm-btn-save { background: rgba(100,200,255,0.12); border: 1px solid rgba(100,200,255,0.3); color: #7df; }
+    .pm-btn-save:hover { background: rgba(100,200,255,0.22); }
+
+    /* ── Lobby Browser Modal ───────────────────────────────────────────── */
+    #lobby-browser {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+    #lobby-browser.open { display: flex; }
+    .lb-box {
+      background: rgba(18,18,18,0.97);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 20px 22px 18px;
+      width: min(500px, 92vw);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      color: #eee;
+      font: 13px/1.5 sans-serif;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+    .lb-header { display: flex; align-items: center; margin-bottom: 14px; gap: 8px; }
+    .lb-title { font: bold 15px/1.3 sans-serif; color: #fff; flex: 1; }
+    .lb-close { background: none; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+    .lb-close:hover { color: #bbb; }
+    .lb-section-title { font: bold 10px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .lb-list { flex: 1; overflow-y: auto; margin-bottom: 14px; min-height: 60px; max-height: 240px; }
+    .lb-empty { color: #555; font-size: 12px; padding: 12px 0; text-align: center; }
+    .lb-lobby-row { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 6px; }
+    .lb-lobby-host { flex: 1; font-weight: 600; color: #ddd; }
+    .lb-lobby-count { color: #888; font-size: 11px; white-space: nowrap; }
+    .lb-join-btn {
+      padding: 4px 10px;
+      background: rgba(100,200,255,0.12); border: 1px solid rgba(100,200,255,0.28);
+      border-radius: 4px; color: #7df; font: 11px/1.4 sans-serif; cursor: pointer; white-space: nowrap;
+    }
+    .lb-join-btn:hover { background: rgba(100,200,255,0.22); }
+    .lb-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0; }
+    .lb-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .lb-input {
+      flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 4px; color: #ddd; font: 12px/1.4 sans-serif; padding: 6px 8px;
+    }
+    .lb-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .lb-btn {
+      padding: 6px 14px; background: rgba(100,200,255,0.12); border: 1px solid rgba(100,200,255,0.28);
+      border-radius: 5px; color: #7df; font: 12px/1.4 sans-serif; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    }
+    .lb-btn:hover { background: rgba(100,200,255,0.22); }
+    .lb-btn:disabled { opacity: 0.4; cursor: default; }
+    .lb-radio-row { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .lb-radio-label { display: flex; align-items: center; gap: 5px; color: #bbb; font: 12px/1.4 sans-serif; cursor: pointer; }
+    .lb-radio-label input { accent-color: #7df; cursor: pointer; }
+    .lb-error { color: #f88; font-size: 11px; margin-top: 4px; display: none; }
+
+    /* ── Lobby HUD ─────────────────────────────────────────────────────── */
+    #lobby-hud {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 10px 12px 12px;
+      backdrop-filter: blur(6px);
+      color: #eee;
+      font: 12px/1.5 sans-serif;
+      min-width: 190px;
+      max-width: 220px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    #lobby-hud.active { display: block; }
+    .lh-title { font: bold 10px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .lh-member {
+      display: flex; align-items: center; gap: 7px;
+      padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .lh-member:last-child { border-bottom: none; }
+    .lh-avatar {
+      width: 24px; height: 24px; border-radius: 50%; background: #1565C0;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font: bold 9px sans-serif; color: #fff; flex-shrink: 0; overflow: hidden;
+    }
+    .lh-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .lh-member-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+    .lh-crown { color: #ffd700; font-size: 10px; flex-shrink: 0; }
+    .lh-member-btns { display: flex; gap: 3px; flex-shrink: 0; }
+    .lh-icon-btn { background: none; border: none; color: #666; font-size: 11px; cursor: pointer; padding: 1px 3px; border-radius: 3px; }
+    .lh-icon-btn:hover { color: #ccc; background: rgba(255,255,255,0.08); }
+    .lh-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; }
+    .lh-btn {
+      display: block; width: 100%; padding: 5px 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 4px; color: #bbb; font: 11px/1.4 sans-serif;
+      cursor: pointer; text-align: left; margin-bottom: 4px; transition: background .1s;
+    }
+    .lh-btn:last-child { margin-bottom: 0; }
+    .lh-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .lh-btn.active { color: #7df; border-color: rgba(100,200,255,0.3); background: rgba(100,200,255,0.08); }
+    .lh-btn-danger { color: #f88; border-color: rgba(255,100,100,0.25); }
+    .lh-btn-danger:hover { background: rgba(255,100,100,0.1); color: #faa; }
+    .lh-code { color: #7df; font: bold 13px/1.4 monospace; letter-spacing: .08em; margin: 4px 0 8px; }
+
+    /* ── Drawing Toolbar ───────────────────────────────────────────────── */
+    #drawing-toolbar {
+      display: none;
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 8px 12px;
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 320px;
+    }
+    #drawing-toolbar.active { display: flex; }
+    .dt-tool-btn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .1s, border-color .1s;
+    }
+    .dt-tool-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .dt-tool-btn.active { background: rgba(100,200,255,0.15); border-color: rgba(100,200,255,0.4); color: #7df; }
+    .dt-sep { width: 1px; height: 24px; background: rgba(255,255,255,0.12); margin: 0 2px; }
+    .dt-color-swatch {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: transform .1s, border-color .1s;
+    }
+    .dt-color-swatch:hover { transform: scale(1.15); }
+    .dt-color-swatch.active { border-color: #fff; transform: scale(1.15); }
+    .dt-clear-btn {
+      padding: 4px 10px;
+      background: rgba(255,80,60,0.12);
+      border: 1px solid rgba(255,80,60,0.28);
+      border-radius: 4px;
+      color: #f88;
+      font: 11px/1.4 sans-serif;
+      cursor: pointer;
+    }
+    .dt-clear-btn:hover { background: rgba(255,80,60,0.22); }
+
+    /* ── Chat Panel ────────────────────────────────────────────────────── */
+    #chat-panel {
+      display: none;
+      position: absolute;
+      right: 16px;
+      bottom: 70px;
+      z-index: 200;
+      width: 280px;
+      max-height: 360px;
+      background: rgba(14,14,14,0.92);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      font: 12px/1.5 sans-serif;
+      color: #eee;
+    }
+    #chat-panel.hidden { display: none !important; }
+    .cp-header {
+      display: flex; align-items: center; padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer; user-select: none;
+    }
+    .cp-title { flex: 1; font: bold 11px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .06em; }
+    .cp-toggle { font-size: 12px; color: #555; }
+    .cp-badge {
+      background: #e53935; color: #fff; border-radius: 8px;
+      padding: 1px 5px; font: bold 9px/1.4 sans-serif; margin-left: 5px; display: none;
+    }
+    .cp-messages {
+      flex: 1; overflow-y: auto; padding: 6px 10px;
+      max-height: 240px; min-height: 60px;
+    }
+    .cp-msg { margin-bottom: 6px; }
+    .cp-msg-header { display: flex; gap: 6px; align-items: baseline; }
+    .cp-msg-name { font-weight: 600; color: #7df; font-size: 11px; }
+    .cp-msg-time { color: #555; font-size: 10px; }
+    .cp-msg-text { color: #ddd; word-break: break-word; }
+    .cp-input-row { display: flex; gap: 6px; padding: 6px 8px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .cp-input {
+      flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px; color: #ddd; font: 12px/1.4 sans-serif; padding: 5px 7px;
+    }
+    .cp-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .cp-send-btn {
+      padding: 5px 10px; background: rgba(100,200,255,0.12);
+      border: 1px solid rgba(100,200,255,0.28); border-radius: 4px;
+      color: #7df; font: 11px/1.4 sans-serif; cursor: pointer;
+    }
+    .cp-send-btn:hover { background: rgba(100,200,255,0.22); }
+
+    /* ── PTT / Video Controls ──────────────────────────────────────────── */
+    #comm-controls {
+      display: none;
+      position: absolute;
+      bottom: 70px;
+      left: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 8px 10px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: stretch;
+    }
+    #comm-controls.hidden { display: none !important; }
+    #ptt-btn {
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb; font: bold 12px/1.4 sans-serif; cursor: pointer;
+      transition: background .1s;
+      user-select: none;
+    }
+    #ptt-btn:active, #ptt-btn.talking {
+      background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #f88;
+    }
+    #video-btn {
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb; font: 11px/1.4 sans-serif; cursor: pointer;
+      transition: background .1s;
+    }
+    #video-btn.active { background: rgba(100,200,255,0.12); border-color: rgba(100,200,255,0.3); color: #7df; }
+    #chat-toggle-btn {
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb; font: 11px/1.4 sans-serif; cursor: pointer;
+    }
+
+    /* ── Peer Video Grid ───────────────────────────────────────────────── */
+    #peer-videos {
+      display: none;
+      position: absolute;
+      top: 16px;
+      right: 250px;
+      z-index: 200;
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      max-width: 280px;
+    }
+    #peer-videos.hidden { display: none !important; }
+    .peer-video-thumb {
+      width: 80px; height: 60px;
+      background: #111; border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px; overflow: hidden; position: relative;
+    }
+    .peer-video-thumb video { width: 100%; height: 100%; object-fit: cover; }
+    .peer-video-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.6); color: #ccc;
+      font: 9px/1.4 sans-serif; padding: 1px 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
+
+  <!-- Auth Panel (top-left) -->
+  <div id="auth-panel">
+    <div id="auth-signed-out">
+      <div class="auth-title">Sign In</div>
+      <button class="auth-provider-btn" id="auth-google-btn">
+        <span class="auth-provider-icon">G</span>Google
+      </button>
+      <button class="auth-provider-btn" id="auth-github-btn">
+        <span class="auth-provider-icon">⌂</span>GitHub
+      </button>
+      <button class="auth-provider-btn" id="auth-apple-btn">
+        <span class="auth-provider-icon">⬛</span>Apple
+      </button>
+      <button class="auth-provider-btn" id="auth-discord-btn">
+        <span class="auth-provider-icon">💬</span>Discord
+      </button>
+    </div>
+    <div id="auth-signed-in" style="display:none">
+      <div class="auth-user-row">
+        <div id="auth-avatar-circle">
+          <img id="auth-avatar-img" src="" alt="" style="display:none">
+          <span id="auth-avatar-initials"></span>
+        </div>
+        <div id="auth-display-name">User</div>
+      </div>
+      <div class="auth-actions">
+        <button class="auth-action-btn" id="auth-edit-btn">✏ Profile</button>
+        <button class="auth-action-btn" id="auth-signout-btn">Sign Out</button>
+      </div>
+      <button class="auth-provider-btn" id="auth-multiplayer-btn" style="margin-top:6px">
+        <span class="auth-provider-icon">⚡</span>Multiplayer
+      </button>
+    </div>
+  </div>
+
+  <!-- Profile Edit Modal -->
+  <div id="profile-modal">
+    <div class="pm-box">
+      <div class="pm-title">Edit Profile</div>
+      <div class="pm-label">Display Name</div>
+      <input class="pm-input" id="pm-name" type="text" maxlength="32" placeholder="Your name (1–32 chars)">
+      <div class="pm-label">Avatar URL</div>
+      <div class="pm-avatar-row">
+        <img id="pm-avatar-preview" src="" alt="avatar">
+        <input class="pm-input" id="pm-avatar-url" type="url" placeholder="https://…" style="margin-bottom:0;flex:1">
+      </div>
+      <div class="pm-error" id="pm-error"></div>
+      <div class="pm-actions">
+        <button class="pm-btn pm-btn-cancel" id="pm-cancel">Cancel</button>
+        <button class="pm-btn pm-btn-save" id="pm-save">Save</button>
+      </div>
+    </div>
+  </div>
+
   <button id="xr-btn">Enter VR</button>
   <div id="flight-info">
     <button class="fi-close" id="flight-info-close">✕</button>
@@ -474,6 +956,95 @@
     </div>
   </div>
 
+  <!-- Communication Controls (PTT + video, shown in lobby) -->
+  <div id="comm-controls" class="hidden">
+    <button id="ptt-btn">🎤 Hold to Talk</button>
+    <button id="video-btn">📷 Video Off</button>
+    <button id="chat-toggle-btn">💬 Chat</button>
+  </div>
+
+  <!-- Chat Panel -->
+  <div id="chat-panel" class="hidden">
+    <div class="cp-header" id="cp-header">
+      <span class="cp-title">Chat</span>
+      <span class="cp-badge" id="cp-badge">0</span>
+      <span class="cp-toggle">▼</span>
+    </div>
+    <div class="cp-messages" id="cp-messages"></div>
+    <div class="cp-input-row">
+      <input class="cp-input" id="cp-input" type="text" maxlength="256" placeholder="Message…">
+      <button class="cp-send-btn" id="cp-send">Send</button>
+    </div>
+  </div>
+
+  <!-- Peer Video Grid -->
+  <div id="peer-videos" class="hidden"></div>
+
+  <!-- Drawing Toolbar (shown when in lobby) -->
+  <div id="drawing-toolbar">
+    <button class="dt-tool-btn" id="dt-stroke" title="Freehand draw">✏</button>
+    <button class="dt-tool-btn" id="dt-line"   title="Line">─</button>
+    <button class="dt-tool-btn" id="dt-circle" title="Circle">○</button>
+    <button class="dt-tool-btn" id="dt-rect"   title="Rectangle">□</button>
+    <button class="dt-tool-btn" id="dt-pin"    title="Pin">📍</button>
+    <div class="dt-sep"></div>
+    <div class="dt-color-swatch active" style="background:#ff3333" data-color="#ff3333"></div>
+    <div class="dt-color-swatch" style="background:#ff9900" data-color="#ff9900"></div>
+    <div class="dt-color-swatch" style="background:#ffee00" data-color="#ffee00"></div>
+    <div class="dt-color-swatch" style="background:#33cc33" data-color="#33cc33"></div>
+    <div class="dt-color-swatch" style="background:#3399ff" data-color="#3399ff"></div>
+    <div class="dt-color-swatch" style="background:#ffffff" data-color="#ffffff"></div>
+    <div class="dt-sep" id="dt-sep-clear"></div>
+    <button class="dt-clear-btn" id="dt-clear-all" style="display:none">✕ Clear All</button>
+  </div>
+
+  <!-- Lobby Browser Modal -->
+  <div id="lobby-browser">
+    <div class="lb-box">
+      <div class="lb-header">
+        <div class="lb-title">Multiplayer Lobbies</div>
+        <button class="lb-close" id="lb-close-btn">✕</button>
+      </div>
+
+      <div class="lb-section-title">Public Lobbies</div>
+      <div class="lb-list" id="lb-lobby-list">
+        <div class="lb-empty" id="lb-empty-msg">No public lobbies. Create one below!</div>
+      </div>
+
+      <hr class="lb-divider">
+      <div class="lb-section-title">Create Lobby</div>
+      <div class="lb-radio-row">
+        <label class="lb-radio-label"><input type="radio" name="lb-privacy" value="public" checked> Public</label>
+        <label class="lb-radio-label"><input type="radio" name="lb-privacy" value="private"> Private</label>
+      </div>
+      <button class="lb-btn" id="lb-create-btn">Create Lobby</button>
+
+      <hr class="lb-divider">
+      <div class="lb-section-title">Join by Code</div>
+      <div class="lb-row">
+        <input class="lb-input" id="lb-code-input" type="text" maxlength="6" placeholder="6-digit code" style="text-transform:uppercase">
+        <button class="lb-btn" id="lb-code-join-btn">Join</button>
+      </div>
+      <div class="lb-error" id="lb-error"></div>
+    </div>
+  </div>
+
+  <!-- Lobby HUD (right sidebar, shown when in lobby) -->
+  <div id="lobby-hud">
+    <div class="lh-title">Lobby</div>
+    <div id="lh-code" class="lh-code"></div>
+    <div id="lh-members"></div>
+    <hr class="lh-divider">
+    <button class="lh-btn lh-btn-danger" id="lh-leave-btn">Leave Lobby</button>
+    <div id="lh-host-controls" style="display:none">
+      <hr class="lh-divider">
+      <div class="lh-title">Host Controls</div>
+      <button class="lh-btn" id="lh-lock-btn">🔓 Lock Lobby</button>
+      <button class="lh-btn" id="lh-privacy-btn">🌐 Make Private</button>
+      <button class="lh-btn" id="lh-sync-layers-btn">⟳ Sync Layers to All</button>
+    </div>
+  </div>
+
   <script type="importmap">
 {
   "imports": {
@@ -482,6 +1053,834 @@
 }
 </script>
 <script type="module">
+    // ── Firebase Auth ─────────────────────────────────────────────────────────
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import {
+      getAuth, signInWithPopup, signOut as fbSignOut, onAuthStateChanged, updateProfile,
+      GoogleAuthProvider, GithubAuthProvider, OAuthProvider,
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    let auth = null;
+    let currentUser = null;
+
+    const firebaseConfig = window.FIREBASE_CONFIG ?? null;
+    if (firebaseConfig?.apiKey) {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+
+      const providers = {
+        google:  new GoogleAuthProvider(),
+        github:  new GithubAuthProvider(),
+        apple:   new OAuthProvider('apple.com'),
+        discord: new OAuthProvider('oidc.discord'),
+      };
+
+      function updateAuthUI(user) {
+        currentUser = user;
+        const signedOut = document.getElementById('auth-signed-out');
+        const signedIn  = document.getElementById('auth-signed-in');
+        if (!user) {
+          signedOut.style.display = 'block';
+          signedIn.style.display  = 'none';
+          return;
+        }
+        signedOut.style.display = 'none';
+        signedIn.style.display  = 'block';
+        document.getElementById('auth-display-name').textContent = user.displayName || 'Anonymous';
+        const avatarImg      = document.getElementById('auth-avatar-img');
+        const avatarInitials = document.getElementById('auth-avatar-initials');
+        if (user.photoURL) {
+          avatarImg.src = user.photoURL;
+          avatarImg.style.display = 'block';
+          avatarInitials.style.display = 'none';
+        } else {
+          avatarImg.style.display = 'none';
+          avatarInitials.textContent = (user.displayName || '?').slice(0, 2).toUpperCase();
+          avatarInitials.style.display = '';
+        }
+        if (!user.displayName) openProfileModal();
+      }
+
+      async function signIn(providerKey) {
+        try {
+          await signInWithPopup(auth, providers[providerKey]);
+        } catch (err) {
+          if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+            console.error('[Auth] sign-in error:', err.message);
+          }
+        }
+      }
+
+      function openProfileModal() {
+        const user = auth.currentUser;
+        if (!user) return;
+        document.getElementById('pm-name').value = user.displayName || '';
+        const avatarUrl = user.photoURL || '';
+        document.getElementById('pm-avatar-url').value = avatarUrl;
+        updateAvatarPreview(avatarUrl);
+        document.getElementById('pm-error').style.display = 'none';
+        document.getElementById('profile-modal').classList.add('open');
+      }
+
+      function updateAvatarPreview(url) {
+        const preview = document.getElementById('pm-avatar-preview');
+        preview.src = url || '';
+        preview.style.opacity = url ? '1' : '0.3';
+      }
+
+      document.getElementById('pm-avatar-url').addEventListener('input', (e) => {
+        updateAvatarPreview(e.target.value.trim());
+      });
+
+      document.getElementById('pm-cancel').addEventListener('click', () => {
+        document.getElementById('profile-modal').classList.remove('open');
+      });
+
+      document.getElementById('pm-save').addEventListener('click', async () => {
+        const name   = document.getElementById('pm-name').value.trim();
+        const url    = document.getElementById('pm-avatar-url').value.trim();
+        const errEl  = document.getElementById('pm-error');
+        if (!name || name.length > 32) {
+          errEl.textContent = 'Display name must be 1–32 characters.';
+          errEl.style.display = 'block';
+          return;
+        }
+        errEl.style.display = 'none';
+        try {
+          await updateProfile(auth.currentUser, { displayName: name, photoURL: url || null });
+          updateAuthUI(auth.currentUser);
+          document.getElementById('profile-modal').classList.remove('open');
+        } catch (err) {
+          errEl.textContent = 'Save failed: ' + err.message;
+          errEl.style.display = 'block';
+        }
+      });
+
+      document.getElementById('auth-google-btn').addEventListener('click', () => signIn('google'));
+      document.getElementById('auth-github-btn').addEventListener('click', () => signIn('github'));
+      document.getElementById('auth-apple-btn').addEventListener('click', () => signIn('apple'));
+      document.getElementById('auth-discord-btn').addEventListener('click', () => signIn('discord'));
+      document.getElementById('auth-edit-btn').addEventListener('click', openProfileModal);
+      document.getElementById('auth-signout-btn').addEventListener('click', () => fbSignOut(auth));
+
+      onAuthStateChanged(auth, updateAuthUI);
+    } else {
+      document.getElementById('auth-panel').style.display = 'none';
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Multiplayer Session (T013–T017) ──────────────────────────────────────
+    import { LobbyClient } from '../dist/multiplayer/LobbyClient.js';
+    import { PeerMesh } from '../dist/multiplayer/PeerMesh.js';
+
+    const SIGNALING_URL = window.SIGNALING_URL ?? 'ws://localhost:8080';
+
+    let lobbyClient = null;
+    let peerMesh = null;
+    let myPeerId = null;
+    let activeLobby = null;
+    let isHost = false;
+    let lobbyMembers = new Map(); // peerId → LobbyMember
+    let lobbyRefreshTimer = null;
+    let presenceAvatarManager = null;
+    let pilotMode = null;
+    let activePilotPeerId = null;
+    const pilotFollowers = new Map(); // followerPeerId → targetPeerId
+
+    function initMultiplayerSession() {
+      lobbyClient = new LobbyClient({
+        onAuthOk: (user) => {
+          console.info('[Multiplayer] Authenticated as', user.displayName);
+        },
+        onAuthError: (reason) => {
+          console.warn('[Multiplayer] Auth error:', reason);
+        },
+        onLobbyList: (lobbies) => {
+          renderLobbyList(lobbies);
+        },
+        onLobbyCreated: ({ lobby, self, turnCredentials }) => {
+          activeLobby = lobby;
+          myPeerId = self.peerId;
+          isHost = true;
+          lobbyMembers.clear();
+          if (currentUser) {
+            lobbyMembers.set(myPeerId, {
+              peerId: myPeerId,
+              userId: currentUser.uid,
+              displayName: currentUser.displayName || 'Me',
+              avatarUrl: currentUser.photoURL || '',
+              joinedAt: Date.now(),
+              isHost: true,
+            });
+          }
+          peerMesh.setIceServers(buildIceServers(turnCredentials));
+          document.getElementById('lobby-browser').classList.remove('open');
+          stopLobbyRefresh();
+          openLobbyHUD();
+          if (window._cesiumViewer) { initAnnotations(window._cesiumViewer); initPresenceAndPilot(window._cesiumViewer); }
+          document.getElementById('dt-clear-all').style.display = 'inline-block';
+          showCommControls();
+        },
+        onLobbyJoined: ({ lobby, self, peers, turnCredentials }) => {
+          activeLobby = lobby;
+          myPeerId = self.peerId;
+          isHost = lobby.hostPeerId === myPeerId;
+          lobbyMembers.clear();
+          for (const p of peers) lobbyMembers.set(p.peerId, p);
+          if (currentUser) {
+            lobbyMembers.set(myPeerId, {
+              peerId: myPeerId,
+              userId: currentUser?.uid ?? '',
+              displayName: currentUser.displayName || 'Me',
+              avatarUrl: currentUser.photoURL || '',
+              joinedAt: Date.now(),
+              isHost,
+            });
+          }
+          peerMesh.setIceServers(buildIceServers(turnCredentials));
+          for (const peer of peers) {
+            const initiate = myPeerId > peer.peerId;
+            peerMesh.addPeer(peer.peerId, initiate);
+          }
+          document.getElementById('lobby-browser').classList.remove('open');
+          stopLobbyRefresh();
+          openLobbyHUD();
+          if (window._cesiumViewer) { initAnnotations(window._cesiumViewer); initPresenceAndPilot(window._cesiumViewer); }
+          showCommControls();
+        },
+        onJoinError: (reason) => {
+          const errEl = document.getElementById('lb-error');
+          errEl.textContent = {
+            'lobby-full': 'Lobby is full.',
+            'not-found': 'Lobby not found.',
+            'locked': 'Lobby is locked.',
+            'invalid-code': 'Invalid code.',
+            'already-in-lobby': 'Already in a lobby.',
+          }[reason] ?? 'Could not join.';
+          errEl.style.display = 'block';
+        },
+        onPeerJoined: (peer) => {
+          lobbyMembers.set(peer.peerId, peer);
+          const initiate = myPeerId > peer.peerId;
+          peerMesh.addPeer(peer.peerId, initiate);
+          renderHUDMembers();
+        },
+        onPeerLeft: (peerId) => {
+          lobbyMembers.delete(peerId);
+          peerMesh.removePeer(peerId);
+          renderHUDMembers();
+        },
+        onHostPromoted: (newHostPeerId) => {
+          if (activeLobby) activeLobby.hostPeerId = newHostPeerId;
+          isHost = newHostPeerId === myPeerId;
+          for (const [pid, m] of lobbyMembers) {
+            lobbyMembers.set(pid, { ...m, isHost: pid === newHostPeerId });
+          }
+          renderHUDMembers();
+          updateHostControls();
+        },
+        onLobbyUpdated: (info) => {
+          if (activeLobby) Object.assign(activeLobby, info);
+          updateHostControls();
+        },
+        onOffer: (fromPeerId, sdp) => peerMesh.handleOffer(fromPeerId, sdp),
+        onAnswer: (fromPeerId, sdp) => peerMesh.handleAnswer(fromPeerId, sdp),
+        onIce: (fromPeerId, candidate) => peerMesh.handleIce(fromPeerId, candidate),
+        onKicked: () => {
+          showToast('You were removed from the lobby.');
+          leaveLobbyCleanup();
+        },
+        onDisconnected: () => {
+          showToast('Disconnected from signaling server.');
+          leaveLobbyCleanup();
+        },
+      });
+
+      peerMesh = new PeerMesh(lobbyClient, {
+        onConnectionStateChange: (peerId, state) => {
+          console.debug(`[PeerMesh] ${peerId}: ${state}`);
+        },
+      });
+
+      lobbyClient.connect(SIGNALING_URL);
+
+      if (auth?.currentUser) {
+        auth.currentUser.getIdToken().then(token => {
+          lobbyClient.authenticate(token);
+        });
+      }
+    }
+
+    function buildIceServers(turnCredentials) {
+      const servers = [{ urls: 'stun:stun.l.google.com:19302' }];
+      if (turnCredentials?.urls?.length) {
+        servers.push({
+          urls: turnCredentials.urls,
+          username: turnCredentials.username,
+          credential: turnCredentials.credential,
+        });
+      }
+      return servers;
+    }
+
+    function leaveLobbyCleanup() {
+      peerMesh?.destroy();
+      activeLobby = null;
+      myPeerId = null;
+      isHost = false;
+      lobbyMembers.clear();
+      document.getElementById('lobby-hud').classList.remove('active');
+    }
+
+    // ── Lobby browser UI ──
+    function openLobbyBrowser() {
+      if (!lobbyClient) initMultiplayerSession();
+      document.getElementById('lb-error').style.display = 'none';
+      document.getElementById('lobby-browser').classList.add('open');
+      lobbyClient.listLobbies();
+      startLobbyRefresh();
+    }
+
+    function startLobbyRefresh() {
+      stopLobbyRefresh();
+      lobbyRefreshTimer = setInterval(() => lobbyClient?.listLobbies(), 10_000);
+    }
+
+    function stopLobbyRefresh() {
+      if (lobbyRefreshTimer !== null) { clearInterval(lobbyRefreshTimer); lobbyRefreshTimer = null; }
+    }
+
+    function renderLobbyList(lobbies) {
+      const list = document.getElementById('lb-lobby-list');
+      const emptyMsg = document.getElementById('lb-empty-msg');
+      list.querySelectorAll('.lb-lobby-row').forEach(el => el.remove());
+      if (!lobbies.length) {
+        emptyMsg.style.display = 'block';
+        return;
+      }
+      emptyMsg.style.display = 'none';
+      for (const lobby of lobbies) {
+        const row = document.createElement('div');
+        row.className = 'lb-lobby-row';
+        row.innerHTML = `
+          <span class="lb-lobby-host">${escapeHtml(lobby.hostDisplayName)}</span>
+          <span class="lb-lobby-count">${lobby.memberCount}/6</span>
+          <button class="lb-join-btn">Join</button>`;
+        row.querySelector('.lb-join-btn').addEventListener('click', () => {
+          lobbyClient.joinLobby(lobby.id);
+        });
+        list.append(row);
+      }
+    }
+
+    document.getElementById('lb-close-btn').addEventListener('click', () => {
+      document.getElementById('lobby-browser').classList.remove('open');
+      stopLobbyRefresh();
+    });
+
+    document.getElementById('lb-create-btn').addEventListener('click', () => {
+      const isPublic = document.querySelector('input[name="lb-privacy"]:checked').value === 'public';
+      lobbyClient?.createLobby(isPublic);
+    });
+
+    document.getElementById('lb-code-join-btn').addEventListener('click', () => {
+      const code = document.getElementById('lb-code-input').value.trim().toUpperCase();
+      if (code.length !== 6) {
+        document.getElementById('lb-error').textContent = 'Code must be 6 characters.';
+        document.getElementById('lb-error').style.display = 'block';
+        return;
+      }
+      document.getElementById('lb-error').style.display = 'none';
+      // Code-based join: we need the lobbyId too — for private lobbies the server should
+      // look up by code. For now we pass the code as lobbyId for the simple path.
+      // In production, add a GET /lobby-by-code/:code endpoint.
+      lobbyClient?.joinLobby(code, code);
+    });
+
+    document.getElementById('auth-multiplayer-btn')?.addEventListener('click', openLobbyBrowser);
+
+    // ── Lobby HUD ──
+    function openLobbyHUD() {
+      renderHUDMembers();
+      updateHostControls();
+      const codeEl = document.getElementById('lh-code');
+      codeEl.textContent = activeLobby?.code ? `Code: ${activeLobby.code}` : '';
+      document.getElementById('lobby-hud').classList.add('active');
+    }
+
+    function renderHUDMembers() {
+      const container = document.getElementById('lh-members');
+      container.innerHTML = '';
+      for (const [peerId, member] of lobbyMembers) {
+        const div = document.createElement('div');
+        div.className = 'lh-member';
+        const isMe = peerId === myPeerId;
+        const avatarContent = member.avatarUrl
+          ? `<img src="${escapeHtml(member.avatarUrl)}" alt="">`
+          : (member.displayName || '?').slice(0, 2).toUpperCase();
+        div.innerHTML = `
+          <div class="lh-avatar">${member.avatarUrl ? `<img src="${escapeHtml(member.avatarUrl)}" alt="">` : (member.displayName || '?').slice(0, 2).toUpperCase()}</div>
+          <span class="lh-member-name">${escapeHtml(member.displayName)}${isMe ? ' (you)' : ''}</span>
+          ${member.isHost ? '<span class="lh-crown">👑</span>' : ''}`;
+        if (isHost && !isMe) {
+          const btns = document.createElement('div');
+          btns.className = 'lh-member-btns';
+          const kickBtn = document.createElement('button');
+          kickBtn.className = 'lh-icon-btn';
+          kickBtn.title = 'Kick';
+          kickBtn.textContent = '✕';
+          kickBtn.addEventListener('click', () => lobbyClient?.kickMember(peerId));
+          const promoteBtn = document.createElement('button');
+          promoteBtn.className = 'lh-icon-btn';
+          promoteBtn.title = 'Promote to host';
+          promoteBtn.textContent = '👑';
+          promoteBtn.addEventListener('click', () => lobbyClient?.promoteHost(peerId));
+          btns.append(kickBtn, promoteBtn);
+          div.append(btns);
+        }
+        container.append(div);
+      }
+    }
+
+    function updateHostControls() {
+      const section = document.getElementById('lh-host-controls');
+      section.style.display = isHost ? 'block' : 'none';
+      if (!isHost || !activeLobby) return;
+      const lockBtn = document.getElementById('lh-lock-btn');
+      lockBtn.textContent = activeLobby.isLocked ? '🔒 Unlock Lobby' : '🔓 Lock Lobby';
+      lockBtn.classList.toggle('active', activeLobby.isLocked);
+      const privacyBtn = document.getElementById('lh-privacy-btn');
+      privacyBtn.textContent = activeLobby.isPublic ? '🔒 Make Private' : '🌐 Make Public';
+    }
+
+    document.getElementById('lh-leave-btn').addEventListener('click', () => {
+      lobbyClient?.leaveLobby();
+      leaveLobbyCleanup();
+    });
+
+    document.getElementById('lh-lock-btn').addEventListener('click', () => {
+      if (!activeLobby) return;
+      lobbyClient?.lockLobby(!activeLobby.isLocked);
+    });
+
+    document.getElementById('lh-privacy-btn').addEventListener('click', () => {
+      if (!activeLobby) return;
+      lobbyClient?.togglePrivacy(!activeLobby.isPublic);
+    });
+
+    document.getElementById('lh-sync-layers-btn').addEventListener('click', () => {
+      if (!isHost) return;
+      // broadcastLayerState defined after layer managers are initialized
+      if (typeof broadcastLayerState === 'function') broadcastLayerState();
+      const btn = document.getElementById('lh-sync-layers-btn');
+      btn.textContent = '✓ Synced';
+      setTimeout(() => { btn.textContent = '⟳ Sync Layers to All'; }, 2000);
+    });
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      Object.assign(toast.style, {
+        position: 'fixed', bottom: '80px', left: '50%', transform: 'translateX(-50%)',
+        background: 'rgba(20,20,20,0.95)', color: '#eee', padding: '10px 20px',
+        borderRadius: '6px', border: '1px solid rgba(255,255,255,0.18)', zIndex: '9999',
+        font: '13px sans-serif', pointerEvents: 'none', backdropFilter: 'blur(4px)',
+      });
+      document.body.append(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Annotation + Drawing Toolbar (T019–T022) ──────────────────────────────
+    import { AnnotationManager } from '../dist/multiplayer/AnnotationManager.js';
+    import { DataChannels } from '../dist/multiplayer/DataChannels.js';
+
+    let annotationManager = null;
+    let dataChannels = null;
+
+    function initAnnotations(cesiumViewer) {
+      annotationManager = new AnnotationManager(cesiumViewer, {
+        authorPeerId: myPeerId ?? 'local',
+        onComplete: (annotation) => {
+          if (!dataChannels || !peerMesh) return;
+          dataChannels.sendAnnotationAdd(peerMesh.getAllPeerIds(), annotation);
+        },
+      });
+
+      dataChannels = new DataChannels({
+        onAnnotation: (_fromPeerId, msg) => {
+          if (msg.type === 'annotation-add')    annotationManager.addRemote(msg.annotation);
+          else if (msg.type === 'annotation-delete') annotationManager.removeAnnotation(msg.annotationId);
+          else if (msg.type === 'annotation-clear')  annotationManager.clearAll();
+          else if (msg.type === 'state-full') {
+            for (const a of msg.annotations) annotationManager.addRemote(a);
+          } else if (msg.type === 'layer-sync') {
+            applyLayerSync(msg.fire, msg.radio, msg.flights);
+          }
+        },
+        onChat: (_fromPeerId, msg) => {
+          if (msg.type === 'chat') appendChatMessage(msg);
+          else if (msg.type === 'pilot-follow') pilotFollowers.set(msg.followerPeerId, msg.targetPeerId);
+          else if (msg.type === 'pilot-leave')  pilotFollowers.delete(msg.followerPeerId);
+        },
+        onPresence: (fromPeerId, state) => {
+          presenceAvatarManager?.updatePresence(fromPeerId, state);
+        },
+      });
+
+      // Wire DataChannels into PeerMesh
+      if (peerMesh) {
+        peerMesh.callbacks.onConnectionReady = (peerId, isInitiator) => {
+          const conn = peerMesh.getConnection(peerId);
+          if (conn) dataChannels.attachToPeer(peerId, conn, isInitiator);
+          if (isHost) {
+            const payload = JSON.stringify({ type: 'state-full', annotations: annotationManager.getAllAnnotations() });
+            peerMesh.transferStateToPeer(peerId, payload);
+          }
+        };
+        peerMesh.callbacks.onStateReceived = (_peerId, jsonPayload) => {
+          try {
+            const msg = JSON.parse(jsonPayload);
+            if (msg.type === 'state-full' && Array.isArray(msg.annotations)) {
+              for (const a of msg.annotations) annotationManager.addRemote(a);
+            }
+          } catch {}
+        };
+      }
+
+      // Start presence broadcast when in a lobby
+      dataChannels.startPresenceBroadcast(
+        () => peerMesh?.getAllPeerIds() ?? [],
+        () => buildPresenceState(),
+      );
+
+      // Show drawing toolbar
+      document.getElementById('drawing-toolbar').classList.add('active');
+    }
+
+    function buildPresenceState() {
+      const cam = window._cesiumViewer?.camera;
+      if (!cam) return {};
+      const pos = cam.positionCartographic;
+      return {
+        peerId: myPeerId,
+        longitude: Cesium.Math.toDegrees(pos.longitude),
+        latitude: Cesium.Math.toDegrees(pos.latitude),
+        altitude: pos.height,
+        heading: cam.heading,
+        pitch: cam.pitch,
+        roll: cam.roll,
+        pilotPeerId: activePilotPeerId,
+        timestamp: Date.now(),
+      };
+    }
+
+    function broadcastLayerState() {
+      if (!dataChannels || !peerMesh || !isHost) return;
+      const fire    = window._sandbox?.fireOverlay?.visible ?? false;
+      const radio   = window._radioMarkers?.visible ?? false;
+      const flights = window._flightMarkers?.visible ?? false;
+      dataChannels.sendLayerSync(peerMesh.getAllPeerIds(), fire, radio, flights);
+    }
+
+    function applyLayerSync(fire, radio, flights) {
+      if (window._sandbox?.fireOverlay) window._sandbox.fireOverlay.setVisible(fire);
+      if (window._radioMarkers) window._radioMarkers.setVisible(radio);
+      if (window._flightMarkers) window._flightMarkers.setVisible(flights);
+    }
+
+    // ── Drawing toolbar controls ──
+    const DRAW_TOOLS = {
+      'dt-stroke': 'stroke',
+      'dt-line':   'line',
+      'dt-circle': 'circle',
+      'dt-rect':   'rectangle',
+      'dt-pin':    'pin',
+    };
+    let activeDrawTool = null;
+
+    for (const [btnId, tool] of Object.entries(DRAW_TOOLS)) {
+      document.getElementById(btnId)?.addEventListener('click', () => {
+        if (activeDrawTool === tool) {
+          // deselect
+          activeDrawTool = null;
+          annotationManager?.setTool(null);
+          document.getElementById(btnId).classList.remove('active');
+        } else {
+          activeDrawTool = tool;
+          annotationManager?.setTool(tool);
+          Object.keys(DRAW_TOOLS).forEach(id => document.getElementById(id)?.classList.remove('active'));
+          document.getElementById(btnId).classList.add('active');
+        }
+      });
+    }
+
+    document.querySelectorAll('.dt-color-swatch').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.dt-color-swatch').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+        annotationManager?.setColor(el.dataset.color);
+      });
+    });
+
+    document.getElementById('dt-clear-all')?.addEventListener('click', () => {
+      if (!isHost) return;
+      annotationManager?.clearAll();
+      dataChannels?.sendAnnotationClear(peerMesh?.getAllPeerIds() ?? []);
+    });
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Voice/Video/Chat (T023–T027) ──────────────────────────────────────────
+    import { MediaManager } from '../dist/multiplayer/MediaManager.js';
+
+    let mediaManager = null;
+    const audioElements = new Map();  // peerId → <audio>
+    const videoElements = new Map();  // peerId → .peer-video-thumb div
+
+    async function initMedia() {
+      mediaManager = new MediaManager({
+        onRemoteTrack: (peerId, track, stream) => {
+          if (track.kind === 'audio') {
+            let audio = audioElements.get(peerId);
+            if (!audio) {
+              audio = document.createElement('audio');
+              audio.autoplay = true;
+              audio.style.display = 'none';
+              document.body.append(audio);
+              audioElements.set(peerId, audio);
+            }
+            audio.srcObject = stream;
+          } else if (track.kind === 'video') {
+            let thumb = videoElements.get(peerId);
+            if (!thumb) {
+              thumb = document.createElement('div');
+              thumb.className = 'peer-video-thumb';
+              const vid = document.createElement('video');
+              vid.autoplay = true;
+              vid.playsInline = true;
+              const label = document.createElement('div');
+              label.className = 'peer-video-label';
+              label.textContent = lobbyMembers.get(peerId)?.displayName ?? peerId.slice(0, 8);
+              thumb.append(vid, label);
+              document.getElementById('peer-videos').append(thumb);
+              videoElements.set(peerId, thumb);
+            }
+            thumb.querySelector('video').srcObject = stream;
+          }
+        },
+      });
+
+      try {
+        await mediaManager.initialize();
+        if (peerMesh) {
+          peerMesh.callbacks.onTrack = (peerId, track, streams) => {
+            mediaManager.handleRemoteTrack(peerId, track, streams);
+          };
+          // Add tracks to existing connections
+          for (const peerId of peerMesh.getAllPeerIds()) {
+            const conn = peerMesh.getConnection(peerId);
+            if (conn) mediaManager.addTracksToConnection(conn);
+          }
+          const origAddPeer = peerMesh.addPeer.bind(peerMesh);
+          peerMesh.addPeer = (peerId, isInitiator) => {
+            const conn = origAddPeer(peerId, isInitiator);
+            mediaManager.addTracksToConnection(conn);
+            return conn;
+          };
+        }
+      } catch (err) {
+        console.warn('[Media] getUserMedia failed:', err.message, '— voice/video disabled');
+      }
+    }
+
+    // PTT button
+    const pttBtn = document.getElementById('ptt-btn');
+    pttBtn.addEventListener('mousedown',  () => { mediaManager?.startPTT(); pttBtn.classList.add('talking'); });
+    pttBtn.addEventListener('mouseup',    () => { mediaManager?.stopPTT();  pttBtn.classList.remove('talking'); });
+    pttBtn.addEventListener('mouseleave', () => { mediaManager?.stopPTT();  pttBtn.classList.remove('talking'); });
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && !e.repeat && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        mediaManager?.startPTT();
+        pttBtn.classList.add('talking');
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        mediaManager?.stopPTT();
+        pttBtn.classList.remove('talking');
+      }
+    });
+
+    // Video toggle
+    const videoBtn = document.getElementById('video-btn');
+    videoBtn.addEventListener('click', () => {
+      if (!mediaManager) return;
+      const on = mediaManager.toggleVideo();
+      videoBtn.textContent = on ? '📷 Video On' : '📷 Video Off';
+      videoBtn.classList.toggle('active', on);
+      document.getElementById('peer-videos').classList.toggle('hidden', !on);
+    });
+
+    // Chat
+    let chatUnread = 0;
+    let chatVisible = true;
+
+    function appendChatMessage(msg) {
+      const container = document.getElementById('cp-messages');
+      const div = document.createElement('div');
+      div.className = 'cp-msg';
+      const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      div.innerHTML = `<div class="cp-msg-header"><span class="cp-msg-name">${escapeHtml(msg.displayName)}</span><span class="cp-msg-time">${time}</span></div><div class="cp-msg-text">${escapeHtml(msg.text)}</div>`;
+      container.append(div);
+      container.scrollTop = container.scrollHeight;
+      if (!chatVisible) {
+        chatUnread++;
+        const badge = document.getElementById('cp-badge');
+        badge.textContent = chatUnread;
+        badge.style.display = 'inline';
+      }
+    }
+
+    document.getElementById('cp-send').addEventListener('click', sendChatMessage);
+    document.getElementById('cp-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendChatMessage();
+    });
+
+    function sendChatMessage() {
+      const input = document.getElementById('cp-input');
+      const text = input.value.trim();
+      if (!text || !dataChannels || !peerMesh || !currentUser) return;
+      input.value = '';
+      const msg = {
+        id: crypto.randomUUID(),
+        authorPeerId: myPeerId,
+        displayName: currentUser.displayName || 'Anonymous',
+        text,
+        timestamp: Date.now(),
+      };
+      appendChatMessage(msg);
+      dataChannels.sendChat(peerMesh.getAllPeerIds(), msg);
+    }
+
+    document.getElementById('chat-toggle-btn').addEventListener('click', () => {
+      const panel = document.getElementById('chat-panel');
+      panel.classList.toggle('hidden');
+      chatVisible = !panel.classList.contains('hidden');
+      if (chatVisible) {
+        chatUnread = 0;
+        const badge = document.getElementById('cp-badge');
+        badge.style.display = 'none';
+      }
+    });
+
+    function showCommControls() {
+      document.getElementById('comm-controls').classList.remove('hidden');
+      document.getElementById('chat-panel').classList.remove('hidden');
+      chatVisible = true;
+      initMedia();
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Presence Avatars + Pilot Mode (T028–T033) ─────────────────────────────
+    import { PresenceAvatarManager } from '../dist/multiplayer/PresenceAvatarManager.js';
+    import { PilotMode } from '../dist/multiplayer/PilotMode.js';
+
+    function initPresenceAndPilot(cesiumViewer) {
+      presenceAvatarManager = new PresenceAvatarManager(cesiumViewer, { selfPeerId: myPeerId });
+      pilotMode = new PilotMode(cesiumViewer, {
+        selfPeerId: myPeerId,
+        dataChannels,
+        avatarManager: presenceAvatarManager,
+        getPeerIds: () => peerMesh?.getAllPeerIds() ?? [],
+        getPresenceState: (peerId) => presenceAvatarManager?.getLastState(peerId) ?? null,
+      });
+
+      // Wire incoming pilot messages to PilotMode
+      if (dataChannels) {
+        const origOnChat = dataChannels.callbacks.onChat;
+        dataChannels.callbacks.onChat = (fromPeerId, msg) => {
+          origOnChat?.(fromPeerId, msg);
+          if (msg.type === 'pilot-follow') pilotMode?.handlePilotFollow(msg.followerPeerId, msg.targetPeerId);
+          else if (msg.type === 'pilot-leave') pilotMode?.handlePilotLeave(msg.followerPeerId);
+        };
+      }
+
+      // Wire presence updates to avatar manager
+      if (dataChannels) {
+        const origOnPresence = dataChannels.callbacks.onPresence;
+        dataChannels.callbacks.onPresence = (fromPeerId, state) => {
+          origOnPresence?.(fromPeerId, state);
+          presenceAvatarManager?.updatePresence(fromPeerId, state);
+        };
+      }
+
+      // Add avatars for existing peers
+      for (const [peerId, member] of lobbyMembers) {
+        if (peerId !== myPeerId) {
+          presenceAvatarManager.addPeer(peerId, member.displayName, member.avatarUrl);
+        }
+      }
+
+      // Click avatar to pilot
+      const handler = new Cesium.ScreenSpaceEventHandler(cesiumViewer.scene.canvas);
+      handler.setInputAction((click) => {
+        const picked = cesiumViewer.scene.pick(click.position);
+        if (!picked?.id?.id) return;
+        const entityId = picked.id.id;
+        if (!entityId.startsWith('presence-sprite-')) return;
+        const targetPeerId = entityId.replace('presence-sprite-', '');
+        if (targetPeerId === myPeerId) return;
+        showPilotPopover(targetPeerId, click.position);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    }
+
+    let pilotPopover = null;
+    function showPilotPopover(targetPeerId, screenPos) {
+      dismissPilotPopover();
+      const member = lobbyMembers.get(targetPeerId);
+      const name = member?.displayName ?? targetPeerId.slice(0, 8);
+      const isFollowing = pilotMode?.currentPilotPeerId === targetPeerId;
+      const div = document.createElement('div');
+      Object.assign(div.style, {
+        position: 'fixed', left: screenPos.x + 'px', top: screenPos.y + 'px',
+        zIndex: '9999', background: 'rgba(18,18,18,0.95)',
+        border: '1px solid rgba(255,255,255,0.2)', borderRadius: '7px',
+        padding: '8px 12px', color: '#eee', font: '12px sans-serif',
+        backdropFilter: 'blur(6px)', display: 'flex', flexDirection: 'column', gap: '5px',
+      });
+      div.innerHTML = `<div style="font-weight:600;color:#fff">${escapeHtml(name)}</div>`;
+      const btn = document.createElement('button');
+      btn.style.cssText = 'background:rgba(100,200,255,0.12);border:1px solid rgba(100,200,255,0.3);border-radius:4px;color:#7df;padding:4px 10px;cursor:pointer;font:11px sans-serif';
+      btn.textContent = isFollowing ? 'Leave Pilot Mode' : `Follow ${escapeHtml(name)}`;
+      btn.addEventListener('click', () => {
+        if (isFollowing) {
+          pilotMode?.leavePilotMode();
+          activePilotPeerId = null;
+        } else {
+          const result = pilotMode?.followPeer(targetPeerId);
+          if (result === 'following') activePilotPeerId = targetPeerId;
+        }
+        dismissPilotPopover();
+      });
+      div.append(btn);
+      document.body.append(div);
+      pilotPopover = div;
+      setTimeout(() => {
+        document.addEventListener('click', dismissPilotPopover, { once: true });
+      }, 0);
+    }
+
+    function dismissPilotPopover() {
+      pilotPopover?.remove();
+      pilotPopover = null;
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     import { WebXRWildfireCameraSandbox } from '../dist/WebXRWildfireCameraSandbox.js';
     import { WebXRCesiumBridge } from './webxr-bridge.js';
     import { EmergencyRadioDataSource, EmergencyRadioMarkerManager, EmergencyRadioPlayer } from '../dist/index.js';
@@ -514,12 +1913,14 @@
       selectionIndicator: false,
     });
 
+    window._cesiumViewer = viewer;
+
     // Prevent gimbal-lock at exactly -90° pitch (straight down): at that angle
     // Cesium continuously corrects the undefined heading, which fires camera.changed
     // on every frame and prevents the debounce from ever settling.
     viewer.scene.screenSpaceCameraController.minimumPitchAngle = -Cesium.Math.toRadians(89.99);
 
-    const sandbox = new WebXRWildfireCameraSandbox(viewer, {
+    const sandbox = window._sandbox = new WebXRWildfireCameraSandbox(viewer, {
       dataSource: {
         imageUrlPattern: 'https://cameras.alertcalifornia.org/public-camera-data/{id}/latest-frame.jpg'
       },
@@ -545,7 +1946,7 @@
       // apiKey: 'YOUR_BROADCASTIFY_API_KEY', // get free key at broadcastify.com/api
     });
     const radioPlayer = new EmergencyRadioPlayer(viewer.container);
-    const radioMarkers = new EmergencyRadioMarkerManager(viewer, {
+    const radioMarkers = window._radioMarkers = new EmergencyRadioMarkerManager(viewer, {
       onSelect: (feed) => radioPlayer.open(feed),
     });
     radioSource.load()
@@ -782,7 +2183,7 @@
 
     // ── Live Flights ─────────────────────────────────────────────────────────
     const flightSource  = new LiveFlightDataSource({ refreshIntervalMs: 15_000 });
-    const flightMarkers = new LiveFlightMarkerManager(viewer, {
+    const flightMarkers = window._flightMarkers = new LiveFlightMarkerManager(viewer, {
       onSelect: (flight) => {
         const panel = document.getElementById('flight-info');
         if (!flight) { panel.style.display = 'none'; return; }

@@ -1,0 +1,25 @@
+{
+  "name": "alert-cesium-signaling-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WebRTC signaling server for alert-cesium multiplayer lobbies",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^12.1.0",
+    "uuid": "^9.0.1",
+    "ws": "^8.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/uuid": "^9.0.8",
+    "@types/ws": "^8.5.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
