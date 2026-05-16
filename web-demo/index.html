@@ -1222,6 +1222,7 @@
           showCommControls();
         },
         onLobbyJoined: ({ lobby, self, peers, turnCredentials }) => {
+          console.log('[Lobby] joined', lobby.id, 'peers:', peers.map(p => p.peerId));
           activeLobby = lobby;
           myPeerId = self.peerId;
           isHost = lobby.hostPeerId === myPeerId;
@@ -1260,6 +1261,7 @@
           errEl.style.display = 'block';
         },
         onPeerJoined: (peer) => {
+          console.log('[Lobby] peer joined', peer.peerId);
           lobbyMembers.set(peer.peerId, peer);
           const initiate = myPeerId > peer.peerId;
           peerMesh.addPeer(peer.peerId, initiate);

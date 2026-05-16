@@ -38,14 +38,17 @@ export class PeerMesh {
       return this.peers.get(peerId)!.conn;
     }
 
+    console.log(`[PeerMesh] addPeer ${peerId} initiator=${isInitiator} iceServers=${JSON.stringify(this.iceServers)}`);
     const conn = new RTCPeerConnection({ iceServers: this.iceServers });
     this.peers.set(peerId, { conn, isInitiator });
 
     conn.addEventListener('icecandidate', ({ candidate }) => {
+      console.log(`[PeerMesh] icecandidate ${peerId}:`, candidate?.candidate ?? 'null (gathering complete)');
       if (candidate) this.lobbyClient.sendIce(peerId, candidate.toJSON());
     });
 
     conn.addEventListener('connectionstatechange', () => {
+      console.log(`[PeerMesh] connectionstatechange ${peerId}: ${conn.connectionState}`);
       this.callbacks.onConnectionStateChange?.(peerId, conn.connectionState);
       if (conn.connectionState === 'connected') {
         this.callbacks.onConnectionReady?.(peerId, isInitiator);
