@@ -31,6 +31,7 @@ jobs:
       - name: Bundle with Vite
         env:
           VITE_BASE: /alert-cesium/dev/
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
         run: npm run build:site
 
       - uses: peaceiris/actions-gh-pages@v4
