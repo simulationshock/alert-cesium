@@ -158,6 +158,8 @@ export interface LiveFlightDataSourceOptions {
   /** How long to keep track history. Defaults to 3 600 000 (1 hr). */
   trackDurationMs?: number;
   fetcher?: typeof fetch;
+  /** Base URL of the CORS proxy server (e.g. 'https://current-01.simulationshock.com'). */
+  proxyUrl?: string | null;
 }
 
 export interface LiveFlightMarkerManagerOptions {

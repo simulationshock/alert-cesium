@@ -216,6 +216,18 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
     return;
   }
 
+  if (req.method === 'GET' && req.url?.startsWith('/flights?')) {
+    const qs = new URL(req.url, 'http://localhost').searchParams;
+    const lat = qs.get('lat'); const lon = qs.get('lon'); const dist = qs.get('dist');
+    if (!lat || !lon || !dist) { res.writeHead(400); res.end('missing params'); return; }
+    const upstreamUrl = `https://opendata.adsb.fi/api/v2/lat/${lat}/lon/${lon}/dist/${dist}`;
+    fetch(upstreamUrl, { headers: { accept: 'application/json' } })
+      .then(r => r.text())
+      .then(body => { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(body); })
+      .catch(() => { res.writeHead(502); res.end('upstream error'); });
+    return;
+  }
+
   res.writeHead(404);
   res.end();
 };

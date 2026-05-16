@@ -3,7 +3,8 @@ import type { FlightPoint, LiveFlight, LiveFlightDataSourceOptions } from './typ
 // opendata.adsb.fi — free community ADS-B API, no key required, CORS wildcard.
 // Response uses feet for altitude, knots for speed, ft/min for vertical rate.
 // category field (ADS-B emitter category): B1 = rotorcraft, B2 = glider, etc.
-const ADSB_LOL = 'https://opendata.adsb.fi/api/v2/lat/{lat}/lon/{lon}/dist/{nm}';
+const ADSB_DIRECT = 'https://opendata.adsb.fi/api/v2/lat/{lat}/lon/{lon}/dist/{nm}';
+const ADSB_PROXY  = '{proxy}/flights?lat={lat}&lon={lon}&dist={nm}';
 
 /** Compute search circle from a bounding box: centre lat/lon + radius in nautical miles. */
 function bboxToCircle(bbox: [number, number, number, number]): { lat: number; lon: number; nm: number } {
@@ -17,12 +18,13 @@ function bboxToCircle(bbox: [number, number, number, number]): { lat: number; lo
   return { lat, lon, nm: Math.min(Math.ceil(km / 1.852) + 60, 250) }; // capped at adsb.fi's 250 nm limit
 }
 
-/** Polls adsb.lol for real-time ADS-B state vectors. Free, no API key, CORS-open. */
+/** Polls adsb.fi for real-time ADS-B state vectors via an optional CORS proxy. */
 export class LiveFlightDataSource {
   private readonly bbox: [number, number, number, number];
   private readonly refreshIntervalMs: number;
   private readonly trackDurationMs: number;
   private readonly fetcher: typeof fetch;
+  private readonly proxyUrl: string | null;
 
   private _tracks = new Map<string, FlightPoint[]>();
   private _handle: ReturnType<typeof setInterval> | undefined;
@@ -36,6 +38,7 @@ export class LiveFlightDataSource {
     this.refreshIntervalMs = options.refreshIntervalMs ?? 15_000;
     this.trackDurationMs   = options.trackDurationMs   ?? 3_600_000;
     this.fetcher           = options.fetcher           ?? fetch.bind(globalThis);
+    this.proxyUrl          = options.proxyUrl          ?? null;
   }
 
   async start(): Promise<void> {
@@ -62,7 +65,10 @@ export class LiveFlightDataSource {
   private async _poll(): Promise<void> {
     if (this._destroyed) return;
     const { lat, lon, nm } = bboxToCircle(this.bbox);
-    const url = ADSB_LOL.replace('{lat}', String(lat)).replace('{lon}', String(lon)).replace('{nm}', String(nm));
+    const template = this.proxyUrl
+      ? ADSB_PROXY.replace('{proxy}', this.proxyUrl)
+      : ADSB_DIRECT;
+    const url = template.replace('{lat}', String(lat)).replace('{lon}', String(lon)).replace('{nm}', String(nm));
     try {
       const res = await this.fetcher(url, { headers: { accept: 'application/json' } });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);

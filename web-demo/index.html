@@ -2182,7 +2182,10 @@
       .catch(console.error);
 
     // ── Live Flights ─────────────────────────────────────────────────────────
-    const flightSource  = new LiveFlightDataSource({ refreshIntervalMs: 15_000 });
+    const FLIGHT_PROXY = window.SIGNALING_URL
+      ? window.SIGNALING_URL.replace(/^ws/, 'http')
+      : null;
+    const flightSource  = new LiveFlightDataSource({ refreshIntervalMs: 15_000, proxyUrl: FLIGHT_PROXY });
     const flightMarkers = window._flightMarkers = new LiveFlightMarkerManager(viewer, {
       onSelect: (flight) => {
         const panel = document.getElementById('flight-info');
