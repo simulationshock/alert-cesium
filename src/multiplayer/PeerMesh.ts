@@ -55,6 +55,14 @@ export class PeerMesh {
       }
     });
 
+    conn.addEventListener('icegatheringstatechange', () => {
+      console.log(`[PeerMesh] icegatheringstatechange ${peerId}: ${conn.iceGatheringState}`);
+    });
+
+    conn.addEventListener('iceconnectionstatechange', () => {
+      console.log(`[PeerMesh] iceconnectionstatechange ${peerId}: ${conn.iceConnectionState}`);
+    });
+
     conn.addEventListener('datachannel', ({ channel }) => {
       if (channel.label === 'transfer-state') {
         this.handleTransferStateChannel(peerId, channel);
