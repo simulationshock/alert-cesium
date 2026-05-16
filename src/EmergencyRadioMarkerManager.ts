@@ -180,12 +180,12 @@ export class EmergencyRadioMarkerManager {
     }
 
     let count = 0;
-    for (const [, feeds] of [...onScreen, ...geoFallback]) {
+    for (const [key, feeds] of [...onScreen, ...geoFallback]) {
       if (count >= this.options.maximumVisibleMarkers) break;
       if (feeds.length === 1) {
         this.addFeedEntity(feeds[0]);
       } else {
-        this.addClusterEntity(feeds);
+        this.addClusterEntity(key, feeds);
       }
       count++;
     }
@@ -299,7 +299,7 @@ export class EmergencyRadioMarkerManager {
     this.viewer.entities.add(entity);
   }
 
-  private addClusterEntity(feeds: ResolvedEmergencyRadioFeed[]): void {
+  private addClusterEntity(bucketKey: string, feeds: ResolvedEmergencyRadioFeed[]): void {
     const lat = avg(feeds.map(f => f.latitude));
     const lon = avg(feeds.map(f => f.longitude));
     // Dominant category in this cell
@@ -309,7 +309,7 @@ export class EmergencyRadioMarkerManager {
       .sort((a, b) => b[1] - a[1])[0][0];
 
     const entity = new Entity({
-      id: `radio-cluster:${lon.toFixed(3)}:${lat.toFixed(3)}`,
+      id: `radio-cluster:${bucketKey}`,
       name: `${feeds.length} radio feeds`,
       position: Cartesian3.fromDegrees(lon, lat),
       billboard: {
