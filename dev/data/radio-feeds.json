@@ -1,0 +1,4920 @@
+[
+  {
+    "id": "46906",
+    "name": "*Alameda County Fire Agencies",
+    "county": "Alameda",
+    "latitude": 37.609203,
+    "longitude": -121.899233,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46906"
+  },
+  {
+    "id": "45043",
+    "name": "Alameda City Police",
+    "county": "Alameda",
+    "latitude": 37.588198,
+    "longitude": -122.03616,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45043"
+  },
+  {
+    "id": "11878",
+    "name": "Alameda County Fire",
+    "county": "Alameda",
+    "latitude": 37.608996,
+    "longitude": -121.899245,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/11878"
+  },
+  {
+    "id": "45042",
+    "name": "Albany Police and Fire Dispatch",
+    "county": "Alameda",
+    "latitude": 37.887064,
+    "longitude": -122.298154,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45042"
+  },
+  {
+    "id": "43420",
+    "name": "Bay Area Rapid Transit (BART) - Rail Operations",
+    "county": "Alameda",
+    "latitude": 37.651522,
+    "longitude": -121.919448,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43420"
+  },
+  {
+    "id": "16325",
+    "name": "Berkeley Police and Fire",
+    "county": "Alameda",
+    "latitude": 37.870635,
+    "longitude": -122.272984,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/16325",
+    "listeners": 2
+  },
+  {
+    "id": "25976",
+    "name": "California Highway Patrol - Alameda County",
+    "county": "Alameda",
+    "latitude": 37.651506,
+    "longitude": -121.919456,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25976",
+    "listeners": 5
+  },
+  {
+    "id": "34734",
+    "name": "California Highway Patrol - Oakland",
+    "county": "Alameda",
+    "latitude": 37.651455,
+    "longitude": -121.919673,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/34734"
+  },
+  {
+    "id": "30135",
+    "name": "Calnet Repeater System",
+    "county": "Alameda",
+    "latitude": 33.684333,
+    "longitude": -117.870227,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30135",
+    "listeners": 1
+  },
+  {
+    "id": "45041",
+    "name": "East Bay Regional Parks District Police and Fire",
+    "county": "Alameda",
+    "latitude": 33.681234,
+    "longitude": -117.259344,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45041"
+  },
+  {
+    "id": "22816",
+    "name": "East Bay Regional Parks Fire Dispatch",
+    "county": "Alameda",
+    "latitude": 33.68091,
+    "longitude": -117.259394,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/22816",
+    "listeners": 1
+  },
+  {
+    "id": "45040",
+    "name": "Emeryville Police",
+    "county": "Alameda",
+    "latitude": 37.831206,
+    "longitude": -122.286457,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45040"
+  },
+  {
+    "id": "27948",
+    "name": "Monterey Area Marine NOAA Weather Radio WWF64",
+    "county": "Alameda",
+    "latitude": 37.65145,
+    "longitude": -121.919729,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27948",
+    "listeners": 2
+  },
+  {
+    "id": "27949",
+    "name": "Monterey Area NOAA Weather Radio KEC49",
+    "county": "Alameda",
+    "latitude": 37.651914,
+    "longitude": -121.919591,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27949",
+    "listeners": 3
+  },
+  {
+    "id": "45054",
+    "name": "Newark Police Department",
+    "county": "Alameda",
+    "latitude": 37.529723,
+    "longitude": -122.040123,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45054"
+  },
+  {
+    "id": "28310",
+    "name": "Oakland Fire",
+    "county": "Alameda",
+    "latitude": 37.804652,
+    "longitude": -122.271535,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28310",
+    "listeners": 4
+  },
+  {
+    "id": "45039",
+    "name": "Oakland Fire Department",
+    "county": "Alameda",
+    "latitude": 37.804606,
+    "longitude": -122.271279,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45039"
+  },
+  {
+    "id": "45038",
+    "name": "Oakland Police Department",
+    "county": "Alameda",
+    "latitude": 37.804576,
+    "longitude": -122.271223,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45038"
+  },
+  {
+    "id": "45053",
+    "name": "Ohlone Community College District Police Department",
+    "county": "Alameda",
+    "latitude": 37.651812,
+    "longitude": -121.919615,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45053"
+  },
+  {
+    "id": "45037",
+    "name": "Piedmont Police and Fire Dispatch",
+    "county": "Alameda",
+    "latitude": 37.824365,
+    "longitude": -122.231808,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45037"
+  },
+  {
+    "id": "45036",
+    "name": "San Leandro Police",
+    "county": "Alameda",
+    "latitude": 37.724889,
+    "longitude": -122.156323,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45036"
+  },
+  {
+    "id": "33286",
+    "name": "San Leandro Police Dispatch PD1",
+    "county": "Alameda",
+    "latitude": 37.725032,
+    "longitude": -122.156013,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33286",
+    "listeners": 1
+  },
+  {
+    "id": "31194",
+    "name": "WB6NDJ 146.8800 MHz ORCA Repeater",
+    "county": "Alameda",
+    "latitude": 37.651771,
+    "longitude": -121.91971,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31194",
+    "listeners": 1
+  },
+  {
+    "id": "28469",
+    "name": "Calaveras and Alpine Counties Fire, Cal Fire and USFS",
+    "county": "Alpine",
+    "latitude": 38.597639,
+    "longitude": -119.82151,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28469",
+    "listeners": 2
+  },
+  {
+    "id": "44061",
+    "name": "Reno NV NOAA Weather Radio WXK58",
+    "county": "Alpine",
+    "latitude": 38.597635,
+    "longitude": -119.821332,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44061"
+  },
+  {
+    "id": "45300",
+    "name": "CAL FIRE AEU",
+    "county": "Amador",
+    "latitude": 38.54303,
+    "longitude": -120.543435,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45300"
+  },
+  {
+    "id": "45443",
+    "name": "California Highway Patrol - Stockton",
+    "county": "Amador",
+    "latitude": 38.44643,
+    "longitude": -120.654044,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45443",
+    "listeners": 2
+  },
+  {
+    "id": "16015",
+    "name": "El Dorado and Amador Counties Public Safety",
+    "county": "Amador",
+    "latitude": 38.44639,
+    "longitude": -120.654154,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/16015",
+    "listeners": 10
+  },
+  {
+    "id": "45297",
+    "name": "ENF USFS Fire",
+    "county": "Amador",
+    "latitude": 38.446302,
+    "longitude": -120.654328,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45297"
+  },
+  {
+    "id": "34488",
+    "name": "Northern California NOAA Weather Radio",
+    "county": "Amador",
+    "latitude": 38.446111,
+    "longitude": -120.654282,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/34488",
+    "listeners": 3
+  },
+  {
+    "id": "41737",
+    "name": "*CalFire BTU, Chico Fire, USFS LNF, USFS PNF",
+    "county": "Butte",
+    "latitude": 39.669619,
+    "longitude": -121.601601,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41737",
+    "listeners": 5
+  },
+  {
+    "id": "40874",
+    "name": "Butte BTU Dispatch - Command",
+    "county": "Butte",
+    "latitude": 39.651919,
+    "longitude": -121.586026,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40874",
+    "listeners": 2
+  },
+  {
+    "id": "43213",
+    "name": "Butte County Disaster Event",
+    "county": "Butte",
+    "latitude": 39.652108,
+    "longitude": -121.585939,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43213"
+  },
+  {
+    "id": "1929",
+    "name": "Butte County Fire / CalFire, Chico Fire",
+    "county": "Butte",
+    "latitude": 39.652021,
+    "longitude": -121.585894,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/1929",
+    "listeners": 68
+  },
+  {
+    "id": "45191",
+    "name": "CAL FIRE BTU",
+    "county": "Butte",
+    "latitude": 39.753207,
+    "longitude": -121.62502,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45191",
+    "listeners": 2
+  },
+  {
+    "id": "32375",
+    "name": "California Highway Patrol Chico Dispatch",
+    "county": "Butte",
+    "latitude": 39.66958,
+    "longitude": -121.601609,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32375",
+    "listeners": 5
+  },
+  {
+    "id": "44016",
+    "name": "Chico Fire Dispatch",
+    "county": "Butte",
+    "latitude": 39.728332,
+    "longitude": -121.837701,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44016"
+  },
+  {
+    "id": "43288",
+    "name": "Park Fire Tacticals",
+    "county": "Butte",
+    "latitude": 34.027562,
+    "longitude": -117.656516,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43288"
+  },
+  {
+    "id": "41042",
+    "name": "*CalFire TCU, USFS STF",
+    "county": "Calaveras",
+    "latitude": 38.201846,
+    "longitude": -120.55662,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41042"
+  },
+  {
+    "id": "13524",
+    "name": "Calaveras County Sheriff, Calaveras and Tuolumne Counties CAL FIRE Dispatch",
+    "county": "Calaveras",
+    "latitude": 38.255619,
+    "longitude": -120.498024,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/13524",
+    "listeners": 9
+  },
+  {
+    "id": "36088",
+    "name": "Central Calaveras Fire and Rescue",
+    "county": "Calaveras",
+    "latitude": 38.086523,
+    "longitude": -120.546711,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36088"
+  },
+  {
+    "id": "46514",
+    "name": "*Colusa County Fire agencies",
+    "county": "Colusa",
+    "latitude": 39.146423,
+    "longitude": -122.220889,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46514"
+  },
+  {
+    "id": "29973",
+    "name": "Bear Valley Indian Valley Fire",
+    "county": "Colusa",
+    "latitude": 34.285206,
+    "longitude": -118.688336,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/29973"
+  },
+  {
+    "id": "18865",
+    "name": "Colusa Fire",
+    "county": "Colusa",
+    "latitude": 39.146755,
+    "longitude": -122.220775,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/18865",
+    "listeners": 1
+  },
+  {
+    "id": "20023",
+    "name": "Maxwell Fire Protection District",
+    "county": "Colusa",
+    "latitude": 39.276341,
+    "longitude": -122.196531,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20023"
+  },
+  {
+    "id": "45458",
+    "name": "Princeton Fire",
+    "county": "Colusa",
+    "latitude": 39.402095,
+    "longitude": -122.020001,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45458"
+  },
+  {
+    "id": "20913",
+    "name": "Sacramento River Fire",
+    "county": "Colusa",
+    "latitude": 40.621288,
+    "longitude": -122.445926,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20913"
+  },
+  {
+    "id": "15215",
+    "name": "Williams Fire Protection Authority",
+    "county": "Colusa",
+    "latitude": 39.154692,
+    "longitude": -122.149732,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/15215",
+    "listeners": 1
+  },
+  {
+    "id": "709",
+    "name": "CalFIRE SCU - Contra Costa County",
+    "county": "Contra Costa",
+    "latitude": 37.916215,
+    "longitude": -121.915447,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/709"
+  },
+  {
+    "id": "17110",
+    "name": "California Highway Patrol - Contra Costa and Dublin Areas",
+    "county": "Contra Costa",
+    "latitude": 37.916258,
+    "longitude": -121.915352,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/17110",
+    "listeners": 1
+  },
+  {
+    "id": "32577",
+    "name": "ConFire East - Dispatch and Tac",
+    "county": "Contra Costa",
+    "latitude": 37.916127,
+    "longitude": -121.915189,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32577",
+    "listeners": 1
+  },
+  {
+    "id": "21468",
+    "name": "Contra Costa County Fire - Central",
+    "county": "Contra Costa",
+    "latitude": 37.903232,
+    "longitude": -121.917542,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/21468",
+    "listeners": 2
+  },
+  {
+    "id": "21765",
+    "name": "Contra Costa County Fire - East",
+    "county": "Contra Costa",
+    "latitude": 37.903305,
+    "longitude": -121.917726,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/21765",
+    "listeners": 2
+  },
+  {
+    "id": "31535",
+    "name": "Contra Costa County Fire Dispatch - East",
+    "county": "Contra Costa",
+    "latitude": 37.903607,
+    "longitude": -121.917503,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31535"
+  },
+  {
+    "id": "12911",
+    "name": "Contra Costa County Fire Protection District",
+    "county": "Contra Costa",
+    "latitude": 37.903231,
+    "longitude": -121.917358,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/12911",
+    "listeners": 8
+  },
+  {
+    "id": "37939",
+    "name": "K6POU Amateur Radio Repeater 145.330 MHz",
+    "county": "Contra Costa",
+    "latitude": 37.916305,
+    "longitude": -121.915334,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37939",
+    "listeners": 1
+  },
+  {
+    "id": "33365",
+    "name": "Richmond &amp; El Cerrito Fire, Contra Costa County Fire West Dispatch",
+    "county": "Contra Costa",
+    "latitude": 37.916298,
+    "longitude": -121.915088,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33365",
+    "listeners": 5
+  },
+  {
+    "id": "45052",
+    "name": "Richmond Police Department",
+    "county": "Contra Costa",
+    "latitude": 37.935919,
+    "longitude": -122.347536,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45052"
+  },
+  {
+    "id": "870",
+    "name": "San Ramon Valley Fire Protection District",
+    "county": "Contra Costa",
+    "latitude": 37.825843,
+    "longitude": -122.007572,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/870",
+    "listeners": 2
+  },
+  {
+    "id": "16364",
+    "name": "Del Norte County Sheriff, CCPD, Fire, EMS &amp; CHP",
+    "county": "Del Norte",
+    "latitude": 41.726016,
+    "longitude": -123.913076,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/16364",
+    "listeners": 20
+  },
+  {
+    "id": "31541",
+    "name": "Del Norte County/Crescent City Law, Fire and EMS",
+    "county": "Del Norte",
+    "latitude": 41.726269,
+    "longitude": -123.91312,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31541",
+    "listeners": 3
+  },
+  {
+    "id": "45298",
+    "name": "CAL FIRE NEU/AEU/TCU/SCU Air",
+    "county": "El Dorado",
+    "latitude": 38.778572,
+    "longitude": -120.52468,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45298",
+    "listeners": 1
+  },
+  {
+    "id": "46984",
+    "name": "Pioneer Fire Dispatch",
+    "county": "El Dorado",
+    "latitude": 38.431606,
+    "longitude": -120.571883,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46984"
+  },
+  {
+    "id": "39038",
+    "name": "*CalFire FKU, Fresno County Fire, USFS SNF, Kings Canyon National Park, Sequoia National Park",
+    "county": "Fresno",
+    "latitude": 36.737799,
+    "longitude": -119.787096,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39038",
+    "listeners": 3
+  },
+  {
+    "id": "38264",
+    "name": "Air Attack (A/G) Fresno CalFire - Sierra Forest Net",
+    "county": "Fresno",
+    "latitude": 36.737881,
+    "longitude": -119.787028,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38264",
+    "listeners": 1
+  },
+  {
+    "id": "43528",
+    "name": "Air Base (FAT): CHP/Sheriff/Cal-Fire/Air Attack",
+    "county": "Fresno",
+    "latitude": 36.737871,
+    "longitude": -119.786873,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43528"
+  },
+  {
+    "id": "46975",
+    "name": "Auberry Prather Tollhouse Foothills (Calfire &amp; Fresno Sheriff)",
+    "county": "Fresno",
+    "latitude": 36.737803,
+    "longitude": -119.787236,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46975"
+  },
+  {
+    "id": "28779",
+    "name": "California Highway Patrol - Fresno",
+    "county": "Fresno",
+    "latitude": 36.73766,
+    "longitude": -119.787227,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28779",
+    "listeners": 1
+  },
+  {
+    "id": "33706",
+    "name": "Central Sierra Fire Tactical Feed",
+    "county": "Fresno",
+    "latitude": 34.11573,
+    "longitude": -117.436315,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33706"
+  },
+  {
+    "id": "46524",
+    "name": "City of Clovis Fire Command/Tac",
+    "county": "Fresno",
+    "latitude": 36.73803,
+    "longitude": -119.787007,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46524"
+  },
+  {
+    "id": "46525",
+    "name": "CLOVIS FIRE DISPATCH/COMMAND/TAC",
+    "county": "Fresno",
+    "latitude": 36.8251,
+    "longitude": -119.702862,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46525"
+  },
+  {
+    "id": "39929",
+    "name": "Clovis Police Dispatch/Primary",
+    "county": "Fresno",
+    "latitude": 36.825026,
+    "longitude": -119.702709,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39929",
+    "listeners": 8
+  },
+  {
+    "id": "33406",
+    "name": "Eastern Fresno County Fire Dispatch (includes Selma, Sanger, Kingsburg and Reedley)",
+    "county": "Fresno",
+    "latitude": 37.152424,
+    "longitude": -119.087228,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33406",
+    "listeners": 1
+  },
+  {
+    "id": "13549",
+    "name": "Fresno City Police, Fire and EMS",
+    "county": "Fresno",
+    "latitude": 36.808394,
+    "longitude": -119.882321,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/13549",
+    "listeners": 57
+  },
+  {
+    "id": "34434",
+    "name": "Fresno County Sheriff - Sanger/Parlier/Fowler/Orange Cove/Kingsburg",
+    "county": "Fresno",
+    "latitude": 36.739441,
+    "longitude": -119.784765,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/34434",
+    "listeners": 14
+  },
+  {
+    "id": "40750",
+    "name": "Fresno County Sheriff 2: Dispatch Areas 1 (Orange, West); 2 (Yellow, Metro); &amp; 4 (Green, East)",
+    "county": "Fresno",
+    "latitude": 36.739208,
+    "longitude": -119.784844,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40750"
+  },
+  {
+    "id": "47040",
+    "name": "Kingsburg Fire and Ambulance",
+    "county": "Fresno",
+    "latitude": 36.513775,
+    "longitude": -119.553882,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47040"
+  },
+  {
+    "id": "46252",
+    "name": "NOAA Weather Radio Hanford,CA (KIH62)",
+    "county": "Fresno",
+    "latitude": 32.918808,
+    "longitude": -117.042224,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46252"
+  },
+  {
+    "id": "34252",
+    "name": "Selma Police Dispatch",
+    "county": "Fresno",
+    "latitude": 36.570896,
+    "longitude": -119.611933,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/34252",
+    "listeners": 2
+  },
+  {
+    "id": "35962",
+    "name": "CALFIRE SHU/TGU/SKU Dispatch",
+    "county": "Glenn",
+    "latitude": 39.597791,
+    "longitude": -122.392415,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/35962",
+    "listeners": 14
+  },
+  {
+    "id": "44846",
+    "name": "Glenn County Sheriff&#039;s Office",
+    "county": "Glenn",
+    "latitude": 39.591194,
+    "longitude": -122.37795,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44846",
+    "listeners": 2
+  },
+  {
+    "id": "16415",
+    "name": "Orland Volunteer Fire",
+    "county": "Glenn",
+    "latitude": 39.746023,
+    "longitude": -122.195658,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/16415"
+  },
+  {
+    "id": "39389",
+    "name": "Arcata Fire Command",
+    "county": "Humboldt",
+    "latitude": 40.866624,
+    "longitude": -124.083021,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39389"
+  },
+  {
+    "id": "27584",
+    "name": "Arcata Fire District",
+    "county": "Humboldt",
+    "latitude": 40.86631,
+    "longitude": -124.082956,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27584"
+  },
+  {
+    "id": "41382",
+    "name": "Cal Fire HUU - South",
+    "county": "Humboldt",
+    "latitude": 40.744779,
+    "longitude": -123.869408,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41382"
+  },
+  {
+    "id": "24351",
+    "name": "Humboldt County Law, Fire and EMS - Eureka and North",
+    "county": "Humboldt",
+    "latitude": 40.59968,
+    "longitude": -123.899541,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24351",
+    "listeners": 29
+  },
+  {
+    "id": "7047",
+    "name": "Humboldt County Law, Fire and EMS - Eureka and South",
+    "county": "Humboldt",
+    "latitude": 40.599978,
+    "longitude": -123.899593,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/7047",
+    "listeners": 21
+  },
+  {
+    "id": "46477",
+    "name": "Humboldt County Public Safety - South",
+    "county": "Humboldt",
+    "latitude": 40.599651,
+    "longitude": -123.900005,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46477",
+    "listeners": 4
+  },
+  {
+    "id": "44917",
+    "name": "Calexico Fire",
+    "county": "Imperial",
+    "latitude": 32.671426,
+    "longitude": -115.492714,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44917"
+  },
+  {
+    "id": "44915",
+    "name": "Calipatria Fire",
+    "county": "Imperial",
+    "latitude": 33.125673,
+    "longitude": -115.513832,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44915"
+  },
+  {
+    "id": "42818",
+    "name": "Coachella NOAA Weather Radio (KIG78)",
+    "county": "Imperial",
+    "latitude": 33.044497,
+    "longitude": -115.36084,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42818",
+    "listeners": 2
+  },
+  {
+    "id": "46129",
+    "name": "NOAA Weather Radio Coachella (WNG712)",
+    "county": "Imperial",
+    "latitude": 32.919078,
+    "longitude": -117.042226,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46129"
+  },
+  {
+    "id": "42303",
+    "name": "NOAA Weather Radio Yuma WXL87",
+    "county": "Imperial",
+    "latitude": 32.919126,
+    "longitude": -117.0422,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42303"
+  },
+  {
+    "id": "21410",
+    "name": "W6ZN 145.2800 MHz Palomar Mt. Repeater",
+    "county": "Imperial",
+    "latitude": 33.044478,
+    "longitude": -115.360945,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/21410",
+    "listeners": 4
+  },
+  {
+    "id": "18587",
+    "name": "Big Pine Fire",
+    "county": "Inyo",
+    "latitude": 37.162443,
+    "longitude": -118.289478,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/18587"
+  },
+  {
+    "id": "24283",
+    "name": "Bishop Fire",
+    "county": "Inyo",
+    "latitude": 37.363712,
+    "longitude": -118.395262,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24283"
+  },
+  {
+    "id": "17537",
+    "name": "Independence Fire Protection District",
+    "county": "Inyo",
+    "latitude": 36.822009,
+    "longitude": -118.205254,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/17537"
+  },
+  {
+    "id": "20029",
+    "name": "Inyo County Sheriff, Fire and EMS, CHP Gold",
+    "county": "Inyo",
+    "latitude": 36.559622,
+    "longitude": -117.4074,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20029",
+    "listeners": 6
+  },
+  {
+    "id": "27712",
+    "name": "Lone Pine Fire",
+    "county": "Inyo",
+    "latitude": 36.583019,
+    "longitude": -118.078139,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27712",
+    "listeners": 1
+  },
+  {
+    "id": "25401",
+    "name": "Olancha Cartago Fire",
+    "county": "Inyo",
+    "latitude": 36.272788,
+    "longitude": -118.006899,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25401"
+  },
+  {
+    "id": "45166",
+    "name": "*Kern County Fire",
+    "county": "Kern",
+    "latitude": 35.314442,
+    "longitude": -118.753808,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45166",
+    "listeners": 1
+  },
+  {
+    "id": "45474",
+    "name": "Bakersfield Fire / Kern County Fire / USFS",
+    "county": "Kern",
+    "latitude": 35.374012,
+    "longitude": -119.019369,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45474",
+    "listeners": 7
+  },
+  {
+    "id": "45473",
+    "name": "Bakersfield PD / Kern County Sheriff",
+    "county": "Kern",
+    "latitude": 35.37316,
+    "longitude": -119.018505,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45473",
+    "listeners": 14
+  },
+  {
+    "id": "14029",
+    "name": "Bakersfield Police, Fire and EMS",
+    "county": "Kern",
+    "latitude": 35.373627,
+    "longitude": -119.019401,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/14029",
+    "listeners": 8
+  },
+  {
+    "id": "46687",
+    "name": "CHP - Bakersfield Dispatch",
+    "county": "Kern",
+    "latitude": 35.373744,
+    "longitude": -119.019515,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46687"
+  },
+  {
+    "id": "41023",
+    "name": "Joshua ATCC R-2505",
+    "county": "Kern",
+    "latitude": 35.373333,
+    "longitude": -119.01849,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41023",
+    "listeners": 1
+  },
+  {
+    "id": "46383",
+    "name": "KCSO West Dispatch/Taft PD/CHP Brown",
+    "county": "Kern",
+    "latitude": 38.238586,
+    "longitude": -121.482257,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46383",
+    "listeners": 3
+  },
+  {
+    "id": "40009",
+    "name": "Kern County Fire",
+    "county": "Kern",
+    "latitude": 35.314672,
+    "longitude": -118.753901,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40009",
+    "listeners": 2
+  },
+  {
+    "id": "36357",
+    "name": "KR6DK Repeater Network",
+    "county": "Kern",
+    "latitude": 35.373242,
+    "longitude": -119.018709,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36357"
+  },
+  {
+    "id": "34429",
+    "name": "W6LIE 145.15 MHz Amateur Radio Repeater",
+    "county": "Kern",
+    "latitude": 35.373446,
+    "longitude": -119.018494,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/34429"
+  },
+  {
+    "id": "46854",
+    "name": "Hanford Fire Department",
+    "county": "Kings",
+    "latitude": 36.327697,
+    "longitude": -119.646309,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46854",
+    "listeners": 2
+  },
+  {
+    "id": "40338",
+    "name": "Kings County Fire/EMS",
+    "county": "Kings",
+    "latitude": 36.078524,
+    "longitude": -119.795653,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40338"
+  },
+  {
+    "id": "40339",
+    "name": "Kings County Law Enforcement",
+    "county": "Kings",
+    "latitude": 36.078501,
+    "longitude": -119.795389,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40339",
+    "listeners": 2
+  },
+  {
+    "id": "39686",
+    "name": "Kings County Public Safety",
+    "county": "Kings",
+    "latitude": 36.078516,
+    "longitude": -119.795749,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39686",
+    "listeners": 4
+  },
+  {
+    "id": "9276",
+    "name": "Kings County Sheriff and Corcoran Police",
+    "county": "Kings",
+    "latitude": 36.078729,
+    "longitude": -119.795764,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/9276",
+    "listeners": 14
+  },
+  {
+    "id": "46501",
+    "name": "KK6AC Repeater - Gorman",
+    "county": "Kings",
+    "latitude": 36.075258,
+    "longitude": -119.815948,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46501"
+  },
+  {
+    "id": "39431",
+    "name": "Cal Fire Air",
+    "county": "Lake",
+    "latitude": 37.664358,
+    "longitude": -122.124655,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39431",
+    "listeners": 2
+  },
+  {
+    "id": "39444",
+    "name": "Dispatch LNU, MRN, Napa, Lake",
+    "county": "Lake",
+    "latitude": 39.096746,
+    "longitude": -122.754103,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39444",
+    "listeners": 2
+  },
+  {
+    "id": "47138",
+    "name": "Lake County Backup Feed",
+    "county": "Lake",
+    "latitude": 39.050624,
+    "longitude": -122.777591,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47138"
+  },
+  {
+    "id": "47179",
+    "name": "Lake County Fire Agencies",
+    "county": "Lake",
+    "latitude": 39.050772,
+    "longitude": -122.777478,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47179"
+  },
+  {
+    "id": "30531",
+    "name": "Lake County Fire and Law",
+    "county": "Lake",
+    "latitude": 39.050584,
+    "longitude": -122.777802,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30531",
+    "listeners": 12
+  },
+  {
+    "id": "44060",
+    "name": "Fernley NV NOAA Weather Radio WWG20",
+    "county": "Lassen",
+    "latitude": 40.67417,
+    "longitude": -120.594757,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44060"
+  },
+  {
+    "id": "36152",
+    "name": "Lassen County Fire and EMS Dispatch",
+    "county": "Lassen",
+    "latitude": 40.768551,
+    "longitude": -120.731098,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36152",
+    "listeners": 3
+  },
+  {
+    "id": "39051",
+    "name": "Lassen County Sheriff and Susanville Police Dispatch",
+    "county": "Lassen",
+    "latitude": 40.768331,
+    "longitude": -120.730834,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39051",
+    "listeners": 8
+  },
+  {
+    "id": "46386",
+    "name": "Susanville Municipal Airport",
+    "county": "Lassen",
+    "latitude": 40.416113,
+    "longitude": -120.65299,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46386"
+  },
+  {
+    "id": "36039",
+    "name": "447.140 MHz WA6TTL Gronk Radio Network",
+    "county": "Los Angeles",
+    "latitude": 34.05221,
+    "longitude": -118.243709,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36039"
+  },
+  {
+    "id": "45466",
+    "name": "Allstar Node #554710",
+    "county": "Los Angeles",
+    "latitude": 34.05216,
+    "longitude": -118.243572,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45466"
+  },
+  {
+    "id": "45467",
+    "name": "Allstar Node #554711",
+    "county": "Los Angeles",
+    "latitude": 34.05212,
+    "longitude": -118.243455,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45467"
+  },
+  {
+    "id": "45468",
+    "name": "Allstar Node #554712",
+    "county": "Los Angeles",
+    "latitude": 34.052429,
+    "longitude": -118.243513,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45468"
+  },
+  {
+    "id": "46283",
+    "name": "Allstar Node #554713",
+    "county": "Los Angeles",
+    "latitude": 34.052258,
+    "longitude": -118.243577,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46283"
+  },
+  {
+    "id": "46282",
+    "name": "Allstar Node #554714",
+    "county": "Los Angeles",
+    "latitude": 34.052277,
+    "longitude": -118.24347,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46282"
+  },
+  {
+    "id": "42898",
+    "name": "AMR Santa Clarita Dispatch",
+    "county": "Los Angeles",
+    "latitude": 34.413015,
+    "longitude": -118.553932,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42898"
+  },
+  {
+    "id": "25757",
+    "name": "Angeles National Forest Fire Net",
+    "county": "Los Angeles",
+    "latitude": 34.053789,
+    "longitude": -118.242683,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25757",
+    "listeners": 2
+  },
+  {
+    "id": "46565",
+    "name": "Arcadia Public Safety",
+    "county": "Los Angeles",
+    "latitude": 34.136252,
+    "longitude": -118.040151,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46565"
+  },
+  {
+    "id": "41894",
+    "name": "Burbank Police Primary Dispatch",
+    "county": "Los Angeles",
+    "latitude": 34.181031,
+    "longitude": -118.306957,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41894",
+    "listeners": 8
+  },
+  {
+    "id": "10239",
+    "name": "California Highway Patrol - Los Angeles and Orange County Centers",
+    "county": "Los Angeles",
+    "latitude": 34.052255,
+    "longitude": -118.243632,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/10239",
+    "listeners": 4
+  },
+  {
+    "id": "27487",
+    "name": "Claremont Police and Amateur Radio",
+    "county": "Los Angeles",
+    "latitude": 34.096696,
+    "longitude": -117.719932,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27487",
+    "listeners": 1
+  },
+  {
+    "id": "41348",
+    "name": "K6HOG 445.0400 MHz Contractors Point Repeater",
+    "county": "Los Angeles",
+    "latitude": 34.052037,
+    "longitude": -118.243637,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41348",
+    "listeners": 2
+  },
+  {
+    "id": "14747",
+    "name": "K6MWT 147.4350 MHz Los Angeles Renegade Repeater",
+    "county": "Los Angeles",
+    "latitude": 34.05232,
+    "longitude": -118.243894,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/14747",
+    "listeners": 6
+  },
+  {
+    "id": "24403",
+    "name": "K6VGP - DARN Repeater Network",
+    "county": "Los Angeles",
+    "latitude": 34.052021,
+    "longitude": -118.243928,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24403"
+  },
+  {
+    "id": "25419",
+    "name": "KW6USA 147.4500 MHz Renegade Repeater",
+    "county": "Los Angeles",
+    "latitude": 34.052366,
+    "longitude": -118.243507,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25419",
+    "listeners": 9
+  },
+  {
+    "id": "19346",
+    "name": "LA County Fire - U-1 &amp; U-2 Countywide Dispatch (scan)",
+    "county": "Los Angeles",
+    "latitude": 34.052134,
+    "longitude": -118.243512,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/19346",
+    "listeners": 4
+  },
+  {
+    "id": "8684",
+    "name": "LA County Fire: D-3 TRO &amp; Command C30-C33",
+    "county": "Los Angeles",
+    "latitude": 34.052438,
+    "longitude": -118.243563,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/8684",
+    "listeners": 1
+  },
+  {
+    "id": "20296",
+    "name": "LAPD - South Bureau",
+    "county": "Los Angeles",
+    "latitude": 34.052119,
+    "longitude": -118.243571,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20296",
+    "listeners": 10
+  },
+  {
+    "id": "33910",
+    "name": "LAPD Dispatch - Harbor (5)",
+    "county": "Los Angeles",
+    "latitude": 34.052283,
+    "longitude": -118.243944,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33910",
+    "listeners": 6
+  },
+  {
+    "id": "20274",
+    "name": "LAPD Dispatch - Pacific Division",
+    "county": "Los Angeles",
+    "latitude": 34.052343,
+    "longitude": -118.243669,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20274",
+    "listeners": 3
+  },
+  {
+    "id": "26569",
+    "name": "LAPD Dispatch - Valley Bureau",
+    "county": "Los Angeles",
+    "latitude": 34.05241,
+    "longitude": -118.243754,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/26569",
+    "listeners": 45
+  },
+  {
+    "id": "33623",
+    "name": "LAPD Dispatch - West Divisions",
+    "county": "Los Angeles",
+    "latitude": 34.052404,
+    "longitude": -118.243549,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33623",
+    "listeners": 9
+  },
+  {
+    "id": "40488",
+    "name": "LAPD Hotshot/K-9/Air Hailing",
+    "county": "Los Angeles",
+    "latitude": 34.052085,
+    "longitude": -118.243625,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40488",
+    "listeners": 5
+  },
+  {
+    "id": "29171",
+    "name": "Long Beach Fire Dispatch and V2/3",
+    "county": "Los Angeles",
+    "latitude": 33.7691,
+    "longitude": -118.191478,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/29171",
+    "listeners": 5
+  },
+  {
+    "id": "24051",
+    "name": "Long Beach Police Dispatch",
+    "county": "Los Angeles",
+    "latitude": 33.768824,
+    "longitude": -118.191672,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24051",
+    "listeners": 17
+  },
+  {
+    "id": "31522",
+    "name": "Los Angeles - West County Interagency Fire",
+    "county": "Los Angeles",
+    "latitude": 34.021667,
+    "longitude": -118.285618,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31522",
+    "listeners": 1
+  },
+  {
+    "id": "18564",
+    "name": "Los Angeles City Alt Fire Incident Dispatch - Citywide",
+    "county": "Los Angeles",
+    "latitude": 34.111094,
+    "longitude": -118.190188,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/18564",
+    "listeners": 2
+  },
+  {
+    "id": "2846",
+    "name": "Los Angeles City Fire",
+    "county": "Los Angeles",
+    "latitude": 34.070648,
+    "longitude": -118.446673,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/2846",
+    "listeners": 27
+  },
+  {
+    "id": "29207",
+    "name": "Los Angeles City Fire - Grounds",
+    "county": "Los Angeles",
+    "latitude": 34.071091,
+    "longitude": -118.446949,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/29207",
+    "listeners": 3
+  },
+  {
+    "id": "18435",
+    "name": "Los Angeles City Fire and EMS Dispatch - North Division",
+    "county": "Los Angeles",
+    "latitude": 34.070759,
+    "longitude": -118.446891,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/18435",
+    "listeners": 4
+  },
+  {
+    "id": "18556",
+    "name": "Los Angeles City Fire and EMS Dispatch - South Division",
+    "county": "Los Angeles",
+    "latitude": 34.070927,
+    "longitude": -118.447034,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/18556"
+  },
+  {
+    "id": "44950",
+    "name": "Los Angeles County Fire -  LAC C-12",
+    "county": "Los Angeles",
+    "latitude": 34.05368,
+    "longitude": -118.242981,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44950",
+    "listeners": 1
+  },
+  {
+    "id": "44951",
+    "name": "Los Angeles County Fire -  LAC C-13",
+    "county": "Los Angeles",
+    "latitude": 34.053857,
+    "longitude": -118.242832,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44951",
+    "listeners": 1
+  },
+  {
+    "id": "44952",
+    "name": "Los Angeles County Fire -  LAC C-21",
+    "county": "Los Angeles",
+    "latitude": 34.053782,
+    "longitude": -118.2429,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44952",
+    "listeners": 1
+  },
+  {
+    "id": "44953",
+    "name": "Los Angeles County Fire -  LAC C-22",
+    "county": "Los Angeles",
+    "latitude": 34.053861,
+    "longitude": -118.242721,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44953",
+    "listeners": 1
+  },
+  {
+    "id": "44954",
+    "name": "Los Angeles County Fire -  LAC C-23",
+    "county": "Los Angeles",
+    "latitude": 34.053638,
+    "longitude": -118.242901,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44954",
+    "listeners": 1
+  },
+  {
+    "id": "44955",
+    "name": "Los Angeles County Fire -  LAC C-24",
+    "county": "Los Angeles",
+    "latitude": 34.05358,
+    "longitude": -118.242999,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44955",
+    "listeners": 1
+  },
+  {
+    "id": "44956",
+    "name": "Los Angeles County Fire -  LAC C-31",
+    "county": "Los Angeles",
+    "latitude": 34.053844,
+    "longitude": -118.242808,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44956",
+    "listeners": 1
+  },
+  {
+    "id": "44957",
+    "name": "Los Angeles County Fire -  LAC C-32",
+    "county": "Los Angeles",
+    "latitude": 34.053531,
+    "longitude": -118.242725,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44957",
+    "listeners": 1
+  },
+  {
+    "id": "44958",
+    "name": "Los Angeles County Fire -  LAC C-33",
+    "county": "Los Angeles",
+    "latitude": 34.053914,
+    "longitude": -118.242923,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44958",
+    "listeners": 2
+  },
+  {
+    "id": "44959",
+    "name": "Los Angeles County Fire -  LAC C-34",
+    "county": "Los Angeles",
+    "latitude": 34.053904,
+    "longitude": -118.242659,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44959",
+    "listeners": 2
+  },
+  {
+    "id": "44960",
+    "name": "Los Angeles County Fire -  LAC C-35",
+    "county": "Los Angeles",
+    "latitude": 34.053932,
+    "longitude": -118.24262,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44960",
+    "listeners": 1
+  },
+  {
+    "id": "44961",
+    "name": "Los Angeles County Fire -  LAC C-36",
+    "county": "Los Angeles",
+    "latitude": 34.053936,
+    "longitude": -118.242712,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44961",
+    "listeners": 1
+  },
+  {
+    "id": "44962",
+    "name": "Los Angeles County Fire -  LAC C-37",
+    "county": "Los Angeles",
+    "latitude": 34.053566,
+    "longitude": -118.242594,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44962",
+    "listeners": 1
+  },
+  {
+    "id": "44963",
+    "name": "Los Angeles County Fire -  LAC C-41",
+    "county": "Los Angeles",
+    "latitude": 34.053506,
+    "longitude": -118.242994,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44963",
+    "listeners": 3
+  },
+  {
+    "id": "44964",
+    "name": "Los Angeles County Fire -  LAC C-42",
+    "county": "Los Angeles",
+    "latitude": 34.053843,
+    "longitude": -118.242692,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44964",
+    "listeners": 1
+  },
+  {
+    "id": "44965",
+    "name": "Los Angeles County Fire -  LAC C-43",
+    "county": "Los Angeles",
+    "latitude": 34.053565,
+    "longitude": -118.242811,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44965",
+    "listeners": 1
+  },
+  {
+    "id": "44966",
+    "name": "Los Angeles County Fire -  LAC C-44",
+    "county": "Los Angeles",
+    "latitude": 34.053493,
+    "longitude": -118.242689,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44966",
+    "listeners": 1
+  },
+  {
+    "id": "44967",
+    "name": "Los Angeles County Fire -  LAC C-45",
+    "county": "Los Angeles",
+    "latitude": 34.053567,
+    "longitude": -118.242568,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44967",
+    "listeners": 1
+  },
+  {
+    "id": "44968",
+    "name": "Los Angeles County Fire -  LAC C-46",
+    "county": "Los Angeles",
+    "latitude": 34.053471,
+    "longitude": -118.242558,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44968",
+    "listeners": 1
+  },
+  {
+    "id": "44969",
+    "name": "Los Angeles County Fire -  LAC C-51",
+    "county": "Los Angeles",
+    "latitude": 34.05366,
+    "longitude": -118.242861,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44969",
+    "listeners": 1
+  },
+  {
+    "id": "44970",
+    "name": "Los Angeles County Fire -  LAC C-52",
+    "county": "Los Angeles",
+    "latitude": 34.05352,
+    "longitude": -118.242722,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44970",
+    "listeners": 1
+  },
+  {
+    "id": "44949",
+    "name": "Los Angeles County Fire -  LAC U-2",
+    "county": "Los Angeles",
+    "latitude": 34.053869,
+    "longitude": -118.24283,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44949",
+    "listeners": 1
+  },
+  {
+    "id": "38645",
+    "name": "Los Angeles County Fire - Command 10",
+    "county": "Los Angeles",
+    "latitude": 34.05393,
+    "longitude": -118.242972,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38645",
+    "listeners": 2
+  },
+  {
+    "id": "44973",
+    "name": "Los Angeles County Fire - Command 11",
+    "county": "Los Angeles",
+    "latitude": 34.053702,
+    "longitude": -118.242645,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44973",
+    "listeners": 1
+  },
+  {
+    "id": "38646",
+    "name": "Los Angeles County Fire - Command 20",
+    "county": "Los Angeles",
+    "latitude": 34.05359,
+    "longitude": -118.242983,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38646",
+    "listeners": 2
+  },
+  {
+    "id": "38647",
+    "name": "Los Angeles County Fire - Command 30",
+    "county": "Los Angeles",
+    "latitude": 34.053696,
+    "longitude": -118.242778,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38647",
+    "listeners": 1
+  },
+  {
+    "id": "38649",
+    "name": "Los Angeles County Fire - Command 40",
+    "county": "Los Angeles",
+    "latitude": 34.053754,
+    "longitude": -118.242704,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38649",
+    "listeners": 2
+  },
+  {
+    "id": "38650",
+    "name": "Los Angeles County Fire - Command 50",
+    "county": "Los Angeles",
+    "latitude": 34.053613,
+    "longitude": -118.24263,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38650",
+    "listeners": 2
+  },
+  {
+    "id": "38639",
+    "name": "Los Angeles County Fire - Dispatch",
+    "county": "Los Angeles",
+    "latitude": 34.053621,
+    "longitude": -118.242664,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38639",
+    "listeners": 10
+  },
+  {
+    "id": "38641",
+    "name": "Los Angeles County Fire - Dispatch 1",
+    "county": "Los Angeles",
+    "latitude": 34.053922,
+    "longitude": -118.242978,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38641",
+    "listeners": 3
+  },
+  {
+    "id": "38642",
+    "name": "Los Angeles County Fire - Dispatch 2",
+    "county": "Los Angeles",
+    "latitude": 34.053913,
+    "longitude": -118.242547,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38642",
+    "listeners": 2
+  },
+  {
+    "id": "38643",
+    "name": "Los Angeles County Fire - Dispatch 3",
+    "county": "Los Angeles",
+    "latitude": 34.053489,
+    "longitude": -118.243001,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38643",
+    "listeners": 3
+  },
+  {
+    "id": "38644",
+    "name": "Los Angeles County Fire - Dispatch 4",
+    "county": "Los Angeles",
+    "latitude": 34.053503,
+    "longitude": -118.242967,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38644",
+    "listeners": 2
+  },
+  {
+    "id": "44972",
+    "name": "Los Angeles County Fire - LAC A/G",
+    "county": "Los Angeles",
+    "latitude": 34.05358,
+    "longitude": -118.242826,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44972",
+    "listeners": 1
+  },
+  {
+    "id": "44971",
+    "name": "Los Angeles County Fire - VFIRE21",
+    "county": "Los Angeles",
+    "latitude": 34.053906,
+    "longitude": -118.242726,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44971"
+  },
+  {
+    "id": "38651",
+    "name": "Los Angeles County Fire V-1",
+    "county": "Los Angeles",
+    "latitude": 34.053512,
+    "longitude": -118.24271,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38651",
+    "listeners": 2
+  },
+  {
+    "id": "38652",
+    "name": "Los Angeles County Fire V-2",
+    "county": "Los Angeles",
+    "latitude": 34.053812,
+    "longitude": -118.242828,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38652",
+    "listeners": 1
+  },
+  {
+    "id": "38653",
+    "name": "Los Angeles County Fire V-3",
+    "county": "Los Angeles",
+    "latitude": 34.053641,
+    "longitude": -118.242754,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38653",
+    "listeners": 1
+  },
+  {
+    "id": "38654",
+    "name": "Los Angeles County Fire V-4",
+    "county": "Los Angeles",
+    "latitude": 34.053709,
+    "longitude": -118.242985,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38654",
+    "listeners": 1
+  },
+  {
+    "id": "38655",
+    "name": "Los Angeles County Fire V-5",
+    "county": "Los Angeles",
+    "latitude": 34.053765,
+    "longitude": -118.242962,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38655",
+    "listeners": 1
+  },
+  {
+    "id": "25187",
+    "name": "Los Angeles County Sheriff Dispatch 3,8,9,13,14; California Highway Patrol: South LA &amp; East LA; Downey Fire",
+    "county": "Los Angeles",
+    "latitude": 34.0539,
+    "longitude": -118.243014,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25187",
+    "listeners": 12
+  },
+  {
+    "id": "27147",
+    "name": "Los Angeles County Sheriff Dispatch 7 (Lomita) and Dispatch 12 (South LA)",
+    "county": "Los Angeles",
+    "latitude": 34.053857,
+    "longitude": -118.242812,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27147",
+    "listeners": 1
+  },
+  {
+    "id": "39941",
+    "name": "Los Angeles County Sheriff Dispatch 9 - Carson/Compton",
+    "county": "Los Angeles",
+    "latitude": 34.053898,
+    "longitude": -118.242882,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39941",
+    "listeners": 11
+  },
+  {
+    "id": "829",
+    "name": "Los Angeles County Sheriff, Fire and Aircraft - Santa Clarita Valley",
+    "county": "Los Angeles",
+    "latitude": 34.053632,
+    "longitude": -118.242584,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/829",
+    "listeners": 12
+  },
+  {
+    "id": "44556",
+    "name": "Malibu Area Public Safety",
+    "county": "Los Angeles",
+    "latitude": 34.032282,
+    "longitude": -118.707267,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44556",
+    "listeners": 3
+  },
+  {
+    "id": "43360",
+    "name": "Metrolink San Fernando Valley",
+    "county": "Los Angeles",
+    "latitude": 34.052031,
+    "longitude": -118.243534,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43360",
+    "listeners": 1
+  },
+  {
+    "id": "45511",
+    "name": "N6LXX P25 Repeater",
+    "county": "Los Angeles",
+    "latitude": 34.052083,
+    "longitude": -118.243793,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45511"
+  },
+  {
+    "id": "38640",
+    "name": "OSCC",
+    "county": "Los Angeles",
+    "latitude": 34.052131,
+    "longitude": -118.24393,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38640"
+  },
+  {
+    "id": "1932",
+    "name": "South Bay Fire: Culver City, El Segundo, Manhattan Beach, Redondo Beach, Torrance",
+    "county": "Los Angeles",
+    "latitude": 33.819082,
+    "longitude": -118.346084,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/1932",
+    "listeners": 2
+  },
+  {
+    "id": "46700",
+    "name": "Torrance Fire Dept",
+    "county": "Los Angeles",
+    "latitude": 33.836997,
+    "longitude": -118.341421,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46700"
+  },
+  {
+    "id": "22057",
+    "name": "Verdugo Fire Red 1-8",
+    "county": "Los Angeles",
+    "latitude": 33.947963,
+    "longitude": -117.324212,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/22057",
+    "listeners": 4
+  },
+  {
+    "id": "39037",
+    "name": "*CalFire MMU &amp; Local Area Dispatch",
+    "county": "Madera",
+    "latitude": 37.214562,
+    "longitude": -119.757436,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39037"
+  },
+  {
+    "id": "39035",
+    "name": "*CalFire MMU &amp; Local Command",
+    "county": "Madera",
+    "latitude": 37.214307,
+    "longitude": -119.757072,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39035",
+    "listeners": 4
+  },
+  {
+    "id": "44381",
+    "name": "Marin County - All County Fire Agencies",
+    "county": "Marin",
+    "latitude": 38.041029,
+    "longitude": -122.620094,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44381",
+    "listeners": 3
+  },
+  {
+    "id": "31459",
+    "name": "Mariposa County CalFire, Sheriff and Public Works",
+    "county": "Mariposa",
+    "latitude": 37.570072,
+    "longitude": -119.903882,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31459",
+    "listeners": 7
+  },
+  {
+    "id": "35968",
+    "name": "Mariposa County Fire",
+    "county": "Mariposa",
+    "latitude": 37.570281,
+    "longitude": -119.903442,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/35968"
+  },
+  {
+    "id": "36635",
+    "name": "Mariposa County Fire North",
+    "county": "Mariposa",
+    "latitude": 37.569921,
+    "longitude": -119.903555,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36635"
+  },
+  {
+    "id": "30829",
+    "name": "Cal Fire, Sherwood, Brooktrails and Little Lake Fire / EMS",
+    "county": "Mendocino",
+    "latitude": 39.50494,
+    "longitude": -123.32902,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30829",
+    "listeners": 1
+  },
+  {
+    "id": "41385",
+    "name": "CalFire - Mendocino County &amp; MEU",
+    "county": "Mendocino",
+    "latitude": 39.317715,
+    "longitude": -123.412591,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41385"
+  },
+  {
+    "id": "36726",
+    "name": "Mendocino County Fire and CalFire",
+    "county": "Mendocino",
+    "latitude": 39.317511,
+    "longitude": -123.41271,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36726",
+    "listeners": 1
+  },
+  {
+    "id": "6248",
+    "name": "Mendocino County Sheriff, Fire, EMS, Cal Fire and CHP",
+    "county": "Mendocino",
+    "latitude": 39.317629,
+    "longitude": -123.412574,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/6248",
+    "listeners": 44
+  },
+  {
+    "id": "41378",
+    "name": "Mendocino National Forest - West",
+    "county": "Mendocino",
+    "latitude": 39.317524,
+    "longitude": -123.412648,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41378"
+  },
+  {
+    "id": "43277",
+    "name": "Cal-Fire LMU - Lassen-Modoc Unit",
+    "county": "Modoc",
+    "latitude": 41.588596,
+    "longitude": -120.722213,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43277"
+  },
+  {
+    "id": "45268",
+    "name": "Cal-Fire LMU - Lassen-Modoc Unit with Command Channels",
+    "county": "Modoc",
+    "latitude": 41.58898,
+    "longitude": -120.722067,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45268"
+  },
+  {
+    "id": "33223",
+    "name": "Modoc County Sheriff and Fire Dispatch",
+    "county": "Modoc",
+    "latitude": 41.545043,
+    "longitude": -120.743744,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33223",
+    "listeners": 4
+  },
+  {
+    "id": "15208",
+    "name": "Mammoth Lakes Police / Fire, Mono County Sheriff, Fire and EMS Dispatch",
+    "county": "Mono",
+    "latitude": 37.643212,
+    "longitude": -118.966677,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/15208",
+    "listeners": 2
+  },
+  {
+    "id": "19652",
+    "name": "Mono County Fire",
+    "county": "Mono",
+    "latitude": 37.953535,
+    "longitude": -118.939634,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/19652"
+  },
+  {
+    "id": "39395",
+    "name": "CalFire BEU - Local, Command, Air Attack, Air to Ground",
+    "county": "Monterey",
+    "latitude": 36.239071,
+    "longitude": -121.310039,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39395"
+  },
+  {
+    "id": "24818",
+    "name": "Monterey County Fire &amp; EMS",
+    "county": "Monterey",
+    "latitude": 36.223178,
+    "longitude": -121.387965,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24818",
+    "listeners": 3
+  },
+  {
+    "id": "20102",
+    "name": "Monterey County Fire Dispatch - Command 31",
+    "county": "Monterey",
+    "latitude": 36.223171,
+    "longitude": -121.387977,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20102",
+    "listeners": 1
+  },
+  {
+    "id": "43339",
+    "name": "Monterey Peninsula Fire Dispatch - Command 35",
+    "county": "Monterey",
+    "latitude": 36.597744,
+    "longitude": -121.927604,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43339",
+    "listeners": 1
+  },
+  {
+    "id": "40465",
+    "name": "NorthCo Fire Protection District",
+    "county": "Monterey",
+    "latitude": 36.239043,
+    "longitude": -121.310278,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40465"
+  },
+  {
+    "id": "43338",
+    "name": "Salinas Fire Dispatch - Command 33",
+    "county": "Monterey",
+    "latitude": 36.674213,
+    "longitude": -121.65498,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43338"
+  },
+  {
+    "id": "1679",
+    "name": "Santa Cruz and Monterey Bay Area Amateur Repeaters",
+    "county": "Monterey",
+    "latitude": 36.239073,
+    "longitude": -121.310054,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/1679",
+    "listeners": 1
+  },
+  {
+    "id": "13203",
+    "name": "Napa City and American Canyon Fire Dispatch",
+    "county": "Napa",
+    "latitude": 38.502282,
+    "longitude": -122.265591,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/13203",
+    "listeners": 1
+  },
+  {
+    "id": "20319",
+    "name": "Napa City Fire Ground",
+    "county": "Napa",
+    "latitude": 38.308845,
+    "longitude": -122.287398,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20319"
+  },
+  {
+    "id": "865",
+    "name": "Napa County Fire and CAL FIRE LNU East",
+    "county": "Napa",
+    "latitude": 38.490108,
+    "longitude": -122.321599,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/865",
+    "listeners": 1
+  },
+  {
+    "id": "13984",
+    "name": "Napa County Primary - Napa City Police, and Napa County Sheriff",
+    "county": "Napa",
+    "latitude": 38.489891,
+    "longitude": -122.321794,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/13984",
+    "listeners": 1
+  },
+  {
+    "id": "26975",
+    "name": "Napa Valley Law Enforcement",
+    "county": "Napa",
+    "latitude": 38.502439,
+    "longitude": -122.26554,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/26975",
+    "listeners": 1
+  },
+  {
+    "id": "14826",
+    "name": "East Placer and Nevada Counties CAL FIRE NEU - Kings Beach Area",
+    "county": "Nevada",
+    "latitude": 39.295641,
+    "longitude": -120.769115,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/14826",
+    "listeners": 3
+  },
+  {
+    "id": "44350",
+    "name": "Higgins Area Fire Protection District Dispatch",
+    "county": "Nevada",
+    "latitude": 39.295488,
+    "longitude": -120.769007,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44350",
+    "listeners": 1
+  },
+  {
+    "id": "26302",
+    "name": "Nevada County Public Safety - West",
+    "county": "Nevada",
+    "latitude": 39.354155,
+    "longitude": -120.808954,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/26302",
+    "listeners": 14
+  },
+  {
+    "id": "45301",
+    "name": "TNF USFS Fire",
+    "county": "Nevada",
+    "latitude": 39.295581,
+    "longitude": -120.769205,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45301",
+    "listeners": 2
+  },
+  {
+    "id": "43410",
+    "name": "Union Pacific Roseville Subdivision / Donner Pass",
+    "county": "Nevada",
+    "latitude": 39.29531,
+    "longitude": -120.769163,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43410"
+  },
+  {
+    "id": "41439",
+    "name": "K6ITR Repeater - Clara 145.220 MHz",
+    "county": "Orange",
+    "latitude": 33.717681,
+    "longitude": -117.831185,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41439",
+    "listeners": 2
+  },
+  {
+    "id": "31394",
+    "name": "MetroNet Fire Central Alt Tac 3M",
+    "county": "Orange",
+    "latitude": 33.717705,
+    "longitude": -117.831263,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31394",
+    "listeners": 1
+  },
+  {
+    "id": "31395",
+    "name": "MetroNet Fire Central Alt Tac 3N",
+    "county": "Orange",
+    "latitude": 33.717655,
+    "longitude": -117.830952,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31395",
+    "listeners": 6
+  },
+  {
+    "id": "31006",
+    "name": "MetroNet Fire Dispatch",
+    "county": "Orange",
+    "latitude": 33.717641,
+    "longitude": -117.831025,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31006"
+  },
+  {
+    "id": "31396",
+    "name": "MetroNet Fire North Alt Tac 2M",
+    "county": "Orange",
+    "latitude": 33.717639,
+    "longitude": -117.831315,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31396",
+    "listeners": 1
+  },
+  {
+    "id": "31397",
+    "name": "MetroNet Fire North Alt Tac 2N",
+    "county": "Orange",
+    "latitude": 33.717489,
+    "longitude": -117.831096,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31397",
+    "listeners": 3
+  },
+  {
+    "id": "31403",
+    "name": "MetroNet Fire Tac 2A - Brea",
+    "county": "Orange",
+    "latitude": 33.717352,
+    "longitude": -117.831249,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31403",
+    "listeners": 1
+  },
+  {
+    "id": "31404",
+    "name": "MetroNet Fire Tac 2F - Anaheim",
+    "county": "Orange",
+    "latitude": 33.717256,
+    "longitude": -117.830912,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31404",
+    "listeners": 2
+  },
+  {
+    "id": "31402",
+    "name": "MetroNet Fire Tac 2G - Fullerton",
+    "county": "Orange",
+    "latitude": 33.717679,
+    "longitude": -117.831317,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31402",
+    "listeners": 1
+  },
+  {
+    "id": "31401",
+    "name": "MetroNet Fire Tac 2I - Orange",
+    "county": "Orange",
+    "latitude": 33.71741,
+    "longitude": -117.830996,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31401",
+    "listeners": 2
+  },
+  {
+    "id": "31400",
+    "name": "MetroNet Fire Tac 3G - Fountain Valley",
+    "county": "Orange",
+    "latitude": 33.717606,
+    "longitude": -117.831218,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31400",
+    "listeners": 3
+  },
+  {
+    "id": "31399",
+    "name": "MetroNet Fire Tac 3H - Huntington Beach",
+    "county": "Orange",
+    "latitude": 33.717349,
+    "longitude": -117.830888,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31399",
+    "listeners": 4
+  },
+  {
+    "id": "31398",
+    "name": "MetroNet Fire Tac 3I - Newport Beach",
+    "county": "Orange",
+    "latitude": 33.717676,
+    "longitude": -117.831229,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31398",
+    "listeners": 4
+  },
+  {
+    "id": "44639",
+    "name": "OCFA  All Hazard Tac 4F - Zone 4",
+    "county": "Orange",
+    "latitude": 33.717467,
+    "longitude": -117.831201,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44639",
+    "listeners": 1
+  },
+  {
+    "id": "31325",
+    "name": "OCFA Alt Tac 4O - Zone 4",
+    "county": "Orange",
+    "latitude": 41.338314,
+    "longitude": -122.279776,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31325",
+    "listeners": 1
+  },
+  {
+    "id": "43252",
+    "name": "OCFA Alt Tac 5F - Zone 5 - South County",
+    "county": "Orange",
+    "latitude": 41.338425,
+    "longitude": -122.279862,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43252",
+    "listeners": 2
+  },
+  {
+    "id": "31322",
+    "name": "OCFA Alt Tac 5O - Zone 5",
+    "county": "Orange",
+    "latitude": 41.338249,
+    "longitude": -122.279944,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31322",
+    "listeners": 1
+  },
+  {
+    "id": "22322",
+    "name": "OCFA Dispatch 5B",
+    "county": "Orange",
+    "latitude": 34.051793,
+    "longitude": -118.241806,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/22322",
+    "listeners": 11
+  },
+  {
+    "id": "35957",
+    "name": "OCFA Fire OC",
+    "county": "Orange",
+    "latitude": 36.770196,
+    "longitude": -119.387422,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/35957",
+    "listeners": 3
+  },
+  {
+    "id": "44910",
+    "name": "OCFA Tac 4C - Zone 4",
+    "county": "Orange",
+    "latitude": 34.029711,
+    "longitude": -118.235165,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44910",
+    "listeners": 4
+  },
+  {
+    "id": "31323",
+    "name": "OCFA Tac 4D - Division 1",
+    "county": "Orange",
+    "latitude": 34.029838,
+    "longitude": -118.234952,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31323",
+    "listeners": 1
+  },
+  {
+    "id": "31329",
+    "name": "OCFA Tac 4E - Battalion 2 and 3",
+    "county": "Orange",
+    "latitude": 34.029715,
+    "longitude": -118.234974,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31329",
+    "listeners": 1
+  },
+  {
+    "id": "31330",
+    "name": "OCFA Tac 4M - Battalion 9 and 11",
+    "county": "Orange",
+    "latitude": 34.029874,
+    "longitude": -118.235016,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31330",
+    "listeners": 1
+  },
+  {
+    "id": "31326",
+    "name": "OCFA Tac 4N - Zone 4",
+    "county": "Orange",
+    "latitude": 34.029599,
+    "longitude": -118.234972,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31326",
+    "listeners": 3
+  },
+  {
+    "id": "46089",
+    "name": "OCFA Tac 5A - Zone 5",
+    "county": "Orange",
+    "latitude": 34.029573,
+    "longitude": -118.235274,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46089"
+  },
+  {
+    "id": "44909",
+    "name": "OCFA Tac 5C - Zone 5",
+    "county": "Orange",
+    "latitude": 34.029938,
+    "longitude": -118.235159,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44909",
+    "listeners": 6
+  },
+  {
+    "id": "31327",
+    "name": "OCFA Tac 5D - Battalion 4, 5 and 10",
+    "county": "Orange",
+    "latitude": 34.029933,
+    "longitude": -118.234935,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31327",
+    "listeners": 2
+  },
+  {
+    "id": "31328",
+    "name": "OCFA Tac 5E - Battalion 6 and 7",
+    "county": "Orange",
+    "latitude": 34.029595,
+    "longitude": -118.234883,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31328",
+    "listeners": 1
+  },
+  {
+    "id": "31324",
+    "name": "OCFA Tac 5N - Zone 5",
+    "county": "Orange",
+    "latitude": 34.029853,
+    "longitude": -118.235252,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31324",
+    "listeners": 1
+  },
+  {
+    "id": "1897",
+    "name": "Orange and San Diego Counties Working Incident 1",
+    "county": "Orange",
+    "latitude": 33.717463,
+    "longitude": -117.831263,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/1897"
+  },
+  {
+    "id": "39971",
+    "name": "Orange County Fire Watch Nets: SOARA 447.180- Santiago Peak Amateur Radio Repeater",
+    "county": "Orange",
+    "latitude": 33.750673,
+    "longitude": -117.872143,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39971"
+  },
+  {
+    "id": "23313",
+    "name": "Orange County Vegetation/Wildland Fires",
+    "county": "Orange",
+    "latitude": 33.750527,
+    "longitude": -117.872049,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/23313"
+  },
+  {
+    "id": "46676",
+    "name": "Santiago Peak Amateur Radio Repeaters",
+    "county": "Orange",
+    "latitude": 33.717577,
+    "longitude": -117.831098,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46676"
+  },
+  {
+    "id": "36574",
+    "name": "Amateur Radio AllStarLink Roach Radio 536221",
+    "county": "Placer",
+    "latitude": 35.346971,
+    "longitude": -117.808987,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36574"
+  },
+  {
+    "id": "7853",
+    "name": "Greater Sacramento Area Union Pacific and BNSF Railroads",
+    "county": "Placer",
+    "latitude": 39.091486,
+    "longitude": -120.804116,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/7853",
+    "listeners": 6
+  },
+  {
+    "id": "45374",
+    "name": "Lincoln FD Main",
+    "county": "Placer",
+    "latitude": 39.091438,
+    "longitude": -120.804077,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45374"
+  },
+  {
+    "id": "45535",
+    "name": "NEU West and Nevada County Fire",
+    "county": "Placer",
+    "latitude": 39.091583,
+    "longitude": -120.804128,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45535",
+    "listeners": 1
+  },
+  {
+    "id": "36998",
+    "name": "Placer County Law Enforcement",
+    "county": "Placer",
+    "latitude": 39.10101,
+    "longitude": -120.765241,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36998"
+  },
+  {
+    "id": "27179",
+    "name": "Placer County Law Enforcement and CAL Fire",
+    "county": "Placer",
+    "latitude": 39.101242,
+    "longitude": -120.764929,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27179",
+    "listeners": 10
+  },
+  {
+    "id": "35166",
+    "name": "Rocklin Police, Fire, and EMS Dispatch",
+    "county": "Placer",
+    "latitude": 38.790732,
+    "longitude": -121.235624,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/35166",
+    "listeners": 5
+  },
+  {
+    "id": "32974",
+    "name": "Roseville Police and Fire",
+    "county": "Placer",
+    "latitude": 38.752274,
+    "longitude": -121.28776,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32974",
+    "listeners": 6
+  },
+  {
+    "id": "42647",
+    "name": "UPRR Roseville Sub - Colfax, CA Area",
+    "county": "Placer",
+    "latitude": 39.091842,
+    "longitude": -120.804146,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42647"
+  },
+  {
+    "id": "32073",
+    "name": "W6EK 145.4300 MHz Sierra Foothills ARC Repeater",
+    "county": "Placer",
+    "latitude": 39.091653,
+    "longitude": -120.804002,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32073"
+  },
+  {
+    "id": "46311",
+    "name": "Blythe Fire Dept-La Paz County",
+    "county": "Riverside",
+    "latitude": 33.613605,
+    "longitude": -114.593971,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46311",
+    "listeners": 2
+  },
+  {
+    "id": "19",
+    "name": "Cal Fire and Riverside County Fire - West",
+    "county": "Riverside",
+    "latitude": 33.916816,
+    "longitude": -117.569317,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/19",
+    "listeners": 11
+  },
+  {
+    "id": "32548",
+    "name": "California Highway Patrol - Riverside",
+    "county": "Riverside",
+    "latitude": 33.953308,
+    "longitude": -117.396151,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32548",
+    "listeners": 25
+  },
+  {
+    "id": "42910",
+    "name": "Corona Fire Department Command-1 Channel",
+    "county": "Riverside",
+    "latitude": 33.875208,
+    "longitude": -117.566508,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42910"
+  },
+  {
+    "id": "43042",
+    "name": "Corona Fire Department Dispatch and Command",
+    "county": "Riverside",
+    "latitude": 33.875435,
+    "longitude": -117.566505,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43042"
+  },
+  {
+    "id": "42912",
+    "name": "Corona Fire Department Primary - Dispatch Channel",
+    "county": "Riverside",
+    "latitude": 33.875162,
+    "longitude": -117.566197,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42912"
+  },
+  {
+    "id": "40733",
+    "name": "Corona Fire Dispatch",
+    "county": "Riverside",
+    "latitude": 33.875072,
+    "longitude": -117.566372,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40733"
+  },
+  {
+    "id": "17739",
+    "name": "Corona Police and Fire",
+    "county": "Riverside",
+    "latitude": 33.875331,
+    "longitude": -117.566499,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/17739",
+    "listeners": 5
+  },
+  {
+    "id": "44053",
+    "name": "Palm Springs Fire Department",
+    "county": "Riverside",
+    "latitude": 33.824696,
+    "longitude": -116.540098,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44053",
+    "listeners": 3
+  },
+  {
+    "id": "22301",
+    "name": "Riverside City Fire",
+    "county": "Riverside",
+    "latitude": 33.806018,
+    "longitude": -116.457254,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/22301",
+    "listeners": 1
+  },
+  {
+    "id": "42846",
+    "name": "Riverside County Aviation Air to Air and Ground to Air",
+    "county": "Riverside",
+    "latitude": 33.982596,
+    "longitude": -117.37421,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42846"
+  },
+  {
+    "id": "46197",
+    "name": "Riverside County Fire - RVC Command 9",
+    "county": "Riverside",
+    "latitude": 33.982553,
+    "longitude": -117.37421,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46197",
+    "listeners": 1
+  },
+  {
+    "id": "44195",
+    "name": "UPRR Yuma Sub - Indio CA Area",
+    "county": "Riverside",
+    "latitude": 33.953466,
+    "longitude": -117.396279,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44195"
+  },
+  {
+    "id": "46658",
+    "name": "California Amateur Radio Linking Association",
+    "county": "Sacramento",
+    "latitude": 38.581625,
+    "longitude": -121.494518,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46658"
+  },
+  {
+    "id": "30364",
+    "name": "California Highway Patrol Gold and Black - Sacramento",
+    "county": "Sacramento",
+    "latitude": 38.581617,
+    "longitude": -121.494227,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30364",
+    "listeners": 1
+  },
+  {
+    "id": "5698",
+    "name": "Citrus Heights Police, Folsom Police, Elk Grove Police and Galt Police",
+    "county": "Sacramento",
+    "latitude": 38.706961,
+    "longitude": -121.28117,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/5698",
+    "listeners": 8
+  },
+  {
+    "id": "41987",
+    "name": "K6IS North Hills Radio Club FM Repeater",
+    "county": "Sacramento",
+    "latitude": 38.581652,
+    "longitude": -121.494353,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41987"
+  },
+  {
+    "id": "44372",
+    "name": "N6ICW repeater system 147.195 Sacramento, 146.940 Chico, 145.150 Lake Tahoe",
+    "county": "Sacramento",
+    "latitude": 38.581487,
+    "longitude": -121.494379,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44372"
+  },
+  {
+    "id": "43249",
+    "name": "N6SFI - Allstar Node 649920",
+    "county": "Sacramento",
+    "latitude": 38.581399,
+    "longitude": -121.494634,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43249"
+  },
+  {
+    "id": "23572",
+    "name": "Sacramento County Sheriff and Area Police - South",
+    "county": "Sacramento",
+    "latitude": 38.581121,
+    "longitude": -121.493838,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/23572",
+    "listeners": 9
+  },
+  {
+    "id": "5688",
+    "name": "Sacramento County Sheriff and City Police",
+    "county": "Sacramento",
+    "latitude": 38.581233,
+    "longitude": -121.493888,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/5688",
+    "listeners": 59
+  },
+  {
+    "id": "44064",
+    "name": "Sacramento McClellan Airport KMCC",
+    "county": "Sacramento",
+    "latitude": 38.674788,
+    "longitude": -121.390968,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44064"
+  },
+  {
+    "id": "41626",
+    "name": "Sacramento Metropolitan Fire Department Dispatch",
+    "county": "Sacramento",
+    "latitude": 38.582022,
+    "longitude": -121.489224,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41626",
+    "listeners": 1
+  },
+  {
+    "id": "29667",
+    "name": "Sacramento Regional Fire and EMS",
+    "county": "Sacramento",
+    "latitude": 38.581151,
+    "longitude": -121.493988,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/29667",
+    "listeners": 8
+  },
+  {
+    "id": "1883",
+    "name": "Solano County Fire 1",
+    "county": "Sacramento",
+    "latitude": 38.222006,
+    "longitude": -121.916225,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/1883"
+  },
+  {
+    "id": "47027",
+    "name": "West Sacramento Railroads - UP, BNSF, CFNR, SERA, CSRM",
+    "county": "Sacramento",
+    "latitude": 38.581729,
+    "longitude": -121.494345,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47027"
+  },
+  {
+    "id": "42939",
+    "name": "*CalFire BEU North, Hollister Fire",
+    "county": "San Benito",
+    "latitude": 36.605596,
+    "longitude": -121.075225,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42939"
+  },
+  {
+    "id": "45167",
+    "name": "*CalFire BEU South, San Benito County Fire",
+    "county": "San Benito",
+    "latitude": 36.605625,
+    "longitude": -121.075083,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45167"
+  },
+  {
+    "id": "2202",
+    "name": "BEU CAL FIRE and San Benito County Public Safety",
+    "county": "San Benito",
+    "latitude": 36.388979,
+    "longitude": -121.285658,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/2202",
+    "listeners": 18
+  },
+  {
+    "id": "8897",
+    "name": "N6SBC 147.315 MHz Hollister Repeater",
+    "county": "San Benito",
+    "latitude": 36.605232,
+    "longitude": -121.075131,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/8897",
+    "listeners": 1
+  },
+  {
+    "id": "36234",
+    "name": "146.790 MHz W6BA // via KM6IAU Yucca Valley",
+    "county": "San Bernardino",
+    "latitude": 34.10822,
+    "longitude": -117.290039,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36234"
+  },
+  {
+    "id": "44122",
+    "name": "BNSF and UPRR at East Barstow",
+    "county": "San Bernardino",
+    "latitude": 34.10805,
+    "longitude": -117.289685,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44122"
+  },
+  {
+    "id": "44326",
+    "name": "BNSF Needles Sub - Newberry Springs, CA Wide-Area",
+    "county": "San Bernardino",
+    "latitude": 34.108342,
+    "longitude": -117.289882,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44326"
+  },
+  {
+    "id": "39344",
+    "name": "BNSF Needles Sub and UPRR Cima Sub - Barstow-Daggett CA Area",
+    "county": "San Bernardino",
+    "latitude": 34.108487,
+    "longitude": -117.29002,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39344"
+  },
+  {
+    "id": "40176",
+    "name": "BNSF Needles Sub: Goffs, CA Wide-Area",
+    "county": "San Bernardino",
+    "latitude": 34.108176,
+    "longitude": -117.289783,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40176"
+  },
+  {
+    "id": "39764",
+    "name": "BNSF Needles Sub: Needles Yard and Area",
+    "county": "San Bernardino",
+    "latitude": 34.108444,
+    "longitude": -117.289946,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39764"
+  },
+  {
+    "id": "39345",
+    "name": "BNSF/UPRR: Cajon-Mojave Subs - Phelan-Hesperia, CA Wide-Area",
+    "county": "San Bernardino",
+    "latitude": 34.108223,
+    "longitude": -117.289868,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39345"
+  },
+  {
+    "id": "8710",
+    "name": "Inland CHP",
+    "county": "San Bernardino",
+    "latitude": 34.08517,
+    "longitude": -117.297469,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/8710",
+    "listeners": 12
+  },
+  {
+    "id": "32122",
+    "name": "KE6TZG 146.3850 MHz Keller Peak Repeater",
+    "county": "San Bernardino",
+    "latitude": 34.108506,
+    "longitude": -117.289724,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32122"
+  },
+  {
+    "id": "46880",
+    "name": "NOAA Weather Radio Victorville (WXM66)",
+    "county": "San Bernardino",
+    "latitude": 32.918843,
+    "longitude": -117.042241,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46880"
+  },
+  {
+    "id": "45331",
+    "name": "San Bernardino County - Cajon Pass USFS, BLM, CalFire",
+    "county": "San Bernardino",
+    "latitude": 34.825105,
+    "longitude": -116.083157,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45331",
+    "listeners": 1
+  },
+  {
+    "id": "7010",
+    "name": "San Bernardino County Fire - High Desert",
+    "county": "San Bernardino",
+    "latitude": 34.825316,
+    "longitude": -116.083404,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/7010",
+    "listeners": 13
+  },
+  {
+    "id": "29189",
+    "name": "San Bernardino County Fire - Valley",
+    "county": "San Bernardino",
+    "latitude": 34.825254,
+    "longitude": -116.083238,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/29189",
+    "listeners": 7
+  },
+  {
+    "id": "27111",
+    "name": "San Bernardino County Fire and EMS - South Desert Morongo Basin",
+    "county": "San Bernardino",
+    "latitude": 34.825102,
+    "longitude": -116.083392,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/27111",
+    "listeners": 5
+  },
+  {
+    "id": "43307",
+    "name": "Union Pacific Mojave Subdivision - Highland to Rancho",
+    "county": "San Bernardino",
+    "latitude": 34.108107,
+    "longitude": -117.289622,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43307"
+  },
+  {
+    "id": "44336",
+    "name": "UPRR Cima Sub - Daggett-Yermo CA Wide-Area",
+    "county": "San Bernardino",
+    "latitude": 34.108384,
+    "longitude": -117.289597,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44336"
+  },
+  {
+    "id": "39448",
+    "name": "W6BA 146.790 MHz - Yucca Valley - Morongo Basin Linked Repeater System",
+    "county": "San Bernardino",
+    "latitude": 34.108381,
+    "longitude": -117.289991,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39448"
+  },
+  {
+    "id": "31104",
+    "name": "California Highway Patrol - Border Division",
+    "county": "San Diego",
+    "latitude": 32.715548,
+    "longitude": -117.161174,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31104",
+    "listeners": 5
+  },
+  {
+    "id": "8919",
+    "name": "Chula Vista Police and Fire",
+    "county": "San Diego",
+    "latitude": 32.64012,
+    "longitude": -117.08406,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/8919",
+    "listeners": 4
+  },
+  {
+    "id": "23148",
+    "name": "Escondido Fire",
+    "county": "San Diego",
+    "latitude": 33.121463,
+    "longitude": -117.081357,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/23148",
+    "listeners": 1
+  },
+  {
+    "id": "1713",
+    "name": "Fallbrook Amateur Club Repeaters and CAL FIRE",
+    "county": "San Diego",
+    "latitude": 32.715522,
+    "longitude": -117.160972,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/1713",
+    "listeners": 3
+  },
+  {
+    "id": "33544",
+    "name": "Heartland Fire",
+    "county": "San Diego",
+    "latitude": 37.008642,
+    "longitude": -121.60725,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33544",
+    "listeners": 3
+  },
+  {
+    "id": "46874",
+    "name": "NOAA Weather Radio San Diego (KEC62)",
+    "county": "San Diego",
+    "latitude": 32.918856,
+    "longitude": -117.041772,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46874"
+  },
+  {
+    "id": "46879",
+    "name": "NOAA Weather Radio San Diego Marine (WNG637)",
+    "county": "San Diego",
+    "latitude": 32.919075,
+    "longitude": -117.041765,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46879"
+  },
+  {
+    "id": "10892",
+    "name": "North Comm Dispatch and LE Interop",
+    "county": "San Diego",
+    "latitude": 34.230215,
+    "longitude": -118.466314,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/10892",
+    "listeners": 12
+  },
+  {
+    "id": "33087",
+    "name": "PAPA System Analog Repeaters",
+    "county": "San Diego",
+    "latitude": 32.71571,
+    "longitude": -117.161265,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33087",
+    "listeners": 3
+  },
+  {
+    "id": "9733",
+    "name": "Rural San Diego County CAL FIRE and USFS",
+    "county": "San Diego",
+    "latitude": 32.825683,
+    "longitude": -116.935554,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/9733",
+    "listeners": 1
+  },
+  {
+    "id": "11995",
+    "name": "San Diego CHP Orange/Blue and the RCS Law Mutual Aid",
+    "county": "San Diego",
+    "latitude": 32.715549,
+    "longitude": -117.160869,
+    "category": "multi",
+    "webUrl": "https://www.broadcastify.com/listen/feed/11995",
+    "listeners": 2
+  },
+  {
+    "id": "10294",
+    "name": "San Diego City and Poway Fire",
+    "county": "San Diego",
+    "latitude": 32.715487,
+    "longitude": -117.161223,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/10294",
+    "listeners": 13
+  },
+  {
+    "id": "45432",
+    "name": "San Diego City Lifeguards",
+    "county": "San Diego",
+    "latitude": 32.715622,
+    "longitude": -117.161248,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45432"
+  },
+  {
+    "id": "20530",
+    "name": "San Diego City Police and Fire Dispatch",
+    "county": "San Diego",
+    "latitude": 32.879416,
+    "longitude": -117.231115,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20530",
+    "listeners": 5
+  },
+  {
+    "id": "33036",
+    "name": "San Diego County Wildland Fire Operations VHF",
+    "county": "San Diego",
+    "latitude": 32.717663,
+    "longitude": -117.162943,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33036",
+    "listeners": 1
+  },
+  {
+    "id": "46747",
+    "name": "San Diego K6RRR Repeaters",
+    "county": "San Diego",
+    "latitude": 32.715783,
+    "longitude": -117.161086,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46747"
+  },
+  {
+    "id": "20087",
+    "name": "San Marcos Public Safety",
+    "county": "San Diego",
+    "latitude": 33.135201,
+    "longitude": -117.174171,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20087",
+    "listeners": 4
+  },
+  {
+    "id": "32991",
+    "name": "South Bay Law Enforcement",
+    "county": "San Diego",
+    "latitude": 32.715775,
+    "longitude": -117.161204,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32991"
+  },
+  {
+    "id": "46550",
+    "name": "AllStarLink Node 48063",
+    "county": "San Francisco",
+    "latitude": 37.775112,
+    "longitude": -122.419576,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46550",
+    "listeners": 1
+  },
+  {
+    "id": "37202",
+    "name": "KAPIHAN Network Worldwide Digital Amateur Radio System",
+    "county": "San Francisco",
+    "latitude": 37.775115,
+    "longitude": -122.419625,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37202"
+  },
+  {
+    "id": "6336",
+    "name": "San Francisco City Fire and EMS",
+    "county": "San Francisco",
+    "latitude": 37.76283,
+    "longitude": -122.458396,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/6336",
+    "listeners": 5
+  },
+  {
+    "id": "46180",
+    "name": "San Francisco City Police",
+    "county": "San Francisco",
+    "latitude": 37.762872,
+    "longitude": -122.458479,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46180",
+    "listeners": 9
+  },
+  {
+    "id": "44365",
+    "name": "*San Joaquin County, Stanislaus County Fire Departments",
+    "county": "San Joaquin",
+    "latitude": 37.937317,
+    "longitude": -121.27733,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44365"
+  },
+  {
+    "id": "40634",
+    "name": "BNSF/UP Stockton Diamond Area",
+    "county": "San Joaquin",
+    "latitude": 37.936073,
+    "longitude": -121.271586,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40634"
+  },
+  {
+    "id": "41117",
+    "name": "Cal Fire Dispatch and Tactical Channels",
+    "county": "San Joaquin",
+    "latitude": 37.936428,
+    "longitude": -121.271997,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41117",
+    "listeners": 1
+  },
+  {
+    "id": "33564",
+    "name": "Escalon Consolidated Fire Protection District",
+    "county": "San Joaquin",
+    "latitude": 37.936262,
+    "longitude": -121.271574,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33564"
+  },
+  {
+    "id": "35179",
+    "name": "Escalon Consolidated Fire Protection District",
+    "county": "San Joaquin",
+    "latitude": 37.93613,
+    "longitude": -121.271606,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/35179"
+  },
+  {
+    "id": "38886",
+    "name": "Lathrop Police and Ripon Police Dispatch",
+    "county": "San Joaquin",
+    "latitude": 37.822692,
+    "longitude": -121.276775,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38886",
+    "listeners": 1
+  },
+  {
+    "id": "35939",
+    "name": "Lodi Public Safety",
+    "county": "San Joaquin",
+    "latitude": 38.134437,
+    "longitude": -121.273429,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/35939"
+  },
+  {
+    "id": "13177",
+    "name": "Manteca Public Safety",
+    "county": "San Joaquin",
+    "latitude": 37.798716,
+    "longitude": -121.211908,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/13177",
+    "listeners": 2
+  },
+  {
+    "id": "36136",
+    "name": "NorCal TRACON and Oakland Center ARTCC (Tracy)",
+    "county": "San Joaquin",
+    "latitude": 37.776567,
+    "longitude": -122.411518,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36136"
+  },
+  {
+    "id": "30581",
+    "name": "San Joaquin County Air Traffic",
+    "county": "San Joaquin",
+    "latitude": 37.937439,
+    "longitude": -121.277587,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30581"
+  },
+  {
+    "id": "25811",
+    "name": "San Joaquin County Fire and CHP",
+    "county": "San Joaquin",
+    "latitude": 37.937192,
+    "longitude": -121.277257,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25811",
+    "listeners": 4
+  },
+  {
+    "id": "24052",
+    "name": "San Joaquin County Sheriff Dispatch",
+    "county": "San Joaquin",
+    "latitude": 37.937237,
+    "longitude": -121.27762,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24052",
+    "listeners": 8
+  },
+  {
+    "id": "33212",
+    "name": "Stockton and Lodi Fire Department Dispatch",
+    "county": "San Joaquin",
+    "latitude": 37.936469,
+    "longitude": -121.27169,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33212",
+    "listeners": 1
+  },
+  {
+    "id": "9340",
+    "name": "Stockton Police and Fire Dispatch",
+    "county": "San Joaquin",
+    "latitude": 37.957743,
+    "longitude": -121.290873,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/9340",
+    "listeners": 27
+  },
+  {
+    "id": "26263",
+    "name": "Tracy (South County) Fire",
+    "county": "San Joaquin",
+    "latitude": 36.322568,
+    "longitude": -119.27087,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/26263"
+  },
+  {
+    "id": "41712",
+    "name": "Tracy Airport, New Jerusalem Airport, NorCal Approach",
+    "county": "San Joaquin",
+    "latitude": 37.738301,
+    "longitude": -121.42014,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41712",
+    "listeners": 1
+  },
+  {
+    "id": "44665",
+    "name": "Arroyo Grande Police and Fire",
+    "county": "San Luis Obispo",
+    "latitude": 35.123448,
+    "longitude": -120.57881,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44665",
+    "listeners": 1
+  },
+  {
+    "id": "45396",
+    "name": "Atascadero Fire &amp; Emergency Services",
+    "county": "San Luis Obispo",
+    "latitude": 35.489499,
+    "longitude": -120.670519,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45396"
+  },
+  {
+    "id": "47105",
+    "name": "Cal Fire for SLO and Southern Monterey Counties",
+    "county": "San Luis Obispo",
+    "latitude": 35.269821,
+    "longitude": -120.670138,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47105"
+  },
+  {
+    "id": "37406",
+    "name": "Paso Robles Police and Fire",
+    "county": "San Luis Obispo",
+    "latitude": 35.626258,
+    "longitude": -120.690287,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37406",
+    "listeners": 1
+  },
+  {
+    "id": "24233",
+    "name": "San Luis Obispo City Fire Dispatch",
+    "county": "San Luis Obispo",
+    "latitude": 35.638845,
+    "longitude": -120.686166,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/24233",
+    "listeners": 2
+  },
+  {
+    "id": "43009",
+    "name": "San Luis Obispo County Fire",
+    "county": "San Luis Obispo",
+    "latitude": 35.353883,
+    "longitude": -120.375716,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43009",
+    "listeners": 3
+  },
+  {
+    "id": "44069",
+    "name": "SLO County Public Safety",
+    "county": "San Luis Obispo",
+    "latitude": 35.247573,
+    "longitude": -120.671971,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44069",
+    "listeners": 16
+  },
+  {
+    "id": "44042",
+    "name": "UPRR Santa Barbara Sub - San Luis Obispo",
+    "county": "San Luis Obispo",
+    "latitude": 35.269772,
+    "longitude": -120.669904,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44042",
+    "listeners": 1
+  },
+  {
+    "id": "45521",
+    "name": "*San Mateo County Fire, CalFire CZU",
+    "county": "San Mateo",
+    "latitude": 37.496917,
+    "longitude": -122.332995,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45521",
+    "listeners": 1
+  },
+  {
+    "id": "45860",
+    "name": "Menlo Park and Atherton Police Dispatch",
+    "county": "San Mateo",
+    "latitude": 37.433691,
+    "longitude": -122.40285,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45860"
+  },
+  {
+    "id": "44066",
+    "name": "Mountain West DMR/P25 Repeater Group (WX6D)",
+    "county": "San Mateo",
+    "latitude": 37.433882,
+    "longitude": -122.403239,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44066"
+  },
+  {
+    "id": "44206",
+    "name": "San Francisco Offshore Marine Traffic",
+    "county": "San Mateo",
+    "latitude": 37.4338,
+    "longitude": -122.402826,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44206"
+  },
+  {
+    "id": "45035",
+    "name": "San Mateo Country Sheriff",
+    "county": "San Mateo",
+    "latitude": 37.642705,
+    "longitude": -122.433093,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45035",
+    "listeners": 3
+  },
+  {
+    "id": "45051",
+    "name": "San Mateo County EMS Dispatch",
+    "county": "San Mateo",
+    "latitude": 37.496824,
+    "longitude": -122.332819,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45051",
+    "listeners": 1
+  },
+  {
+    "id": "46578",
+    "name": "San Mateo County Fire (South County)",
+    "county": "San Mateo",
+    "latitude": 37.496956,
+    "longitude": -122.333058,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46578"
+  },
+  {
+    "id": "47028",
+    "name": "South San Francisco City Police",
+    "county": "San Mateo",
+    "latitude": 37.792133,
+    "longitude": -122.40915,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47028"
+  },
+  {
+    "id": "39096",
+    "name": "Santa Barbara County Fire District",
+    "county": "Santa Barbara",
+    "latitude": 34.422341,
+    "longitude": -119.702873,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39096",
+    "listeners": 2
+  },
+  {
+    "id": "33663",
+    "name": "Santa Barbara County Sheriff Main Channel",
+    "county": "Santa Barbara",
+    "latitude": 34.422301,
+    "longitude": -119.702846,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33663",
+    "listeners": 4
+  },
+  {
+    "id": "747",
+    "name": "Santa Barbara County Sheriff, Fire, Aircraft and Marine, Lompoc Police / Fire",
+    "county": "Santa Barbara",
+    "latitude": 34.422169,
+    "longitude": -119.702487,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/747",
+    "listeners": 9
+  },
+  {
+    "id": "38585",
+    "name": "*CalFire SCU, Santa Clara County",
+    "county": "Santa Clara",
+    "latitude": 37.353918,
+    "longitude": -121.955068,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38585"
+  },
+  {
+    "id": "38887",
+    "name": "CalFire SCU - Local, Command, Air Attack, Air to Ground",
+    "county": "Santa Clara",
+    "latitude": 37.354157,
+    "longitude": -121.955334,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38887",
+    "listeners": 1
+  },
+  {
+    "id": "22236",
+    "name": "Gilroy Fire and EMS",
+    "county": "Santa Clara",
+    "latitude": 37.006674,
+    "longitude": -121.563026,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/22236",
+    "listeners": 1
+  },
+  {
+    "id": "44258",
+    "name": "Milpitas Fire",
+    "county": "Santa Clara",
+    "latitude": 37.433392,
+    "longitude": -121.898962,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44258"
+  },
+  {
+    "id": "16240",
+    "name": "Mountain View Fire",
+    "county": "Santa Clara",
+    "latitude": 37.389494,
+    "longitude": -122.08321,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/16240",
+    "listeners": 1
+  },
+  {
+    "id": "46899",
+    "name": "Palo Alto Fire",
+    "county": "Santa Clara",
+    "latitude": 37.44409,
+    "longitude": -122.159792,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46899",
+    "listeners": 1
+  },
+  {
+    "id": "10703",
+    "name": "San Jose Fire",
+    "county": "Santa Clara",
+    "latitude": 37.33607,
+    "longitude": -121.890358,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/10703",
+    "listeners": 8
+  },
+  {
+    "id": "20655",
+    "name": "Santa Clara City Fire 1",
+    "county": "Santa Clara",
+    "latitude": 37.35726,
+    "longitude": -121.90627,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20655"
+  },
+  {
+    "id": "21463",
+    "name": "Santa Clara City Fire 2",
+    "county": "Santa Clara",
+    "latitude": 37.357341,
+    "longitude": -121.905913,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/21463"
+  },
+  {
+    "id": "45483",
+    "name": "Santa Clara County Fire - Dispatch and Commands",
+    "county": "Santa Clara",
+    "latitude": 37.233229,
+    "longitude": -121.684761,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45483",
+    "listeners": 1
+  },
+  {
+    "id": "30885",
+    "name": "Santa Clara County Fire Agencies - South",
+    "county": "Santa Clara",
+    "latitude": 37.233255,
+    "longitude": -121.684653,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30885"
+  },
+  {
+    "id": "17119",
+    "name": "Santa Clara County Fire Dispatch - Command 72",
+    "county": "Santa Clara",
+    "latitude": 37.233415,
+    "longitude": -121.684539,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/17119",
+    "listeners": 1
+  },
+  {
+    "id": "13249",
+    "name": "Sunnyvale Fire",
+    "county": "Santa Clara",
+    "latitude": 37.368637,
+    "longitude": -122.036209,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/13249",
+    "listeners": 5
+  },
+  {
+    "id": "38782",
+    "name": "*CalFire CZU, Santa Cruz County",
+    "county": "Santa Cruz",
+    "latitude": 37.045321,
+    "longitude": -121.957835,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38782"
+  },
+  {
+    "id": "39562",
+    "name": "CalFire CZU - Dispatch, Command, Air Attack, Air to Ground",
+    "county": "Santa Cruz",
+    "latitude": 37.278515,
+    "longitude": -122.3148,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39562"
+  },
+  {
+    "id": "39561",
+    "name": "Santa Cruz County Fire",
+    "county": "Santa Cruz",
+    "latitude": 37.050189,
+    "longitude": -121.990735,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39561",
+    "listeners": 2
+  },
+  {
+    "id": "38395",
+    "name": "Anderson Police Dispatch",
+    "county": "Shasta",
+    "latitude": 40.448137,
+    "longitude": -122.298057,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38395",
+    "listeners": 5
+  },
+  {
+    "id": "39417",
+    "name": "CHP Northern Division - Redding Dispatch Center",
+    "county": "Shasta",
+    "latitude": 38.513642,
+    "longitude": -122.104732,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39417",
+    "listeners": 1
+  },
+  {
+    "id": "37932",
+    "name": "Redding Public Safety",
+    "county": "Shasta",
+    "latitude": 40.586109,
+    "longitude": -122.391885,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37932",
+    "listeners": 3
+  },
+  {
+    "id": "43324",
+    "name": "RPD Dispatch &amp; RFD Dispatch/Fireground",
+    "county": "Shasta",
+    "latitude": 37.856536,
+    "longitude": -120.635817,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43324",
+    "listeners": 8
+  },
+  {
+    "id": "39964",
+    "name": "SHASCOM EMS Dispatch",
+    "county": "Shasta",
+    "latitude": 40.574671,
+    "longitude": -122.412973,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39964",
+    "listeners": 3
+  },
+  {
+    "id": "46867",
+    "name": "Shasta County Area Law Enforcement",
+    "county": "Shasta",
+    "latitude": 40.796709,
+    "longitude": -121.997886,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46867",
+    "listeners": 2
+  },
+  {
+    "id": "46790",
+    "name": "Shasta County Fire and CalFire",
+    "county": "Shasta",
+    "latitude": 40.796745,
+    "longitude": -121.997693,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46790"
+  },
+  {
+    "id": "38439",
+    "name": "Shasta County Sheriff Dispatch",
+    "county": "Shasta",
+    "latitude": 40.796635,
+    "longitude": -121.997829,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38439"
+  },
+  {
+    "id": "45519",
+    "name": "Shasta County Wildland Fire",
+    "county": "Shasta",
+    "latitude": 40.796698,
+    "longitude": -121.997815,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45519"
+  },
+  {
+    "id": "40550",
+    "name": "Shasta National Forest North",
+    "county": "Shasta",
+    "latitude": 40.796463,
+    "longitude": -121.997893,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40550",
+    "listeners": 1
+  },
+  {
+    "id": "40872",
+    "name": "Shasta SHU Dispatch - Command",
+    "county": "Shasta",
+    "latitude": 40.796608,
+    "longitude": -121.997672,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40872",
+    "listeners": 1
+  },
+  {
+    "id": "7860",
+    "name": "Siskiyou and Northern Shasta Counties Fire",
+    "county": "Shasta",
+    "latitude": 40.790791,
+    "longitude": -122.019929,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/7860",
+    "listeners": 6
+  },
+  {
+    "id": "41309",
+    "name": "Union Pacific Valley Sub: Redding, CA Area",
+    "county": "Shasta",
+    "latitude": 40.791036,
+    "longitude": -122.019827,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41309",
+    "listeners": 1
+  },
+  {
+    "id": "25475",
+    "name": "W7PRA Peak Radio Association",
+    "county": "Shasta",
+    "latitude": 40.791096,
+    "longitude": -122.020004,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25475"
+  },
+  {
+    "id": "45334",
+    "name": "Klamath National Forest",
+    "county": "Siskiyou",
+    "latitude": 41.548858,
+    "longitude": -124.060185,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45334"
+  },
+  {
+    "id": "45943",
+    "name": "Northern Siskiyou County Public Safety",
+    "county": "Siskiyou",
+    "latitude": 41.591909,
+    "longitude": -122.541194,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45943"
+  },
+  {
+    "id": "39241",
+    "name": "Siskiyou County Fire",
+    "county": "Siskiyou",
+    "latitude": 41.686493,
+    "longitude": -122.53619,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39241",
+    "listeners": 1
+  },
+  {
+    "id": "42656",
+    "name": "Siskiyou County Law",
+    "county": "Siskiyou",
+    "latitude": 41.686254,
+    "longitude": -122.536085,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42656"
+  },
+  {
+    "id": "28507",
+    "name": "Siskiyou County Sheriff and Fire - West",
+    "county": "Siskiyou",
+    "latitude": 41.686162,
+    "longitude": -122.536118,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28507",
+    "listeners": 6
+  },
+  {
+    "id": "45339",
+    "name": "Siskiyou Fire Air (East)",
+    "county": "Siskiyou",
+    "latitude": 41.686406,
+    "longitude": -122.5358,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45339"
+  },
+  {
+    "id": "46513",
+    "name": "*Solano County Fire Agencies",
+    "county": "Solano",
+    "latitude": 38.221665,
+    "longitude": -121.916387,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46513"
+  },
+  {
+    "id": "39356",
+    "name": "Benicia Fire Main Dispatch",
+    "county": "Solano",
+    "latitude": 38.049162,
+    "longitude": -122.158573,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39356"
+  },
+  {
+    "id": "46066",
+    "name": "Benicia Police Primary",
+    "county": "Solano",
+    "latitude": 38.049606,
+    "longitude": -122.158741,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46066"
+  },
+  {
+    "id": "28814",
+    "name": "California Highway Patrol - Solano",
+    "county": "Solano",
+    "latitude": 38.269523,
+    "longitude": -121.939653,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28814",
+    "listeners": 1
+  },
+  {
+    "id": "4881",
+    "name": "Fairfield, Vacaville, and Suisun Police, Fire and EMS",
+    "county": "Solano",
+    "latitude": 38.26938,
+    "longitude": -121.940107,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/4881",
+    "listeners": 14
+  },
+  {
+    "id": "45005",
+    "name": "Solano County CAL FIRE",
+    "county": "Solano",
+    "latitude": 38.221658,
+    "longitude": -121.91655,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45005",
+    "listeners": 1
+  },
+  {
+    "id": "20773",
+    "name": "Solano County Sheriff,  Rio Vista and Dixon Police Dispatch",
+    "county": "Solano",
+    "latitude": 38.222096,
+    "longitude": -121.916222,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20773",
+    "listeners": 1
+  },
+  {
+    "id": "32738",
+    "name": "Solano Fire - County, Fairfield, Suisun City &amp; Vacaville City",
+    "county": "Solano",
+    "latitude": 38.221828,
+    "longitude": -121.916459,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32738",
+    "listeners": 2
+  },
+  {
+    "id": "41964",
+    "name": "Solano Fire Dispatch",
+    "county": "Solano",
+    "latitude": 38.222017,
+    "longitude": -121.916484,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41964",
+    "listeners": 1
+  },
+  {
+    "id": "45148",
+    "name": "Solano, Vacaville, Fairfield, Suisun – Fire Dept.",
+    "county": "Solano",
+    "latitude": 38.269542,
+    "longitude": -121.939801,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45148"
+  },
+  {
+    "id": "45149",
+    "name": "Solano, Vacaville, Fairfield, Suisun – Police, Fire &amp; CHP",
+    "county": "Solano",
+    "latitude": 38.269427,
+    "longitude": -121.939739,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45149",
+    "listeners": 3
+  },
+  {
+    "id": "43524",
+    "name": "Vacaville, Fairfield, Suisun, Dixon, Rio Vista - Fire Dept.",
+    "county": "Solano",
+    "latitude": 38.269397,
+    "longitude": -121.939873,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/43524",
+    "listeners": 1
+  },
+  {
+    "id": "44166",
+    "name": "Vacaville, Fairfield, Suisun, Dixon, Rio Vista - Police/Fire",
+    "county": "Solano",
+    "latitude": 38.269568,
+    "longitude": -121.940144,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44166",
+    "listeners": 2
+  },
+  {
+    "id": "820",
+    "name": "Vallejo Police and Fire",
+    "county": "Solano",
+    "latitude": 38.103913,
+    "longitude": -122.256741,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/820",
+    "listeners": 28
+  },
+  {
+    "id": "31988",
+    "name": "W6VVR 145.4700 MHz Repeater",
+    "county": "Solano",
+    "latitude": 38.269457,
+    "longitude": -121.940019,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31988"
+  },
+  {
+    "id": "39432",
+    "name": "Cal Fire LNU",
+    "county": "Sonoma",
+    "latitude": 38.806909,
+    "longitude": -122.518438,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39432"
+  },
+  {
+    "id": "32607",
+    "name": "Charles M Schulz-Sonoma County Airport (KSTS)",
+    "county": "Sonoma",
+    "latitude": 38.525681,
+    "longitude": -122.997242,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32607",
+    "listeners": 1
+  },
+  {
+    "id": "38567",
+    "name": "LNU Region Disaster Event",
+    "county": "Sonoma",
+    "latitude": 38.525598,
+    "longitude": -122.997066,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38567"
+  },
+  {
+    "id": "39445",
+    "name": "REDCOM Dispatch, Control",
+    "county": "Sonoma",
+    "latitude": 38.525941,
+    "longitude": -122.997251,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39445",
+    "listeners": 3
+  },
+  {
+    "id": "47135",
+    "name": "Sebastopol Police Dispatch",
+    "county": "Sonoma",
+    "latitude": 38.402142,
+    "longitude": -122.824058,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47135"
+  },
+  {
+    "id": "45508",
+    "name": "Sonoma County Fire - Southeast",
+    "county": "Sonoma",
+    "latitude": 38.510831,
+    "longitude": -122.847551,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45508"
+  },
+  {
+    "id": "31847",
+    "name": "Sonoma County Fire and CalFire",
+    "county": "Sonoma",
+    "latitude": 38.511329,
+    "longitude": -122.847553,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31847",
+    "listeners": 2
+  },
+  {
+    "id": "47139",
+    "name": "Sonoma County Fire Southwest",
+    "county": "Sonoma",
+    "latitude": 38.510834,
+    "longitude": -122.847301,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47139"
+  },
+  {
+    "id": "40337",
+    "name": "Sonoma County Fire-EMS and Sheriff Dispatch",
+    "county": "Sonoma",
+    "latitude": 38.510863,
+    "longitude": -122.847508,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40337",
+    "listeners": 3
+  },
+  {
+    "id": "32554",
+    "name": "Sonoma County Law Enforcement",
+    "county": "Sonoma",
+    "latitude": 38.511068,
+    "longitude": -122.847217,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/32554",
+    "listeners": 11
+  },
+  {
+    "id": "40596",
+    "name": "Sonoma Fire North",
+    "county": "Sonoma",
+    "latitude": 38.510854,
+    "longitude": -122.847479,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40596",
+    "listeners": 4
+  },
+  {
+    "id": "40595",
+    "name": "Sonoma Fire South",
+    "county": "Sonoma",
+    "latitude": 38.511173,
+    "longitude": -122.847261,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40595",
+    "listeners": 3
+  },
+  {
+    "id": "45863",
+    "name": "Central California Railroads",
+    "county": "Stanislaus",
+    "latitude": 37.55876,
+    "longitude": -120.987648,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45863"
+  },
+  {
+    "id": "42754",
+    "name": "Ceres Police Dispatch",
+    "county": "Stanislaus",
+    "latitude": 37.594733,
+    "longitude": -120.957567,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42754"
+  },
+  {
+    "id": "41253",
+    "name": "Modesto Police Dispatch",
+    "county": "Stanislaus",
+    "latitude": 37.63953,
+    "longitude": -120.996945,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41253",
+    "listeners": 7
+  },
+  {
+    "id": "30550",
+    "name": "Stanislaus County Fire Command 2",
+    "county": "Stanislaus",
+    "latitude": 37.550121,
+    "longitude": -121.050115,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30550",
+    "listeners": 2
+  },
+  {
+    "id": "30551",
+    "name": "Stanislaus County Fire Command 3",
+    "county": "Stanislaus",
+    "latitude": 37.550152,
+    "longitude": -121.050251,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30551",
+    "listeners": 1
+  },
+  {
+    "id": "30552",
+    "name": "Stanislaus County Fire Command 4",
+    "county": "Stanislaus",
+    "latitude": 37.54994,
+    "longitude": -121.050262,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30552",
+    "listeners": 12
+  },
+  {
+    "id": "30549",
+    "name": "Stanislaus County Fire Dispatch",
+    "county": "Stanislaus",
+    "latitude": 37.550047,
+    "longitude": -121.050173,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30549",
+    "listeners": 5
+  },
+  {
+    "id": "41289",
+    "name": "Stanislaus County Sheriff",
+    "county": "Stanislaus",
+    "latitude": 37.550243,
+    "longitude": -121.050229,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41289",
+    "listeners": 3
+  },
+  {
+    "id": "37163",
+    "name": "Stanislaus County Sheriff and Fire Dispatch, Ceres Police Dispatch, and Modesto Police Dispatch",
+    "county": "Stanislaus",
+    "latitude": 37.550126,
+    "longitude": -121.050175,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37163",
+    "listeners": 31
+  },
+  {
+    "id": "29600",
+    "name": "Turlock Police and Fire, CA State University Police",
+    "county": "Stanislaus",
+    "latitude": 37.494575,
+    "longitude": -120.846793,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/29600",
+    "listeners": 8
+  },
+  {
+    "id": "47124",
+    "name": "Turlock Police Dispatch",
+    "county": "Stanislaus",
+    "latitude": 37.494877,
+    "longitude": -120.846607,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/47124",
+    "listeners": 2
+  },
+  {
+    "id": "37201",
+    "name": "Turlock Police, Turlock Fire, CSUS Police, Ceres Police, Stanislaus Sheriff and Fire Command 4",
+    "county": "Stanislaus",
+    "latitude": 37.494498,
+    "longitude": -120.846367,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37201",
+    "listeners": 6
+  },
+  {
+    "id": "8468",
+    "name": "WIN System Amateur Repeater Network",
+    "county": "Statewide",
+    "latitude": 36.778149,
+    "longitude": -119.417986,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/8468",
+    "listeners": 11
+  },
+  {
+    "id": "19782",
+    "name": "Pleasant Grove Fire",
+    "county": "Sutter",
+    "latitude": 38.823819,
+    "longitude": -121.483767,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/19782"
+  },
+  {
+    "id": "31375",
+    "name": "Sutter County Sheriff, Yuba City Police, Fire, and Ambulance",
+    "county": "Sutter",
+    "latitude": 38.950963,
+    "longitude": -121.697206,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31375",
+    "listeners": 4
+  },
+  {
+    "id": "38926",
+    "name": "Yuba City Fire",
+    "county": "Sutter",
+    "latitude": 39.140324,
+    "longitude": -121.616702,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38926"
+  },
+  {
+    "id": "31714",
+    "name": "Yuba City Police, Sutter County Sheriff, and Fire/Rescue",
+    "county": "Sutter",
+    "latitude": 39.140299,
+    "longitude": -121.617067,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31714",
+    "listeners": 3
+  },
+  {
+    "id": "33656",
+    "name": "Corning VFD",
+    "county": "Tehama",
+    "latitude": 39.927463,
+    "longitude": -122.179316,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33656",
+    "listeners": 2
+  },
+  {
+    "id": "42562",
+    "name": "Lassen National Forest Fire - West",
+    "county": "Tehama",
+    "latitude": 40.768352,
+    "longitude": -120.730805,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42562"
+  },
+  {
+    "id": "42471",
+    "name": "Mendocino National Forest - East",
+    "county": "Tehama",
+    "latitude": 39.317811,
+    "longitude": -123.412443,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42471"
+  },
+  {
+    "id": "37937",
+    "name": "Northern Sacramento Valley Fire",
+    "county": "Tehama",
+    "latitude": 40.125393,
+    "longitude": -122.234116,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/37937"
+  },
+  {
+    "id": "42561",
+    "name": "Shasta-Trinity National Forest Fire - South",
+    "county": "Tehama",
+    "latitude": 40.588339,
+    "longitude": -122.39366,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42561",
+    "listeners": 1
+  },
+  {
+    "id": "30094",
+    "name": "Tehama County Law Enforcement Dispatch",
+    "county": "Tehama",
+    "latitude": 40.125153,
+    "longitude": -122.201315,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30094",
+    "listeners": 5
+  },
+  {
+    "id": "40873",
+    "name": "Tehama TGU Dispatch - Command",
+    "county": "Tehama",
+    "latitude": 40.125109,
+    "longitude": -122.201511,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40873",
+    "listeners": 6
+  },
+  {
+    "id": "40539",
+    "name": "*CalFire SHU, Trinity County Fire, Whiskeytown NRA, USFS SHF",
+    "county": "Trinity",
+    "latitude": 40.649201,
+    "longitude": -123.11312,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40539"
+  },
+  {
+    "id": "25881",
+    "name": "CalFire Tulare Unit (TUU)",
+    "county": "Tulare",
+    "latitude": 36.270364,
+    "longitude": -118.796349,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/25881"
+  },
+  {
+    "id": "33583",
+    "name": "Dinuba Fire &amp; EMS Dispatch",
+    "county": "Tulare",
+    "latitude": 36.54308,
+    "longitude": -119.387038,
+    "category": "ems",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33583",
+    "listeners": 3
+  },
+  {
+    "id": "46019",
+    "name": "Porterville Fire Department",
+    "county": "Tulare",
+    "latitude": 36.065137,
+    "longitude": -119.016701,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46019"
+  },
+  {
+    "id": "28839",
+    "name": "Porterville Police",
+    "county": "Tulare",
+    "latitude": 36.065332,
+    "longitude": -119.016881,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28839",
+    "listeners": 7
+  },
+  {
+    "id": "33994",
+    "name": "Sequoia and Sierra Nat&#039;l Forests &amp; Kings Canyon Nat&#039;l Park",
+    "county": "Tulare",
+    "latitude": 36.207811,
+    "longitude": -118.790047,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/33994",
+    "listeners": 1
+  },
+  {
+    "id": "6369",
+    "name": "Tulare City Police and Fire Dispatch",
+    "county": "Tulare",
+    "latitude": 36.206936,
+    "longitude": -119.342588,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/6369",
+    "listeners": 12
+  },
+  {
+    "id": "7372",
+    "name": "Tulare County Fire and CHP Pink",
+    "county": "Tulare",
+    "latitude": 36.251534,
+    "longitude": -118.852663,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/7372",
+    "listeners": 4
+  },
+  {
+    "id": "4233",
+    "name": "Tulare County Sheriff 1",
+    "county": "Tulare",
+    "latitude": 36.251497,
+    "longitude": -118.852735,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/4233",
+    "listeners": 3
+  },
+  {
+    "id": "6316",
+    "name": "Tulare County Sheriff 2",
+    "county": "Tulare",
+    "latitude": 36.251634,
+    "longitude": -118.852828,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/6316",
+    "listeners": 6
+  },
+  {
+    "id": "44895",
+    "name": "Tulare County Sheriff, Exeter PD, Farmersville PD, Woodlake PD",
+    "county": "Tulare",
+    "latitude": 36.251763,
+    "longitude": -118.852556,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44895"
+  },
+  {
+    "id": "16404",
+    "name": "Visalia Fire",
+    "county": "Tulare",
+    "latitude": 36.330431,
+    "longitude": -119.291997,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/16404",
+    "listeners": 3
+  },
+  {
+    "id": "38428",
+    "name": "Tuolumne County Public Safety",
+    "county": "Tuolumne",
+    "latitude": 38.056738,
+    "longitude": -119.991886,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/38428",
+    "listeners": 13
+  },
+  {
+    "id": "42095",
+    "name": "California Highway Patrol Coastal Division Ventura Purple",
+    "county": "Ventura",
+    "latitude": 34.370431,
+    "longitude": -119.13909,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/42095"
+  },
+  {
+    "id": "41139",
+    "name": "Camarillo Airport - ATC",
+    "county": "Ventura",
+    "latitude": 34.217784,
+    "longitude": -119.038492,
+    "category": "aircraft",
+    "webUrl": "https://www.broadcastify.com/listen/feed/41139",
+    "listeners": 1
+  },
+  {
+    "id": "28873",
+    "name": "Pleasant Valley ARC Repeater Network",
+    "county": "Ventura",
+    "latitude": 38.683181,
+    "longitude": -120.663148,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28873"
+  },
+  {
+    "id": "46556",
+    "name": "Port Hueneme Police Dispatch",
+    "county": "Ventura",
+    "latitude": 34.147768,
+    "longitude": -119.195105,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46556",
+    "listeners": 1
+  },
+  {
+    "id": "30587",
+    "name": "Ventura County Fire - Ch 1,2,5,8",
+    "county": "Ventura",
+    "latitude": 34.445642,
+    "longitude": -119.077715,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/30587",
+    "listeners": 8
+  },
+  {
+    "id": "36480",
+    "name": "Ventura County Sheriff Dispatch - East",
+    "county": "Ventura",
+    "latitude": 34.445966,
+    "longitude": -119.077909,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/36480",
+    "listeners": 6
+  },
+  {
+    "id": "31780",
+    "name": "Ventura County Sheriff Dispatch - West",
+    "county": "Ventura",
+    "latitude": 34.445783,
+    "longitude": -119.078174,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31780",
+    "listeners": 14
+  },
+  {
+    "id": "46068",
+    "name": "Ventura PD Band 1",
+    "county": "Ventura",
+    "latitude": 34.370471,
+    "longitude": -119.13905,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/46068",
+    "listeners": 2
+  },
+  {
+    "id": "31435",
+    "name": "Davis Fire",
+    "county": "Yolo",
+    "latitude": 38.543335,
+    "longitude": -121.738923,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/31435",
+    "listeners": 1
+  },
+  {
+    "id": "45986",
+    "name": "NR6TT AllStarLink Node 65940",
+    "county": "Yolo",
+    "latitude": 38.678334,
+    "longitude": -121.901794,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45986"
+  },
+  {
+    "id": "28553",
+    "name": "UC Davis Fire Dispatch",
+    "county": "Yolo",
+    "latitude": 38.53402,
+    "longitude": -121.790684,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/28553"
+  },
+  {
+    "id": "23386",
+    "name": "West Sacramento Fire Dispatch",
+    "county": "Yolo",
+    "latitude": 38.58039,
+    "longitude": -121.530368,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/23386",
+    "listeners": 1
+  },
+  {
+    "id": "39828",
+    "name": "West Sacramento Police, Fire and Yolo County Sheriff Dispatch",
+    "county": "Yolo",
+    "latitude": 38.580473,
+    "longitude": -121.530046,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/39828",
+    "listeners": 5
+  },
+  {
+    "id": "45568",
+    "name": "West Sacramento Public Safety",
+    "county": "Yolo",
+    "latitude": 38.580266,
+    "longitude": -121.530135,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/45568"
+  },
+  {
+    "id": "23384",
+    "name": "Woodland Fire Dispatch - Gold",
+    "county": "Yolo",
+    "latitude": 38.678603,
+    "longitude": -121.773442,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/23384",
+    "listeners": 1
+  },
+  {
+    "id": "34812",
+    "name": "Woodland Police Dispatch",
+    "county": "Yolo",
+    "latitude": 38.678573,
+    "longitude": -121.77312,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/34812",
+    "listeners": 1
+  },
+  {
+    "id": "23383",
+    "name": "Yolo County Fire Dispatch - Green",
+    "county": "Yolo",
+    "latitude": 38.718704,
+    "longitude": -121.905847,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/23383",
+    "listeners": 1
+  },
+  {
+    "id": "40538",
+    "name": "*Yuba County Fire agencies, CalFire NEU",
+    "county": "Yuba",
+    "latitude": 39.283984,
+    "longitude": -121.355722,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/40538"
+  },
+  {
+    "id": "20479",
+    "name": "Linda Fire",
+    "county": "Yuba",
+    "latitude": 39.122672,
+    "longitude": -121.541393,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20479"
+  },
+  {
+    "id": "22060",
+    "name": "Olivehurst Fire",
+    "county": "Yuba",
+    "latitude": 39.079666,
+    "longitude": -121.552895,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/22060"
+  },
+  {
+    "id": "44693",
+    "name": "UPRR Valley and Sacramento Subs: Marysville, CA Area",
+    "county": "Yuba",
+    "latitude": 39.264479,
+    "longitude": -121.346739,
+    "category": "other",
+    "webUrl": "https://www.broadcastify.com/listen/feed/44693"
+  },
+  {
+    "id": "20589",
+    "name": "Wheatland Fire Authority",
+    "county": "Yuba",
+    "latitude": 39.009841,
+    "longitude": -121.42294,
+    "category": "fire",
+    "webUrl": "https://www.broadcastify.com/listen/feed/20589"
+  },
+  {
+    "id": "8294",
+    "name": "Yuba County Sheriff, Wheatland and Marysville Public Safety",
+    "county": "Yuba",
+    "latitude": 39.284171,
+    "longitude": -121.355825,
+    "category": "law",
+    "webUrl": "https://www.broadcastify.com/listen/feed/8294",
+    "listeners": 22
+  }
+]

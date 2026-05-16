@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cesium Sandbox Demo</title>
+  <!-- Tell Cesium where its workers/assets live (must be set before Cesium.js loads) -->
+  <script>window.CESIUM_BASE_URL = 'https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/';</script>
+  <!-- Cesium from CDN (same version as the sandbox dependency) -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <style>
+    html, body, #cesiumContainer { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+    #xr-btn {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      padding: 10px 18px;
+      background: rgba(20,20,20,0.85);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 6px;
+      font: bold 15px sans-serif;
+      cursor: pointer;
+      display: none;
+    }
+    #xr-btn:hover { background: rgba(50,50,50,0.95); }
+    #xr-btn.active { border-color: #4af; color: #4af; }
+
+    #map-legend {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      color: #eee;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 12px 14px 10px;
+      font: 13px/1.5 sans-serif;
+      backdrop-filter: blur(6px);
+      min-width: 180px;
+      user-select: none;
+    }
+    #map-legend h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 0;
+    }
+    .legend-symbol {
+      flex-shrink: 0;
+      width: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .legend-dot {
+      border-radius: 50%;
+      border: 2px solid #fff;
+      display: inline-block;
+    }
+    .legend-polygon {
+      width: 16px;
+      height: 10px;
+      border: 2px solid #f44;
+      background: rgba(255,68,68,0.35);
+      border-radius: 2px;
+    }
+    .legend-label { flex: 1; font-size: 12px; }
+    .legend-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity .15s;
+    }
+    .legend-toggle:hover { opacity: 1; }
+    .legend-toggle.off { opacity: 0.35; }
+    .legend-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      margin: 6px 0;
+    }
+
+    /* ── Fire popup panel (vertical accordion, no horizontal scrolling) ── */
+    #fire-popup {
+      display: none;
+      position: absolute;
+      left: calc(100% + 6px);
+      width: 240px;
+      max-height: 65vh;
+      overflow-y: auto;
+      background: rgba(14,14,14,0.96);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      z-index: 250;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      padding: 4px 0;
+    }
+    .fp-city-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px 7px 12px;
+      cursor: pointer;
+      color: #ddd;
+      font: 12px/1.4 sans-serif;
+      user-select: none;
+    }
+    .fp-city-head:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .fp-city-name { flex: 1; }
+    .fp-city-arrow { opacity: 0.5; font-size: 9px; flex-shrink: 0; }
+    #fire-sub-popup {
+      display: none;
+      position: absolute;
+      width: 220px;
+      max-height: 65vh;
+      overflow-y: auto;
+      background: rgba(14,14,14,0.96);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      z-index: 260;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      padding: 4px 0;
+    }
+    .fp-fire {
+      padding: 5px 8px;
+      cursor: pointer;
+      color: #ccc;
+      font: 11px/1.4 sans-serif;
+      border-radius: 4px;
+    }
+    .fp-fire:hover { color: #ffaaaa; background: rgba(255,80,60,0.14); }
+    .fp-fire-meta { color: #777; font-size: 10px; margin-top: 1px; }
+    .fp-header {
+      padding: 5px 12px 4px;
+      font: bold 10px/1.4 sans-serif;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 2px;
+    }
+
+    /* ── Flight info panel ── */
+    #flight-info {
+      display: none;
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      background: rgba(14,14,14,0.92);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 10px 14px 8px;
+      color: #eee;
+      font: 12px/1.6 sans-serif;
+      backdrop-filter: blur(6px);
+      min-width: 220px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.55);
+    }
+    #flight-info .fi-callsign {
+      font: bold 14px/1.3 sans-serif;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    #flight-info .fi-row { display: flex; justify-content: space-between; gap: 16px; }
+    #flight-info .fi-label { color: #888; }
+    #flight-info .fi-val   { color: #eee; font-weight: 600; }
+    #flight-info .fi-note  { color: #666; font-size: 10px; margin-top: 6px; }
+    #flight-info .fi-close {
+      position: absolute; top: 6px; right: 8px;
+      background: none; border: none; color: #666; cursor: pointer; font-size: 14px;
+    }
+    #flight-info .fi-close:hover { color: #bbb; }
+
+    /* ── Altitude snap controls ── */
+    #altitude-snap {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+    #snap-toggle-btn {
+      pointer-events: all;
+      padding: 6px 16px;
+      background: rgba(20,20,20,0.88);
+      color: #bbb;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 20px;
+      font: 12px/1.4 sans-serif;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      white-space: nowrap;
+      transition: color .15s, border-color .15s;
+    }
+    #snap-toggle-btn:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+    #snap-toggle-btn.active { color: #7df; border-color: rgba(100,200,255,0.55); }
+    #snap-level-bar {
+      pointer-events: all;
+      display: none;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 14px;
+      background: rgba(14,14,14,0.92);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      white-space: nowrap;
+    }
+    .snap-level {
+      font: 11px/1.4 sans-serif;
+      color: #555;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: color .1s, background .1s;
+    }
+    .snap-level:hover { color: #aaa; }
+    .snap-level.active { color: #7df; font-weight: 600; background: rgba(100,200,255,0.1); }
+    .snap-sep { color: #333; font-size: 10px; margin: 0 1px; user-select: none; }
+
+    /* ── Map Settings Panel ── */
+    #map-settings {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 200;
+    }
+    #map-settings-toggle {
+      display: block;
+      margin-left: auto;
+      padding: 6px 12px;
+      background: rgba(18,18,18,0.88);
+      color: #ccc;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 6px;
+      font: 12px/1.4 sans-serif;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: color .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    #map-settings-toggle:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    #map-settings-toggle.open  { color: #7df; border-color: rgba(100,200,255,0.45); }
+    #map-settings-panel {
+      display: none;
+      margin-top: 6px;
+      padding: 10px 12px 12px;
+      background: rgba(18,18,18,0.93);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.55);
+      min-width: 160px;
+    }
+    .ms-title {
+      font: bold 10px/1.4 sans-serif;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 5px;
+    }
+    .ms-options { display: flex; flex-direction: column; gap: 1px; }
+    .ms-option {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 6px;
+      color: #ccc;
+      font: 12px/1.4 sans-serif;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: background .1s;
+    }
+    .ms-option:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .ms-option input { accent-color: #7df; cursor: pointer; }
+    .ms-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; }
+    .ms-key-row {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+      align-items: center;
+    }
+    .ms-key-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: #ddd;
+      font: 11px/1.4 sans-serif;
+      padding: 4px 6px;
+      min-width: 0;
+    }
+    .ms-key-input::placeholder { color: #555; }
+    .ms-key-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .ms-btn {
+      padding: 4px 8px;
+      background: rgba(100,200,255,0.12);
+      border: 1px solid rgba(100,200,255,0.3);
+      border-radius: 4px;
+      color: #7df;
+      font: 11px/1.4 sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ms-btn:hover { background: rgba(100,200,255,0.22); }
+    .ms-btn:disabled { opacity: 0.4; cursor: default; }
+    .ms-select {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: #ccc;
+      font: 12px/1.4 sans-serif;
+      padding: 5px 6px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .ms-select:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .ms-hint { font: 10px/1.4 sans-serif; color: #555; margin-top: 4px; padding: 0 4px; }
+
+    /* ── Auth Panel ────────────────────────────────────────────────────── */
+    #auth-panel {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 10px 12px;
+      backdrop-filter: blur(6px);
+      color: #eee;
+      font: 12px/1.5 sans-serif;
+      min-width: 170px;
+      user-select: none;
+    }
+    .auth-title {
+      font: bold 10px/1.4 sans-serif;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 7px;
+    }
+    .auth-provider-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      width: 100%;
+      padding: 5px 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 5px;
+      color: #bbb;
+      font: 12px/1.4 sans-serif;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 4px;
+      transition: background .1s, border-color .1s;
+    }
+    .auth-provider-btn:last-child { margin-bottom: 0; }
+    .auth-provider-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); color: #fff; }
+    .auth-provider-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+    .auth-user-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    #auth-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1565C0;
+      border: 2px solid rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: bold 11px sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+    #auth-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    #auth-display-name {
+      font: 600 13px/1.3 sans-serif;
+      color: #eee;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+    .auth-actions { display: flex; gap: 4px; }
+    .auth-action-btn {
+      flex: 1;
+      padding: 4px 6px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 4px;
+      color: #aaa;
+      font: 11px/1.4 sans-serif;
+      cursor: pointer;
+      transition: background .1s;
+    }
+    .auth-action-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    /* ── Profile Modal ─────────────────────────────────────────────────── */
+    #profile-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+    #profile-modal.open { display: flex; }
+    .pm-box {
+      background: rgba(20,20,20,0.97);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 20px 22px 16px;
+      min-width: 280px;
+      max-width: 340px;
+      width: 90vw;
+      color: #eee;
+      font: 13px/1.5 sans-serif;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+    .pm-title { font: bold 14px/1.3 sans-serif; color: #fff; margin-bottom: 14px; }
+    .pm-label { font: 11px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+    .pm-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      color: #ddd;
+      font: 13px/1.4 sans-serif;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+    }
+    .pm-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .pm-avatar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    #pm-avatar-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1565C0;
+      border: 2px solid rgba(255,255,255,0.2);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .pm-error { color: #f88; font-size: 11px; margin-bottom: 8px; display: none; }
+    .pm-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+    .pm-btn { padding: 6px 14px; border-radius: 5px; font: 12px/1.4 sans-serif; cursor: pointer; transition: background .1s; }
+    .pm-btn-cancel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); color: #aaa; }
+    .pm-btn-cancel:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .pm-btn-save { background: rgba(100,200,255,0.12); border: 1px solid rgba(100,200,255,0.3); color: #7df; }
+    .pm-btn-save:hover { background: rgba(100,200,255,0.22); }
+
+    /* ── Lobby Browser Modal ───────────────────────────────────────────── */
+    #lobby-browser {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+    #lobby-browser.open { display: flex; }
+    .lb-box {
+      background: rgba(18,18,18,0.97);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 20px 22px 18px;
+      width: min(500px, 92vw);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      color: #eee;
+      font: 13px/1.5 sans-serif;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+    .lb-header { display: flex; align-items: center; margin-bottom: 14px; gap: 8px; }
+    .lb-title { font: bold 15px/1.3 sans-serif; color: #fff; flex: 1; }
+    .lb-close { background: none; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+    .lb-close:hover { color: #bbb; }
+    .lb-section-title { font: bold 10px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .lb-list { flex: 1; overflow-y: auto; margin-bottom: 14px; min-height: 60px; max-height: 240px; }
+    .lb-empty { color: #555; font-size: 12px; padding: 12px 0; text-align: center; }
+    .lb-lobby-row { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 6px; }
+    .lb-lobby-host { flex: 1; font-weight: 600; color: #ddd; }
+    .lb-lobby-count { color: #888; font-size: 11px; white-space: nowrap; }
+    .lb-join-btn {
+      padding: 4px 10px;
+      background: rgba(100,200,255,0.12); border: 1px solid rgba(100,200,255,0.28);
+      border-radius: 4px; color: #7df; font: 11px/1.4 sans-serif; cursor: pointer; white-space: nowrap;
+    }
+    .lb-join-btn:hover { background: rgba(100,200,255,0.22); }
+    .lb-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0; }
+    .lb-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .lb-input {
+      flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 4px; color: #ddd; font: 12px/1.4 sans-serif; padding: 6px 8px;
+    }
+    .lb-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .lb-btn {
+      padding: 6px 14px; background: rgba(100,200,255,0.12); border: 1px solid rgba(100,200,255,0.28);
+      border-radius: 5px; color: #7df; font: 12px/1.4 sans-serif; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    }
+    .lb-btn:hover { background: rgba(100,200,255,0.22); }
+    .lb-btn:disabled { opacity: 0.4; cursor: default; }
+    .lb-radio-row { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .lb-radio-label { display: flex; align-items: center; gap: 5px; color: #bbb; font: 12px/1.4 sans-serif; cursor: pointer; }
+    .lb-radio-label input { accent-color: #7df; cursor: pointer; }
+    .lb-error { color: #f88; font-size: 11px; margin-top: 4px; display: none; }
+
+    /* ── Lobby HUD ─────────────────────────────────────────────────────── */
+    #lobby-hud {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 10px 12px 12px;
+      backdrop-filter: blur(6px);
+      color: #eee;
+      font: 12px/1.5 sans-serif;
+      min-width: 190px;
+      max-width: 220px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    #lobby-hud.active { display: block; }
+    .lh-title { font: bold 10px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .lh-member {
+      display: flex; align-items: center; gap: 7px;
+      padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .lh-member:last-child { border-bottom: none; }
+    .lh-avatar {
+      width: 24px; height: 24px; border-radius: 50%; background: #1565C0;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font: bold 9px sans-serif; color: #fff; flex-shrink: 0; overflow: hidden;
+    }
+    .lh-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .lh-member-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+    .lh-crown { color: #ffd700; font-size: 10px; flex-shrink: 0; }
+    .lh-member-btns { display: flex; gap: 3px; flex-shrink: 0; }
+    .lh-icon-btn { background: none; border: none; color: #666; font-size: 11px; cursor: pointer; padding: 1px 3px; border-radius: 3px; }
+    .lh-icon-btn:hover { color: #ccc; background: rgba(255,255,255,0.08); }
+    .lh-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; }
+    .lh-btn {
+      display: block; width: 100%; padding: 5px 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 4px; color: #bbb; font: 11px/1.4 sans-serif;
+      cursor: pointer; text-align: left; margin-bottom: 4px; transition: background .1s;
+    }
+    .lh-btn:last-child { margin-bottom: 0; }
+    .lh-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .lh-btn.active { color: #7df; border-color: rgba(100,200,255,0.3); background: rgba(100,200,255,0.08); }
+    .lh-btn-danger { color: #f88; border-color: rgba(255,100,100,0.25); }
+    .lh-btn-danger:hover { background: rgba(255,100,100,0.1); color: #faa; }
+    .lh-code { color: #7df; font: bold 13px/1.4 monospace; letter-spacing: .08em; margin: 4px 0 8px; }
+
+    /* ── Drawing Toolbar ───────────────────────────────────────────────── */
+    #drawing-toolbar {
+      display: none;
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 8px 12px;
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 320px;
+    }
+    #drawing-toolbar.active { display: flex; }
+    .dt-tool-btn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .1s, border-color .1s;
+    }
+    .dt-tool-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .dt-tool-btn.active { background: rgba(100,200,255,0.15); border-color: rgba(100,200,255,0.4); color: #7df; }
+    .dt-sep { width: 1px; height: 24px; background: rgba(255,255,255,0.12); margin: 0 2px; }
+    .dt-color-swatch {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: transform .1s, border-color .1s;
+    }
+    .dt-color-swatch:hover { transform: scale(1.15); }
+    .dt-color-swatch.active { border-color: #fff; transform: scale(1.15); }
+    .dt-clear-btn {
+      padding: 4px 10px;
+      background: rgba(255,80,60,0.12);
+      border: 1px solid rgba(255,80,60,0.28);
+      border-radius: 4px;
+      color: #f88;
+      font: 11px/1.4 sans-serif;
+      cursor: pointer;
+    }
+    .dt-clear-btn:hover { background: rgba(255,80,60,0.22); }
+
+    /* ── Chat Panel ────────────────────────────────────────────────────── */
+    #chat-panel {
+      display: none;
+      position: absolute;
+      right: 16px;
+      bottom: 70px;
+      z-index: 200;
+      width: 280px;
+      max-height: 360px;
+      background: rgba(14,14,14,0.92);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      font: 12px/1.5 sans-serif;
+      color: #eee;
+    }
+    #chat-panel.hidden { display: none !important; }
+    .cp-header {
+      display: flex; align-items: center; padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer; user-select: none;
+    }
+    .cp-title { flex: 1; font: bold 11px/1.4 sans-serif; color: #888; text-transform: uppercase; letter-spacing: .06em; }
+    .cp-toggle { font-size: 12px; color: #555; }
+    .cp-badge {
+      background: #e53935; color: #fff; border-radius: 8px;
+      padding: 1px 5px; font: bold 9px/1.4 sans-serif; margin-left: 5px; display: none;
+    }
+    .cp-messages {
+      flex: 1; overflow-y: auto; padding: 6px 10px;
+      max-height: 240px; min-height: 60px;
+    }
+    .cp-msg { margin-bottom: 6px; }
+    .cp-msg-header { display: flex; gap: 6px; align-items: baseline; }
+    .cp-msg-name { font-weight: 600; color: #7df; font-size: 11px; }
+    .cp-msg-time { color: #555; font-size: 10px; }
+    .cp-msg-text { color: #ddd; word-break: break-word; }
+    .cp-input-row { display: flex; gap: 6px; padding: 6px 8px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .cp-input {
+      flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px; color: #ddd; font: 12px/1.4 sans-serif; padding: 5px 7px;
+    }
+    .cp-input:focus { outline: none; border-color: rgba(100,200,255,0.5); }
+    .cp-send-btn {
+      padding: 5px 10px; background: rgba(100,200,255,0.12);
+      border: 1px solid rgba(100,200,255,0.28); border-radius: 4px;
+      color: #7df; font: 11px/1.4 sans-serif; cursor: pointer;
+    }
+    .cp-send-btn:hover { background: rgba(100,200,255,0.22); }
+
+    /* ── PTT / Video Controls ──────────────────────────────────────────── */
+    #comm-controls {
+      display: none;
+      position: absolute;
+      bottom: 70px;
+      left: 16px;
+      z-index: 200;
+      background: rgba(18,18,18,0.88);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 8px 10px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: stretch;
+    }
+    #comm-controls.hidden { display: none !important; }
+    #ptt-btn {
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb; font: bold 12px/1.4 sans-serif; cursor: pointer;
+      transition: background .1s;
+      user-select: none;
+    }
+    #ptt-btn:active, #ptt-btn.talking {
+      background: rgba(255,60,60,0.25); border-color: rgba(255,60,60,0.5); color: #f88;
+    }
+    #video-btn {
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb; font: 11px/1.4 sans-serif; cursor: pointer;
+      transition: background .1s;
+    }
+    #video-btn.active { background: rgba(100,200,255,0.12); border-color: rgba(100,200,255,0.3); color: #7df; }
+    #chat-toggle-btn {
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      color: #bbb; font: 11px/1.4 sans-serif; cursor: pointer;
+    }
+
+    /* ── Peer Video Grid ───────────────────────────────────────────────── */
+    #peer-videos {
+      display: none;
+      position: absolute;
+      top: 16px;
+      right: 250px;
+      z-index: 200;
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      max-width: 280px;
+    }
+    #peer-videos.hidden { display: none !important; }
+    .peer-video-thumb {
+      width: 80px; height: 60px;
+      background: #111; border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px; overflow: hidden; position: relative;
+    }
+    .peer-video-thumb video { width: 100%; height: 100%; object-fit: cover; }
+    .peer-video-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.6); color: #ccc;
+      font: 9px/1.4 sans-serif; padding: 1px 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "cesium": "./cesium-esm-shim.js"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/alert-cesium/dev/assets/index-DqDEYVMb.js"></script>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+
+  <!-- Auth Panel (top-left) -->
+  <div id="auth-panel">
+    <div id="auth-signed-out">
+      <div class="auth-title">Sign In</div>
+      <button class="auth-provider-btn" id="auth-google-btn">
+        <span class="auth-provider-icon">G</span>Google
+      </button>
+      <button class="auth-provider-btn" id="auth-github-btn">
+        <span class="auth-provider-icon">⌂</span>GitHub
+      </button>
+      <button class="auth-provider-btn" id="auth-apple-btn">
+        <span class="auth-provider-icon">⬛</span>Apple
+      </button>
+      <button class="auth-provider-btn" id="auth-discord-btn">
+        <span class="auth-provider-icon">💬</span>Discord
+      </button>
+    </div>
+    <div id="auth-signed-in" style="display:none">
+      <div class="auth-user-row">
+        <div id="auth-avatar-circle">
+          <img id="auth-avatar-img" src="" alt="" style="display:none">
+          <span id="auth-avatar-initials"></span>
+        </div>
+        <div id="auth-display-name">User</div>
+      </div>
+      <div class="auth-actions">
+        <button class="auth-action-btn" id="auth-edit-btn">✏ Profile</button>
+        <button class="auth-action-btn" id="auth-signout-btn">Sign Out</button>
+      </div>
+      <button class="auth-provider-btn" id="auth-multiplayer-btn" style="margin-top:6px">
+        <span class="auth-provider-icon">⚡</span>Multiplayer
+      </button>
+    </div>
+  </div>
+
+  <!-- Profile Edit Modal -->
+  <div id="profile-modal">
+    <div class="pm-box">
+      <div class="pm-title">Edit Profile</div>
+      <div class="pm-label">Display Name</div>
+      <input class="pm-input" id="pm-name" type="text" maxlength="32" placeholder="Your name (1–32 chars)">
+      <div class="pm-label">Avatar URL</div>
+      <div class="pm-avatar-row">
+        <img id="pm-avatar-preview" src="" alt="avatar">
+        <input class="pm-input" id="pm-avatar-url" type="url" placeholder="https://…" style="margin-bottom:0;flex:1">
+      </div>
+      <div class="pm-error" id="pm-error"></div>
+      <div class="pm-actions">
+        <button class="pm-btn pm-btn-cancel" id="pm-cancel">Cancel</button>
+        <button class="pm-btn pm-btn-save" id="pm-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <button id="xr-btn">Enter VR</button>
+  <div id="flight-info">
+    <button class="fi-close" id="flight-info-close">✕</button>
+    <div class="fi-callsign" id="fi-callsign"></div>
+    <div class="fi-row"><span class="fi-label">Altitude</span><span class="fi-val" id="fi-alt"></span></div>
+    <div class="fi-row"><span class="fi-label">Speed</span><span class="fi-val" id="fi-speed"></span></div>
+    <div class="fi-row"><span class="fi-label">Heading</span><span class="fi-val" id="fi-heading"></span></div>
+    <div class="fi-row"><span class="fi-label">Vertical</span><span class="fi-val" id="fi-vrate"></span></div>
+    <div class="fi-row"><span class="fi-label">Origin</span><span class="fi-val" id="fi-country"></span></div>
+    <div class="fi-note" id="fi-note"></div>
+  </div>
+
+  <div id="altitude-snap">
+    <div id="snap-level-bar"></div>
+    <button id="snap-toggle-btn">⇕ Altitude Snap</button>
+  </div>
+
+  <div id="map-settings">
+    <button id="map-settings-toggle">⚙ Map</button>
+    <div id="map-settings-panel">
+      <div class="ms-title">Imagery</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="topo" checked> Topo</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="satellite"> Satellite</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="3d-satellite"> 3D Satellite</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="street"> Street</label>
+        <label class="ms-option"><input type="radio" name="ms-imagery" value="dark"> Dark</label>
+      </div>
+      <hr class="ms-divider">
+      <div class="ms-title">Photorealistic 3D</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="checkbox" id="ms-google3d"> Google 3D Tiles</label>
+      </div>
+      <div id="ms-google3d-key" style="display:none">
+        <div class="ms-key-row">
+          <input type="password" class="ms-key-input" id="ms-google3d-input" placeholder="Google Maps API key">
+          <button class="ms-btn" id="ms-google3d-load">Load</button>
+        </div>
+        <div class="ms-hint">Free tier · <a href="https://developers.google.com/maps/documentation/tile/get-api-key" target="_blank" style="color:#7df">Get key</a></div>
+      </div>
+      <hr class="ms-divider">
+      <div class="ms-title">Terrain</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="checkbox" id="ms-elevation" checked> 3D Elevation</label>
+      </div>
+      <hr class="ms-divider">
+      <div class="ms-title">Load Region</div>
+      <select class="ms-select" id="ms-region">
+        <option value="world" selected>World (no limit)</option>
+        <option value="california">California</option>
+        <option value="so-cal">Southern California</option>
+        <option value="pacific-nw">Pacific Northwest</option>
+      </select>
+      <div style="margin-top:5px">
+        <button class="ms-btn" id="ms-clip-view" style="width:100%">📍 Clip to Current View</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="map-legend">
+    <h3>Map Legend</h3>
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:10px;height:10px;background:#ff4500;"></span></span>
+      <span class="legend-label">Camera</span>
+      <button class="legend-toggle" id="legend-cameras-btn" title="Toggle camera markers">&#x1F441;</button>
+    </div>
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:12px;height:12px;background:#ffa500;"></span></span>
+      <span class="legend-label">Near fire (&lt;5 km)</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:14px;height:14px;background:#ff0000;"></span></span>
+      <span class="legend-label">Inside fire perimeter</span>
+    </div>
+
+    <hr class="legend-divider">
+
+    <div class="legend-row" id="fire-legend-row">
+      <span class="legend-symbol"><span class="legend-polygon"></span></span>
+      <span class="legend-label">Active fire perimeter</span>
+      <button class="legend-toggle" id="legend-fires-btn" title="Toggle fire overlay">&#x1F441;</button>
+    </div>
+
+    <hr class="legend-divider">
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:12px;height:12px;background:#81d4fa;border-color:#0277bd;"></span></span>
+      <span class="legend-label">Aircraft</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:12px;height:12px;background:#ffcc80;border-color:#e65100;"></span></span>
+      <span class="legend-label">Helicopter</span>
+      <button class="legend-toggle" id="legend-flights-btn" title="Toggle live flights">&#x1F441;</button>
+    </div>
+
+    <hr class="legend-divider">
+
+    <div class="legend-row">
+      <span class="legend-symbol"><span class="legend-dot" style="width:14px;height:14px;background:#0097A7;"></span></span>
+      <span class="legend-label">Public webcam</span>
+      <button class="legend-toggle" id="legend-webcams-btn" title="Toggle public webcams">&#x1F441;</button>
+    </div>
+
+    <hr class="legend-divider">
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#1565C0;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">PD</span></span>
+      <span class="legend-label">Law Enforcement</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#C62828;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">FD</span></span>
+      <span class="legend-label">Fire Dispatch</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#2E7D32;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">+</span></span>
+      <span class="legend-label">EMS</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-symbol"><span style="width:18px;height:18px;border-radius:50%;background:#E65100;border:2px solid #fff;display:inline-block;font:bold 8px sans-serif;color:#fff;display:flex;align-items:center;justify-content:center;">MC</span></span>
+      <span class="legend-label">Multi-Agency</span>
+      <button class="legend-toggle" id="legend-radio-btn" title="Toggle radio markers">&#x1F441;</button>
+    </div>
+  </div>
+
+  <!-- Communication Controls (PTT + video, shown in lobby) -->
+  <div id="comm-controls" class="hidden">
+    <button id="ptt-btn">🎤 Hold to Talk</button>
+    <button id="video-btn">📷 Video Off</button>
+    <button id="chat-toggle-btn">💬 Chat</button>
+  </div>
+
+  <!-- Chat Panel -->
+  <div id="chat-panel" class="hidden">
+    <div class="cp-header" id="cp-header">
+      <span class="cp-title">Chat</span>
+      <span class="cp-badge" id="cp-badge">0</span>
+      <span class="cp-toggle">▼</span>
+    </div>
+    <div class="cp-messages" id="cp-messages"></div>
+    <div class="cp-input-row">
+      <input class="cp-input" id="cp-input" type="text" maxlength="256" placeholder="Message…">
+      <button class="cp-send-btn" id="cp-send">Send</button>
+    </div>
+  </div>
+
+  <!-- Peer Video Grid -->
+  <div id="peer-videos" class="hidden"></div>
+
+  <!-- Drawing Toolbar (shown when in lobby) -->
+  <div id="drawing-toolbar">
+    <button class="dt-tool-btn" id="dt-stroke" title="Freehand draw">✏</button>
+    <button class="dt-tool-btn" id="dt-line"   title="Line">─</button>
+    <button class="dt-tool-btn" id="dt-circle" title="Circle">○</button>
+    <button class="dt-tool-btn" id="dt-rect"   title="Rectangle">□</button>
+    <button class="dt-tool-btn" id="dt-pin"    title="Pin">📍</button>
+    <div class="dt-sep"></div>
+    <div class="dt-color-swatch active" style="background:#ff3333" data-color="#ff3333"></div>
+    <div class="dt-color-swatch" style="background:#ff9900" data-color="#ff9900"></div>
+    <div class="dt-color-swatch" style="background:#ffee00" data-color="#ffee00"></div>
+    <div class="dt-color-swatch" style="background:#33cc33" data-color="#33cc33"></div>
+    <div class="dt-color-swatch" style="background:#3399ff" data-color="#3399ff"></div>
+    <div class="dt-color-swatch" style="background:#ffffff" data-color="#ffffff"></div>
+    <div class="dt-sep" id="dt-sep-clear"></div>
+    <button class="dt-clear-btn" id="dt-clear-all" style="display:none">✕ Clear All</button>
+  </div>
+
+  <!-- Lobby Browser Modal -->
+  <div id="lobby-browser">
+    <div class="lb-box">
+      <div class="lb-header">
+        <div class="lb-title">Multiplayer Lobbies</div>
+        <button class="lb-close" id="lb-close-btn">✕</button>
+      </div>
+
+      <div class="lb-section-title">Public Lobbies</div>
+      <div class="lb-list" id="lb-lobby-list">
+        <div class="lb-empty" id="lb-empty-msg">No public lobbies. Create one below!</div>
+      </div>
+
+      <hr class="lb-divider">
+      <div class="lb-section-title">Create Lobby</div>
+      <div class="lb-radio-row">
+        <label class="lb-radio-label"><input type="radio" name="lb-privacy" value="public" checked> Public</label>
+        <label class="lb-radio-label"><input type="radio" name="lb-privacy" value="private"> Private</label>
+      </div>
+      <button class="lb-btn" id="lb-create-btn">Create Lobby</button>
+
+      <hr class="lb-divider">
+      <div class="lb-section-title">Join by Code</div>
+      <div class="lb-row">
+        <input class="lb-input" id="lb-code-input" type="text" maxlength="6" placeholder="6-digit code" style="text-transform:uppercase">
+        <button class="lb-btn" id="lb-code-join-btn">Join</button>
+      </div>
+      <div class="lb-error" id="lb-error"></div>
+    </div>
+  </div>
+
+  <!-- Lobby HUD (right sidebar, shown when in lobby) -->
+  <div id="lobby-hud">
+    <div class="lh-title">Lobby</div>
+    <div id="lh-code" class="lh-code"></div>
+    <div id="lh-members"></div>
+    <hr class="lh-divider">
+    <button class="lh-btn lh-btn-danger" id="lh-leave-btn">Leave Lobby</button>
+    <div id="lh-host-controls" style="display:none">
+      <hr class="lh-divider">
+      <div class="lh-title">Host Controls</div>
+      <button class="lh-btn" id="lh-lock-btn">🔓 Lock Lobby</button>
+      <button class="lh-btn" id="lh-privacy-btn">🌐 Make Private</button>
+      <button class="lh-btn" id="lh-sync-layers-btn">⟳ Sync Layers to All</button>
+    </div>
+  </div>
+
+
+</body>
+</html>
