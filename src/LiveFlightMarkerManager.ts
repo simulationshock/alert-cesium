@@ -65,7 +65,6 @@ export class LiveFlightMarkerManager {
   get visible(): boolean { return this._visible; }
 
   update(flights: LiveFlight[]): void {
-    const show = this._visible && this._underMaxAlt();
     const seen = new Set<string>();
 
     for (const f of flights) {
@@ -75,10 +74,10 @@ export class LiveFlightMarkerManager {
 
       let entity = this.entities.get(f.icao24);
       if (!entity) {
+        // Always show=true on the entity; ds.show is the sole visibility gate.
         entity = this.ds.entities.add({
           id: `lf-${f.icao24}`,
           position: new ConstantPositionProperty(pos),
-          show,
           billboard: {
             image,
             rotation,
@@ -107,7 +106,6 @@ export class LiveFlightMarkerManager {
       } else {
         (entity.position as ConstantPositionProperty).setValue(pos);
         entity.billboard!.rotation = new ConstantProperty(rotation);
-        entity.show = show;
       }
       this.flightMap.set(entity, f);
       seen.add(f.icao24);
