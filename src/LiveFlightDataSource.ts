@@ -1,4 +1,4 @@
-import type { FlightPoint, LiveFlight, LiveFlightDataSourceOptions } from './types.js';
+import type { FlightCircle, FlightPoint, LiveFlight, LiveFlightDataSourceOptions } from './types.js';
 
 // opendata.adsb.fi — free community ADS-B API, no key required, CORS wildcard.
 // Response uses feet for altitude, knots for speed, ft/min for vertical rate.
@@ -7,7 +7,7 @@ const ADSB_DIRECT = 'https://opendata.adsb.fi/api/v2/lat/{lat}/lon/{lon}/dist/{n
 const ADSB_PROXY  = '{proxy}/flights?lat={lat}&lon={lon}&dist={nm}';
 
 /** Compute search circle from a bounding box: centre lat/lon + radius in nautical miles. */
-function bboxToCircle(bbox: [number, number, number, number]): { lat: number; lon: number; nm: number } {
+function bboxToCircle(bbox: [number, number, number, number]): FlightCircle {
   const [west, south, east, north] = bbox;
   const lat = (south + north) / 2;
   const lon = (west  + east)  / 2;
@@ -20,6 +20,7 @@ function bboxToCircle(bbox: [number, number, number, number]): { lat: number; lo
 
 /** Polls adsb.fi for real-time ADS-B state vectors via an optional CORS proxy. */
 export class LiveFlightDataSource {
+  private readonly circles: FlightCircle[];
   private readonly bbox: [number, number, number, number];
   private readonly refreshIntervalMs: number;
   private readonly trackDurationMs: number;
@@ -35,6 +36,7 @@ export class LiveFlightDataSource {
 
   constructor(options: LiveFlightDataSourceOptions = {}) {
     this.bbox              = options.bbox             ?? [-124.48, 32.53, -114.13, 42.01];
+    this.circles           = options.circles          ?? [];
     this.refreshIntervalMs = options.refreshIntervalMs ?? 15_000;
     this.trackDurationMs   = options.trackDurationMs   ?? 3_600_000;
     this.fetcher           = options.fetcher           ?? fetch.bind(globalThis);
@@ -64,83 +66,96 @@ export class LiveFlightDataSource {
 
   private async _poll(): Promise<void> {
     if (this._destroyed) return;
-    const { lat, lon, nm } = bboxToCircle(this.bbox);
+
+    const queryCircles = this.circles.length > 0 ? this.circles : [bboxToCircle(this.bbox)];
     const template = this.proxyUrl
       ? ADSB_PROXY.replace('{proxy}', this.proxyUrl)
       : ADSB_DIRECT;
-    const url = template.replace('{lat}', String(lat)).replace('{lon}', String(lon)).replace('{nm}', String(nm));
-    try {
-      const res = await this.fetcher(url, { headers: { accept: 'application/json' } });
-      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-      const data = await res.json() as { ac?: unknown[]; aircraft?: unknown[] };
-      if (this._destroyed) return;
 
-      const now     = Date.now();
-      const flights: LiveFlight[] = [];
-      const seen    = new Set<string>();
-      const [west, south, east, north] = this.bbox;
+    const now = Date.now();
+    const [west, south, east, north] = this.bbox;
+    const flightMap = new Map<string, LiveFlight>();
 
-      for (const raw of (data.aircraft ?? data.ac ?? [])) {
-        if (typeof raw !== 'object' || raw === null) continue;
-        const a = raw as Record<string, unknown>;
+    await Promise.all(queryCircles.map(async ({ lat, lon, nm }) => {
+      const url = template
+        .replace('{lat}', String(lat))
+        .replace('{lon}', String(lon))
+        .replace('{nm}', String(nm));
+      try {
+        const res = await this.fetcher(url, { headers: { accept: 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const data = await res.json() as { ac?: unknown[]; aircraft?: unknown[] };
+        if (this._destroyed) return;
 
-        const icao24 = typeof a['hex'] === 'string' ? a['hex'].toLowerCase() : null;
-        const lat    = typeof a['lat'] === 'number' ? a['lat'] : null;
-        const lon    = typeof a['lon'] === 'number' ? a['lon'] : null;
-        if (!icao24 || lat === null || lon === null) continue;
+        for (const raw of (data.aircraft ?? data.ac ?? [])) {
+          if (typeof raw !== 'object' || raw === null) continue;
+          const a = raw as Record<string, unknown>;
 
-        // Clip to original bbox (circle query overshoots)
-        if (lon < west || lon > east || lat < south || lat > north) continue;
+          const icao24 = typeof a['hex'] === 'string' ? a['hex'].toLowerCase() : null;
+          const alat   = typeof a['lat'] === 'number' ? a['lat'] : null;
+          const alon   = typeof a['lon'] === 'number' ? a['lon'] : null;
+          if (!icao24 || alat === null || alon === null) continue;
 
-        // Skip ground vehicles and parked aircraft
-        const altRaw = a['alt_baro'];
-        if (altRaw === 'ground') continue;
-        const altFt = typeof altRaw === 'number' ? altRaw : 0;
-        if (altFt < 100) continue; // filter taxi/surface traffic
+          // When using a bbox, clip to it (circle query overshoots corners)
+          if (this.circles.length === 0) {
+            if (alon < west || alon > east || alat < south || alat > north) continue;
+          }
 
-        // Skip stale entries (seen > 60 s)
-        const seen_s = typeof a['seen'] === 'number' ? a['seen'] : 0;
-        if (seen_s > 60) continue;
+          // Skip ground vehicles and parked aircraft
+          const altRaw = a['alt_baro'];
+          if (altRaw === 'ground') continue;
+          const altFt = typeof altRaw === 'number' ? altRaw : 0;
+          if (altFt < 100) continue;
 
-        const altM    = altFt  * 0.3048;
-        const speedMs = (typeof a['gs']        === 'number' ? a['gs']        : 0) * 0.514444;
-        const heading = typeof a['track']      === 'number' ? a['track']     : 0;
-        const vRateMs = (typeof a['baro_rate'] === 'number' ? a['baro_rate'] : 0) * 0.00508;
+          // Skip stale entries (seen > 60 s)
+          const seen_s = typeof a['seen'] === 'number' ? a['seen'] : 0;
+          if (seen_s > 60) continue;
 
-        const callsign = (typeof a['flight'] === 'string' ? a['flight'].trim() : '') || icao24;
-        // Show operator name if available, otherwise aircraft registration
-        const originCountry =
-          (typeof a['ownOp'] === 'string' && a['ownOp'] ? a['ownOp'] : null) ??
-          (typeof a['r']     === 'string' && a['r']     ? a['r']     : null) ??
-          '';
+          // Deduplicate across circles — keep whichever entry arrives first
+          if (flightMap.has(icao24)) continue;
 
-        // category B1 = rotorcraft; fall back to speed heuristic
-        const category = typeof a['category'] === 'string' ? a['category'] : '';
-        const kind: 'plane' | 'helicopter' =
-          category === 'B1' ? 'helicopter'
-          : !category && speedMs < 60 ? 'helicopter'
-          : 'plane';
+          const altM    = altFt  * 0.3048;
+          const speedMs = (typeof a['gs']        === 'number' ? a['gs']        : 0) * 0.514444;
+          const heading = typeof a['track']      === 'number' ? a['track']     : 0;
+          const vRateMs = (typeof a['baro_rate'] === 'number' ? a['baro_rate'] : 0) * 0.00508;
 
-        const point: FlightPoint = { longitude: lon, latitude: lat, altitude: altM, heading, speed: speedMs, timestamp: now };
-        const prev  = this._tracks.get(icao24) ?? [];
-        const track = [...prev, point].filter(p => now - p.timestamp < this.trackDurationMs);
-        this._tracks.set(icao24, track);
+          const callsign = (typeof a['flight'] === 'string' ? a['flight'].trim() : '') || icao24;
+          const originCountry =
+            (typeof a['ownOp'] === 'string' && a['ownOp'] ? a['ownOp'] : null) ??
+            (typeof a['r']     === 'string' && a['r']     ? a['r']     : null) ??
+            '';
 
-        flights.push({ icao24, callsign, originCountry, longitude: lon, latitude: lat, altitude: altM, speed: speedMs, heading, verticalRate: vRateMs, kind });
-        seen.add(icao24);
+          const category = typeof a['category'] === 'string' ? a['category'] : '';
+          const kind: 'plane' | 'helicopter' =
+            category === 'B1' ? 'helicopter'
+            : !category && speedMs < 60 ? 'helicopter'
+            : 'plane';
+
+          const point: FlightPoint = { longitude: alon, latitude: alat, altitude: altM, heading, speed: speedMs, timestamp: now };
+          const prev  = this._tracks.get(icao24) ?? [];
+          const track = [...prev, point].filter(p => now - p.timestamp < this.trackDurationMs);
+          this._tracks.set(icao24, track);
+
+          flightMap.set(icao24, { icao24, callsign, originCountry, longitude: alon, latitude: alat, altitude: altM, speed: speedMs, heading, verticalRate: vRateMs, kind });
+        }
+      } catch (err) {
+        console.warn('[LiveFlight] poll failed:', err instanceof Error ? err.message : String(err));
       }
+    }));
 
-      // Prune departed aircraft — keep their track until it ages out naturally
-      for (const [id, track] of this._tracks) {
-        if (seen.has(id)) continue;
-        const pruned = track.filter(p => now - p.timestamp < this.trackDurationMs);
-        if (pruned.length === 0) this._tracks.delete(id);
-        else this._tracks.set(id, pruned);
-      }
+    if (this._destroyed) return;
 
-      this.onUpdate?.(flights);
-    } catch (err) {
-      console.warn('[LiveFlight] poll failed:', err instanceof Error ? err.message : String(err));
+    const flights = [...flightMap.values()];
+    const seen = new Set(flightMap.keys());
+
+    // Prune departed aircraft — keep track until it ages out naturally
+    for (const [id, track] of this._tracks) {
+      if (seen.has(id)) continue;
+      const pruned = track.filter(p => now - p.timestamp < this.trackDurationMs);
+      if (pruned.length === 0) this._tracks.delete(id);
+      else this._tracks.set(id, pruned);
     }
+
+    this.onUpdate?.(flights);
   }
 }

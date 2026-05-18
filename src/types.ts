@@ -150,9 +150,21 @@ export interface LiveFlight {
   kind: AircraftKind;
 }
 
+export interface FlightCircle {
+  lat: number;
+  lon: number;
+  /** Radius in nautical miles (max 250 per adsb.fi API). */
+  nm: number;
+}
+
 export interface LiveFlightDataSourceOptions {
   /** Bounding box [west, south, east, north]. Defaults to California. */
   bbox?: [number, number, number, number];
+  /**
+   * Explicit query circles. When provided, overrides bbox.
+   * Use multiple circles to cover regions wider than 250 nm.
+   */
+  circles?: FlightCircle[];
   /** Poll interval in ms. Defaults to 15 000. */
   refreshIntervalMs?: number;
   /** How long to keep track history. Defaults to 3 600 000 (1 hr). */

@@ -2187,7 +2187,13 @@
     const FLIGHT_PROXY = window.SIGNALING_URL
       ? window.SIGNALING_URL.replace(/^ws/, 'http')
       : null;
-    const flightSource  = new LiveFlightDataSource({ refreshIntervalMs: 15_000, proxyUrl: FLIGHT_PROXY });
+    // Two overlapping circles cover all of California within adsb.fi's 250 nm limit.
+    // A single circle centered at CA's midpoint would miss San Diego (~294 nm away).
+    const CA_CIRCLES = [
+      { lat: 38.0, lon: -120.0, nm: 230 }, // NorCal — SF, Sacramento, Sierra, coast to OR border
+      { lat: 34.0, lon: -117.5, nm: 200 }, // SoCal — LA, San Diego, Inland Empire
+    ];
+    const flightSource  = new LiveFlightDataSource({ circles: CA_CIRCLES, refreshIntervalMs: 15_000, proxyUrl: FLIGHT_PROXY });
     const flightMarkers = window._flightMarkers = new LiveFlightMarkerManager(viewer, {
       onSelect: (flight) => {
         const panel = document.getElementById('flight-info');

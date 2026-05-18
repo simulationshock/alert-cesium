@@ -17,7 +17,7 @@ import {
 } from 'cesium';
 import type { FlightPoint, LiveFlight, LiveFlightMarkerManagerOptions } from './types.js';
 
-const DEFAULT_MAX_ALT = 2_000_000; // hide above 2 000 km camera altitude
+const DEFAULT_MAX_ALT = 1_200_000; // hide above 1 200 km — visible at state/city zoom, hidden at continental/global
 
 /** Renders live ADS-B flight positions as rotating aircraft icons with click-to-show trajectory. */
 export class LiveFlightMarkerManager {
