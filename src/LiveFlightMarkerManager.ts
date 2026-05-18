@@ -5,6 +5,7 @@ import {
   Color,
   ConstantPositionProperty,
   ConstantProperty,
+  CustomDataSource,
   LabelStyle,
   Math as CesiumMath,
   NearFarScalar,
@@ -21,6 +22,7 @@ const DEFAULT_MAX_ALT = 2_000_000; // hide above 2 000 km camera altitude
 /** Renders live ADS-B flight positions as rotating aircraft icons with click-to-show trajectory. */
 export class LiveFlightMarkerManager {
   private readonly viewer: Viewer;
+  private readonly ds: CustomDataSource;
   private readonly onSelect: (flight: LiveFlight | null) => void;
   private readonly maxAlt: number;
   private readonly entities  = new Map<string, ReturnType<Viewer['entities']['add']>>();
@@ -40,6 +42,9 @@ export class LiveFlightMarkerManager {
     this.planeImg = buildAircraftCanvas('plane');
     this.heliImg  = buildAircraftCanvas('helicopter');
 
+    this.ds = new CustomDataSource('live-flights');
+    void viewer.dataSources.add(this.ds);
+
     this.handler = new ScreenSpaceEventHandler(viewer.scene.canvas);
     this.handler.setInputAction(
       (e: ScreenSpaceEventHandler.PositionedEvent) => this._onClick(e),
@@ -54,8 +59,7 @@ export class LiveFlightMarkerManager {
 
   setVisible(visible: boolean): void {
     this._visible = visible;
-    for (const e of this.entities.values()) e.show = visible && this._underMaxAlt();
-    if (this.trackEntity) this.trackEntity.show = visible && this._underMaxAlt();
+    this._syncVisibility();
   }
 
   get visible(): boolean { return this._visible; }
@@ -71,7 +75,7 @@ export class LiveFlightMarkerManager {
 
       let entity = this.entities.get(f.icao24);
       if (!entity) {
-        entity = this.viewer.entities.add({
+        entity = this.ds.entities.add({
           id: `lf-${f.icao24}`,
           position: new ConstantPositionProperty(pos),
           show,
@@ -112,7 +116,7 @@ export class LiveFlightMarkerManager {
     // Remove entities for aircraft that left the bbox
     for (const [id, entity] of this.entities) {
       if (!seen.has(id)) {
-        this.viewer.entities.remove(entity);
+        this.ds.entities.remove(entity);
         this.entities.delete(id);
         if (this.selectedIcao24 === id) { this._clearTrack(); this.selectedIcao24 = undefined; this.onSelect(null); }
       }
@@ -125,7 +129,7 @@ export class LiveFlightMarkerManager {
   destroy(): void {
     this.handler.destroy();
     this.viewer.camera.changed.removeEventListener(this._syncVisibility, this);
-    for (const e of this.entities.values()) this.viewer.entities.remove(e);
+    this.viewer.dataSources.remove(this.ds, true);
     this.entities.clear();
     this._clearTrack();
   }
@@ -137,9 +141,7 @@ export class LiveFlightMarkerManager {
   }
 
   private readonly _syncVisibility = (): void => {
-    const show = this._visible && this._underMaxAlt();
-    for (const e of this.entities.values()) e.show = show;
-    if (this.trackEntity) this.trackEntity.show = show;
+    this.ds.show = this._visible && this._underMaxAlt();
   };
 
   private _onClick(event: ScreenSpaceEventHandler.PositionedEvent): void {
@@ -167,7 +169,7 @@ export class LiveFlightMarkerManager {
     const positions = points.map(p =>
       Cartesian3.fromDegrees(p.longitude, p.latitude, Math.max(0, p.altitude))
     );
-    this.trackEntity = this.viewer.entities.add({
+    this.trackEntity = this.ds.entities.add({
       polyline: {
         positions,
         width: 2,
@@ -180,7 +182,7 @@ export class LiveFlightMarkerManager {
 
   private _clearTrack(): void {
     if (this.trackEntity) {
-      this.viewer.entities.remove(this.trackEntity);
+      this.ds.entities.remove(this.trackEntity);
       this.trackEntity = undefined;
     }
   }
