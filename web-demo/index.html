@@ -876,6 +876,13 @@
         <label class="ms-option"><input type="checkbox" id="ms-elevation" checked> 3D Elevation</label>
       </div>
       <hr class="ms-divider">
+      <div class="ms-title">Scene Mode</div>
+      <div class="ms-options">
+        <label class="ms-option"><input type="radio" name="ms-scene" value="3d" checked> 3D Globe</label>
+        <label class="ms-option"><input type="radio" name="ms-scene" value="2d"> 2D Map</label>
+        <label class="ms-option"><input type="radio" name="ms-scene" value="cv"> Columbus View</label>
+      </div>
+      <hr class="ms-divider">
       <div class="ms-title">Load Region</div>
       <select class="ms-select" id="ms-region">
         <option value="world" selected>World (no limit)</option>
@@ -2554,6 +2561,17 @@
 
     // Apply the default selection (California) on load
     applyRegion(REGIONS[regionSelect.value] ?? null);
+
+    document.querySelectorAll('input[name="ms-scene"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return;
+        switch (radio.value) {
+          case '3d': viewer.scene.morphTo3D(1.0); break;
+          case '2d': viewer.scene.morphTo2D(1.0); break;
+          case 'cv': viewer.scene.morphToColumbusView(1.0); break;
+        }
+      });
+    });
 
     document.getElementById('ms-clip-view').addEventListener('click', () => {
       const rect = viewer.camera.computeViewRectangle(viewer.scene.globe.ellipsoid);
