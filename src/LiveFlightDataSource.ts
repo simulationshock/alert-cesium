@@ -75,6 +75,7 @@ export class LiveFlightDataSource {
     const now = Date.now();
     const [west, south, east, north] = this.bbox;
     const flightMap = new Map<string, LiveFlight>();
+    let successCount = 0;
 
     await Promise.all(queryCircles.map(async ({ lat, lon, nm }) => {
       const url = template
@@ -84,8 +85,11 @@ export class LiveFlightDataSource {
       try {
         const res = await this.fetcher(url, { headers: { accept: 'application/json' } });
         if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-        const data = await res.json() as { ac?: unknown[]; aircraft?: unknown[] };
+        const text = await res.text();
+        if (!text.trim()) throw new Error('empty response body');
+        const data = JSON.parse(text) as { ac?: unknown[]; aircraft?: unknown[] };
         if (this._destroyed) return;
+        successCount++;
 
         for (const raw of (data.aircraft ?? data.ac ?? [])) {
           if (typeof raw !== 'object' || raw === null) continue;
@@ -144,6 +148,9 @@ export class LiveFlightDataSource {
     }));
 
     if (this._destroyed) return;
+
+    // All circles failed — keep existing markers rather than blanking the map
+    if (successCount === 0) return;
 
     const flights = [...flightMap.values()];
     const seen = new Set(flightMap.keys());
